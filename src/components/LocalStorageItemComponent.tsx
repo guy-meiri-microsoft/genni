@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { LocalStorageItem } from '../types';
 import { JsonEditor } from './JsonEditor';
 
@@ -11,11 +11,19 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
   item,
   onUpdate
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(item.value);
   const [editError, setEditError] = useState<string | undefined>();
   const [isValidJson, setIsValidJson] = useState(item.isValidJson);
   const [isSaving, setIsSaving] = useState(false);
+
+  // Sync editValue when item.value changes (after successful save)
+  useEffect(() => {
+    setEditValue(item.value);
+    setIsValidJson(item.isValidJson);
+    setEditError(item.error);
+  }, [item.value, item.isValidJson, item.error]);
 
   const handleEditChange = (newValue: string) => {
     setEditValue(newValue);
@@ -51,6 +59,21 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
     setIsEditing(false);
   };
 
+  const handleStartEdit = () => {
+    setIsEditing(true);
+    // Reset edit state to current item values
+    setEditValue(item.value);
+    setIsValidJson(item.isValidJson);
+    setEditError(item.error);
+    if (!isExpanded) {
+      setIsExpanded(true);
+    }
+  };
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
+
   const displayValue = () => {
     if (item.isValidJson && item.parsedValue) {
       return JSON.stringify(item.parsedValue, null, 2);
@@ -60,17 +83,9 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
 
   return (
     <div className="storage-item">
-      <div className="item-header">
-        <h3 className="item-key">{item.key}</h3>
-        <div className="item-actions">
-          {!isEditing && (
-            <button 
-              onClick={() => setIsEditing(true)}
-              className="edit-btn"
-            >
-              Edit
-            </button>
-          )}
+      <div className="item-header" onClick={toggleExpanded}>
+        <div className="item-title">
+          <h3 className="item-key">{item.key}</h3>
           <div className="item-status">
             {item.isValidJson ? (
               <span className="status-valid">JSON</span>
@@ -81,20 +96,46 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
             )}
           </div>
         </div>
+        <div className="item-controls">
+          <button 
+            className={`expand-btn ${isExpanded ? 'expanded' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleExpanded();
+            }}
+            title={isExpanded ? 'Collapse' : 'Expand'}
+          >
+            {isExpanded ? '▼' : '▶'}
+          </button>
+        </div>
       </div>
 
-      {isEditing ? (
-        <JsonEditor
-          value={editValue}
-          onChange={handleEditChange}
-          onSave={handleSave}
-          onCancel={handleCancel}
-          isValid={isValidJson}
-          error={editError}
-        />
-      ) : (
+      {isExpanded && (
         <div className="item-content">
-          <pre className="json-display">{displayValue()}</pre>
+          {isEditing ? (
+            <div className="edit-mode">
+              <JsonEditor
+                value={editValue}
+                onChange={handleEditChange}
+                onSave={handleSave}
+                onCancel={handleCancel}
+                isValid={isValidJson}
+                error={editError}
+              />
+            </div>
+          ) : (
+            <div className="view-mode">
+              <pre className="json-display">{displayValue()}</pre>
+              <div className="view-actions">
+                <button 
+                  onClick={handleStartEdit}
+                  className="edit-btn"
+                >
+                  Edit JSON
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
 

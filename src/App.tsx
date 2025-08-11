@@ -78,7 +78,7 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>LocalStorage JSON Manager</h1>
+        <h1>LocalStorage JSON Manager1</h1>
         <div className="current-tab">
           <small>Current tab: {currentTab}</small>
         </div>
