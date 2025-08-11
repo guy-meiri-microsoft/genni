@@ -727,8 +727,9 @@ body {
   resize: vertical;
   background: white;
   color: #24292f;
-  min-height: 200px;
-  max-height: 400px;
+  min-height: 400px;
+  max-height: 800px;
+  height: 500px;
 }
 
 .json-textarea:focus {

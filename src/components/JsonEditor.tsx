@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { formatJson } from '../utils/chrome';
 import { JsonSearch } from './JsonSearch';
-import { findMatches } from '../utils/searchUtils';
-import type { SearchMatch } from '../utils/searchUtils';
+import { findMatches } from '../utils/searchUtils.tsx';
+import type { SearchMatch } from '../utils/searchUtils.tsx';
 
 interface JsonEditorProps {
   value: string;
@@ -209,7 +209,7 @@ export const JsonEditor: React.FC<JsonEditorProps> = ({
           onChange={(e) => handleChange(e.target.value)}
           onKeyDown={handleKeyDown}
           className={`json-textarea ${!isValid ? 'invalid' : ''}`}
-          rows={12}
+          rows={20}
           placeholder="Enter JSON here..."
           spellCheck={false}
           autoFocus
