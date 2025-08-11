@@ -81,11 +81,50 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
     return item.value;
   };
 
+  const renderKeyDisplay = () => {
+    if (item.mockParts) {
+      const { api, startDate, endDate, id } = item.mockParts;
+      return (
+        <div className="mock-key-parts">
+          <div className="api-name">
+            <span className="label">API:</span>
+            <span className="value">{api}</span>
+          </div>
+          {startDate && endDate && (
+            <div className="date-range">
+              <span className="label">Period:</span>
+              <span className="value">{startDate} → {endDate}</span>
+            </div>
+          )}
+          {id && (
+            <div className="mock-id">
+              <span className="label">ID:</span>
+              <span className="value" title={id}>{id.substring(0, 8)}...</span>
+            </div>
+          )}
+          <div className="full-key">
+            <span className="label">Full key:</span>
+            <span className="value">{item.key}</span>
+          </div>
+        </div>
+      );
+    }
+    
+    // Fallback for non-mock keys or unparseable keys
+    return (
+      <div className="simple-key">
+        <span className="value">{item.key}</span>
+      </div>
+    );
+  };
+
   return (
     <div className="storage-item">
       <div className="item-header" onClick={toggleExpanded}>
         <div className="item-title">
-          <h3 className="item-key">{item.key}</h3>
+          <h3 className="item-key">
+            {item.mockParts ? item.mockParts.api : item.key}
+          </h3>
           <div className="item-status">
             {item.isValidJson ? (
               <span className="status-valid">JSON</span>
@@ -151,6 +190,9 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
             </div>
           ) : (
             <div className="view-mode">
+              <div className="key-details">
+                {renderKeyDisplay()}
+              </div>
               <pre className="json-display">{displayValue()}</pre>
             </div>
           )}

@@ -358,6 +358,76 @@ body {
   gap: 8px;
 }
 
+/* Mock key parts display */
+.key-details {
+  padding: 16px 20px;
+  background: #f6f8fa;
+  border-bottom: 1px solid #e1e5e9;
+}
+
+.mock-key-parts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mock-key-parts > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mock-key-parts .label {
+  font-weight: 600;
+  color: #656d76;
+  min-width: 60px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+.mock-key-parts .value {
+  font-family: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 13px;
+  color: #24292f;
+  background: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  border: 1px solid #d1d9e0;
+}
+
+.api-name .value {
+  font-weight: 600;
+  color: #0969da;
+  background: #dbeafe;
+  border-color: #bfdbfe;
+}
+
+.date-range .value {
+  color: #059669;
+  background: #d1fae5;
+  border-color: #a7f3d0;
+}
+
+.mock-id .value {
+  color: #7c2d12;
+  background: #fed7aa;
+  border-color: #fdba74;
+  font-size: 11px;
+}
+
+.full-key .value {
+  font-size: 11px;
+  color: #6b7280;
+  word-break: break-all;
+}
+
+.simple-key .value {
+  font-family: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 13px;
+  color: #24292f;
+  word-break: break-all;
+}
+
 /* JSON Editor */
 .json-editor {
   padding: 20px;

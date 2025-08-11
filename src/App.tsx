@@ -8,7 +8,7 @@ function App() {
   const [items, setItems] = useState<LocalStorageItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | undefined>();
-  const [prefix, setPrefix] = useState('mock_');
+  const [searchTerm, setSearchTerm] = useState('');
   const [currentTab, setCurrentTab] = useState<string>('');
 
   const loadItems = async () => {
@@ -19,7 +19,7 @@ function App() {
       const tab = await getCurrentTab();
       if (tab) {
         setCurrentTab(tab.url);
-        const loadedItems = await getLocalStorageItems(prefix);
+        const loadedItems = await getLocalStorageItems(searchTerm);
         setItems(loadedItems);
       } else {
         setError('No active tab found');
@@ -47,8 +47,8 @@ function App() {
     loadItems();
   }, []);
 
-  const handlePrefixChange = (newPrefix: string) => {
-    setPrefix(newPrefix);
+  const handleSearchChange = (newSearchTerm: string) => {
+    setSearchTerm(newSearchTerm);
     // Don't auto-reload, let user click refresh
   };
 
@@ -85,30 +85,31 @@ function App() {
 
       <div className="controls">
         <div className="prefix-control">
-          <label htmlFor="prefix">Key prefix:</label>
+          <label htmlFor="search">Search API:</label>
           <input
-            id="prefix"
+            id="search"
             type="text"
-            value={prefix}
-            onChange={(e) => handlePrefixChange(e.target.value)}
-            placeholder="e.g., mock_"
+            value={searchTerm}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            placeholder="e.g., billing, summary, order..."
           />
         </div>
         <button onClick={loadItems} className="refresh-btn">
-          Refresh
+          Search
         </button>
       </div>
 
       <main className="main-content">
         {items.length === 0 ? (
           <div className="no-items">
-            <p>No localStorage items found with prefix "{prefix}"</p>
-            <p>Make sure you're on a page that has localStorage items with this prefix.</p>
+            <p>No localStorage mock items found{searchTerm && ` matching "${searchTerm}"`}</p>
+            <p>Make sure you're on a page that has localStorage items with the "mock_" prefix.</p>
           </div>
         ) : (
           <div className="items-list">
             <div className="items-count">
               Found {items.length} item{items.length !== 1 ? 's' : ''}
+              {searchTerm && ` matching "${searchTerm}"`}
             </div>
             {items.map((item) => (
               <LocalStorageItemComponent

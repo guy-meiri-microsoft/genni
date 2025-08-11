@@ -1,4 +1,36 @@
-import type { LocalStorageItem, ChromeTabInfo } from '../types';
+import type { LocalStorageItem, ChromeTabInfo, MockKeyParts } from '../types';
+
+/**
+ * Parses a mock key into its component parts
+ * Expected format: mock_<api>_<start>_<end>_<id>
+ * Example: mock_billingSummary_05/08_12/08_4f91ba29-52bc-ef11-8ee7-000d3a5a9be8
+ */
+export function parseMockKey(key: string): MockKeyParts | null {
+  const parts = key.split('_');
+  
+  if (parts.length < 2 || parts[0] !== 'mock') {
+    return null;
+  }
+
+  const result: MockKeyParts = {
+    prefix: parts[0],
+    api: parts[1] || '',
+    rawKey: key
+  };
+
+  // If we have more parts, try to identify dates and ID
+  if (parts.length >= 3) {
+    result.startDate = parts[2];
+  }
+  if (parts.length >= 4) {
+    result.endDate = parts[3];
+  }
+  if (parts.length >= 5) {
+    result.id = parts[4];
+  }
+
+  return result;
+}
 
 /**
  * Gets the current active tab information
@@ -41,21 +73,20 @@ export async function executeInTab<T>(
 }
 
 /**
- * Gets all localStorage items with a specific prefix from the current tab
+ * Gets all localStorage items matching a search term (searches within API names)
  */
-export async function getLocalStorageItems(prefix: string = 'mock_'): Promise<LocalStorageItem[]> {
+export async function getLocalStorageItems(searchTerm: string = ''): Promise<LocalStorageItem[]> {
   const tab = await getCurrentTab();
   if (!tab) {
     throw new Error('No active tab found');
   }
 
-  const items = await executeInTab(tab.id, (...args: unknown[]) => {
-    const prefix = args[0] as string;
+  const items = await executeInTab(tab.id, () => {
     const items: { key: string; value: string }[] = [];
     
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key && key.startsWith(prefix)) {
+      if (key && key.startsWith('mock_')) {
         const value = localStorage.getItem(key);
         if (value !== null) {
           items.push({ key, value });
@@ -64,28 +95,45 @@ export async function getLocalStorageItems(prefix: string = 'mock_'): Promise<Lo
     }
     
     return items;
-  }, prefix);
-
-  return items.map(item => {
-    let parsedValue: unknown;
-    let isValidJson = false;
-    let error: string | undefined;
-
-    try {
-      parsedValue = JSON.parse(item.value);
-      isValidJson = true;
-    } catch (e) {
-      error = e instanceof Error ? e.message : 'Invalid JSON';
-      isValidJson = false;
-    }
-
-    return {
-      ...item,
-      parsedValue,
-      isValidJson,
-      error
-    };
   });
+
+  return items
+    .map(item => {
+      let parsedValue: unknown;
+      let isValidJson = false;
+      let error: string | undefined;
+
+      try {
+        parsedValue = JSON.parse(item.value);
+        isValidJson = true;
+      } catch (e) {
+        error = e instanceof Error ? e.message : 'Invalid JSON';
+        isValidJson = false;
+      }
+
+      // Parse mock key structure
+      const mockParts = parseMockKey(item.key);
+
+      return {
+        ...item,
+        parsedValue,
+        isValidJson,
+        error,
+        mockParts: mockParts || undefined
+      };
+    })
+    .filter(item => {
+      // If no search term, return all mock items
+      if (!searchTerm.trim()) return true;
+      
+      // Search in the API name if mock parts exist
+      if (item.mockParts?.api) {
+        return item.mockParts.api.toLowerCase().includes(searchTerm.toLowerCase());
+      }
+      
+      // Fallback to searching in the full key
+      return item.key.toLowerCase().includes(searchTerm.toLowerCase());
+    });
 }
 
 /**
