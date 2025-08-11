@@ -582,25 +582,6 @@ body {
   border-color: #c7d2db;
 }
 
-/* JSON Code Editor with Monaco */
-.json-code-editor {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.monaco-editor-container {
-  border: 1px solid #d1d9e0;
-  border-radius: 6px;
-  overflow: hidden;
-  background: white;
-}
-
-.monaco-editor-container:focus-within {
-  border-color: #0969da;
-  box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.12);
-}
-
 /* Simple JSON Editor styles */
 .simple-json-editor {
   background: white;
@@ -916,12 +897,6 @@ body {
   padding: 0 1px;
 }
 
-.current-match {
-  background-color: #ff6b35;
-  color: white;
-  border-color: #e55a2b;
-}
-
 .editor-content {
   position: relative;
 }
@@ -994,21 +969,9 @@ body {
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
 }
 
-.editor-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 12px;
-}
-
 .keyboard-shortcuts {
   color: #656d76;
   font-size: 11px;
-}
-
-.action-buttons {
-  display: flex;
-  gap: 8px;
 }
 
 .cancel-btn {

@@ -40,34 +40,6 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
   const [editingValue, setEditingValue] = useState<string>('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    const newHasChanges = value !== originalValue;
-    setHasChanges(newHasChanges);
-    console.log('🔧 SimpleJsonEditor: hasChanges updated to:', newHasChanges);
-  }, [value, originalValue]);
-
-  useEffect(() => {
-    // Parse JSON when value changes for formatted view
-    if (isValid && value) {
-      try {
-        const parsed = JSON.parse(value);
-        setParsedJson(parseJsonForDisplay(parsed, 0));
-      } catch (e) {
-        setParsedJson(null);
-      }
-    } else {
-      setParsedJson(null);
-    }
-  }, [value, isValid]);
-
-  useEffect(() => {
-    // Set the initial value in the textarea
-    if (textareaRef.current && textareaRef.current.value !== value) {
-      textareaRef.current.value = value;
-      console.log('🔧 SimpleJsonEditor: Textarea value set to:', value);
-    }
-  }, [value]);
-
   // Parse JSON object/array for hierarchical display
   const parseJsonForDisplay = useCallback((obj: unknown, level: number): JsonNode => {
     if (obj === null) {
@@ -79,7 +51,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
         type: 'array',
         value: obj.map((item, index) => ({
           ...parseJsonForDisplay(item, level + 1),
-          key: index.toString()
+          key: `[${index}]`
         })),
         collapsed: false,
         level
@@ -105,6 +77,34 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
       level
     };
   }, []);
+
+  useEffect(() => {
+    const newHasChanges = value !== originalValue;
+    setHasChanges(newHasChanges);
+    console.log('🔧 SimpleJsonEditor: hasChanges updated to:', newHasChanges);
+  }, [value, originalValue]);
+
+  useEffect(() => {
+    // Parse JSON when value changes for formatted view
+    if (isValid && value) {
+      try {
+        const parsed = JSON.parse(value);
+        setParsedJson(parseJsonForDisplay(parsed, 0));
+      } catch {
+        setParsedJson(null);
+      }
+    } else {
+      setParsedJson(null);
+    }
+  }, [value, isValid, parseJsonForDisplay]);
+
+  useEffect(() => {
+    // Set the initial value in the textarea
+    if (textareaRef.current && textareaRef.current.value !== value) {
+      textareaRef.current.value = value;
+      console.log('🔧 SimpleJsonEditor: Textarea value set to:', value);
+    }
+  }, [value]);
 
   // Toggle collapse state for a node path
   const toggleCollapse = (path: string) => {
@@ -181,7 +181,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
   };
 
   // Update a node value at the given path
-  const updateNode = (path: string, newValue: any) => {
+  const updateNode = (path: string, newValue: unknown) => {
     if (!isValid || !value) return;
     
     try {
@@ -243,7 +243,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
     }
   };
 
-  const startEditing = (path: string, currentValue: any) => {
+  const startEditing = (path: string, currentValue: unknown) => {
     setEditingNode(path);
     setEditingValue(typeof currentValue === 'string' ? currentValue : JSON.stringify(currentValue));
   };
