@@ -124,20 +124,6 @@ export const JsonEditor: React.FC<JsonEditorProps> = ({
             button disabled: {(!hasChanges || !isValid) ? '🔴 true' : '🟢 false'}
           </div>
         </div>
-        <div className="action-buttons">
-          <button onClick={onCancel} className="cancel-btn">
-            Cancel
-          </button>
-          <button 
-            onClick={() => {
-              onSave();
-            }} 
-            disabled={!hasChanges || !isValid}
-            className="save-btn"
-          >
-            Save Changes
-          </button>
-        </div>
       </div>
     </div>
   );

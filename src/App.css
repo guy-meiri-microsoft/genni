@@ -78,6 +78,7 @@ body {
   border-radius: 6px;
   font-size: 14px;
   background: white;
+  color: #24292f;
   flex: 1;
   min-width: 0;
   max-width: 300px;
@@ -335,6 +336,25 @@ body {
 .view-actions {
   display: flex;
   justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Content actions at top of expanded card */
+.content-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e1e5e9;
+  background: #fafbfc;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.view-actions {
+  display: flex;
   gap: 8px;
 }
 

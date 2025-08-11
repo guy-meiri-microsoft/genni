@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import type { LocalStorageItem } from './types';
 import { LocalStorageItemComponent } from './components/LocalStorageItemComponent';
 import { getLocalStorageItems, updateLocalStorageItem, getCurrentTab } from './utils/chrome';
@@ -11,10 +11,10 @@ function App() {
   const [prefix, setPrefix] = useState('mock_');
   const [currentTab, setCurrentTab] = useState<string>('');
 
-  const loadItems = useCallback(async () => {
+  const loadItems = async () => {
     setLoading(true);
     setError(undefined);
-    
+
     try {
       const tab = await getCurrentTab();
       if (tab) {
@@ -30,7 +30,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  }, [prefix]);
+  };
 
   const handleUpdateItem = async (key: string, newValue: string) => {
     try {
@@ -42,12 +42,14 @@ function App() {
     }
   };
 
+  // Load items on mount
   useEffect(() => {
     loadItems();
-  }, [loadItems]);
+  }, []);
 
   const handlePrefixChange = (newPrefix: string) => {
     setPrefix(newPrefix);
+    // Don't auto-reload, let user click refresh
   };
 
   if (loading) {
@@ -78,10 +80,7 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>LocalStorage JSON Manager1</h1>
-        <div className="current-tab">
-          <small>Current tab: {currentTab}</small>
-        </div>
+        <h1>Genni </h1>
       </header>
 
       <div className="controls">
@@ -120,6 +119,9 @@ function App() {
             ))}
           </div>
         )}
+        <div className="current-tab">
+          <small>Current tab: {currentTab}</small>
+        </div>
       </main>
     </div>
   );
