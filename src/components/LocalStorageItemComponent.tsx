@@ -86,25 +86,20 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
       const { api, startDate, endDate, id } = item.mockParts;
       return (
         <div className="mock-key-parts">
-          <div className="api-name">
-            <span className="label">API:</span>
-            <span className="value">{api}</span>
-          </div>
-          {startDate && endDate && (
-            <div className="date-range">
-              <span className="label">Period:</span>
-              <span className="value">{startDate} → {endDate}</span>
-            </div>
-          )}
-          {id && (
-            <div className="mock-id">
-              <span className="label">ID:</span>
-              <span className="value" title={id}>{id.substring(0, 8)}...</span>
-            </div>
-          )}
-          <div className="full-key">
-            <span className="label">Full key:</span>
-            <span className="value">{item.key}</span>
+          <div className="key-info-inline">
+            <span className="api-name">{api}</span>
+            {startDate && endDate && (
+              <>
+                <span className="separator">•</span>
+                <span className="date-range">{startDate} → {endDate}</span>
+              </>
+            )}
+            {id && (
+              <>
+                <span className="separator">•</span>
+                <span className="mock-id" title={id}>{id.substring(0, 8)}...</span>
+              </>
+            )}
           </div>
         </div>
       );
@@ -142,6 +137,16 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
         </div>
         <div className="item-controls">
           <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              handleStartEdit();
+            }}
+            className="edit-btn"
+            title="Edit JSON"
+          >
+            ✏️
+          </button>
+          <button 
             className={`expand-btn ${isExpanded ? 'expanded' : ''}`}
             onClick={(e) => {
               e.stopPropagation();
@@ -156,19 +161,6 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
 
       {isExpanded && (
         <div className="item-content">
-          {!isEditing && (
-            <div className="content-actions">
-              <div className="view-actions">
-                <button 
-                  onClick={handleStartEdit}
-                  className="edit-btn"
-                >
-                  Edit JSON
-                </button>
-              </div>
-            </div>
-          )}
-          
           {isEditing ? (
             <div className="edit-mode">
               <JsonEditor
