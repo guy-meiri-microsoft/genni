@@ -1,22 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { LocalStorageItem } from '../types';
 import { JsonEditor } from './JsonEditor';
 
 interface LocalStorageItemComponentProps {
   item: LocalStorageItem;
   onUpdate: (key: string, newValue: string) => Promise<void>;
+  autoExpand?: boolean;
+  searchTerm?: string;
+  isFirstResult?: boolean;
 }
 
 export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps> = ({
   item,
-  onUpdate
+  onUpdate,
+  autoExpand = false,
+  searchTerm = '',
+  isFirstResult = false
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(autoExpand || false);
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(item.value);
   const [editError, setEditError] = useState<string | undefined>();
   const [isValidJson, setIsValidJson] = useState(item.isValidJson);
   const [isSaving, setIsSaving] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
 
   // Sync editValue when item.value changes (after successful save)
   useEffect(() => {
@@ -24,6 +31,37 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
     setIsValidJson(item.isValidJson);
     setEditError(item.error);
   }, [item.value, item.isValidJson, item.error]);
+
+  // Handle auto-expand from search
+  useEffect(() => {
+    if (autoExpand) {
+      setIsExpanded(true);
+    }
+  }, [autoExpand]);
+
+  // Scroll to top when this is the first search result
+  useEffect(() => {
+    if (isFirstResult && cardRef.current) {
+      setTimeout(() => {
+        cardRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start' 
+        });
+      }, 100);
+    }
+  }, [isFirstResult]);
+
+  // Helper function to highlight search terms
+  const highlightText = (text: string, searchTerm: string) => {
+    if (!searchTerm.trim()) return text;
+    
+    const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.split(regex).map((part, index) => 
+      regex.test(part) ? (
+        <mark key={index} className="search-highlight">{part}</mark>
+      ) : part
+    );
+  };
 
   const handleEditChange = (newValue: string) => {
     setEditValue(newValue);
@@ -87,7 +125,7 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
       return (
         <div className="mock-key-parts">
           <div className="key-info-inline">
-            <span className="api-name">{api}</span>
+            <span className="api-name">{highlightText(api, searchTerm)}</span>
             {startDate && endDate && (
               <>
                 <span className="separator">•</span>
@@ -108,17 +146,17 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
     // Fallback for non-mock keys or unparseable keys
     return (
       <div className="simple-key">
-        <span className="value">{item.key}</span>
+        <span className="value">{highlightText(item.key, searchTerm)}</span>
       </div>
     );
   };
 
   return (
-    <div className="storage-item">
+    <div className="storage-item" ref={cardRef}>
       <div className="item-header" onClick={toggleExpanded}>
         <div className="item-title">
           <h3 className="item-key">
-            {item.mockParts ? item.mockParts.api : item.key}
+            {item.mockParts ? highlightText(item.mockParts.api, searchTerm) : highlightText(item.key, searchTerm)}
             {item.mockParts?.startDate && item.mockParts?.endDate && (
               <span className="date-preview">
                 <small> ({item.mockParts.startDate} → {item.mockParts.endDate})</small>

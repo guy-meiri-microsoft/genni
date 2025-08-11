@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { LocalStorageItem } from './types';
 import { LocalStorageItemComponent } from './components/LocalStorageItemComponent';
 import { getLocalStorageItems, updateLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks } from './utils/chrome';
@@ -10,6 +10,7 @@ function App() {
   const [error, setError] = useState<string | undefined>();
   const [searchTerm, setSearchTerm] = useState('');
   const [currentTab, setCurrentTab] = useState<string>('');
+  const itemsListRef = useRef<HTMLDivElement>(null);
 
   const loadItems = async () => {
     setLoading(true);
@@ -52,8 +53,8 @@ function App() {
     // Don't auto-reload, let user press enter or click search
   };
 
-  const handleSearchSubmit = () => {
-    loadItems();
+  const handleSearchSubmit = async () => {
+    await loadItems();
   };
 
   const handleSearchKeyDown = (e: React.KeyboardEvent) => {
@@ -151,12 +152,15 @@ function App() {
             <p>Make sure you're on a page that has localStorage items with the "mock_" prefix.</p>
           </div>
         ) : (
-          <div className="items-list">
-            {items.map((item) => (
+          <div className="items-list" ref={itemsListRef}>
+            {items.map((item, index) => (
               <LocalStorageItemComponent
                 key={item.key}
                 item={item}
                 onUpdate={handleUpdateItem}
+                autoExpand={index === 0 && searchTerm.length > 0}
+                searchTerm={searchTerm}
+                isFirstResult={index === 0 && searchTerm.length > 0}
               />
             ))}
           </div>
