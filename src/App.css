@@ -501,6 +501,119 @@ body {
   gap: 8px;
 }
 
+.editor-controls .search-btn {
+  padding: 4px 8px;
+  background: #f6f8fa;
+  border: 1px solid #d1d9e0;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: #24292f;
+}
+
+.editor-controls .search-btn:hover {
+  background: #f3f4f6;
+  border-color: #c7d2db;
+}
+
+/* JSON Search Component */
+.json-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.search-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.search-input {
+  flex: 1;
+  padding: 4px 8px;
+  border: 1px solid #d1d9e0;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #0969da;
+  box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.12);
+}
+
+.search-results {
+  font-size: 11px;
+  color: #656d76;
+  white-space: nowrap;
+}
+
+.match-count {
+  font-family: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Courier New', monospace;
+}
+
+.search-controls {
+  display: flex;
+  gap: 4px;
+}
+
+.search-controls .search-btn {
+  padding: 2px 6px;
+  background: white;
+  border: 1px solid #d1d9e0;
+  border-radius: 3px;
+  font-size: 11px;
+  cursor: pointer;
+  min-width: 20px;
+  text-align: center;
+  color: #24292f;
+  font-weight: bold;
+}
+
+.search-controls .search-btn:hover {
+  background: #f6f8fa;
+}
+
+.search-controls .search-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.close-btn {
+  color: #d1242f;
+  font-weight: bold;
+}
+
+.close-btn:hover {
+  background: #ffeef0;
+}
+
+/* Search highlighting */
+.search-highlight {
+  background-color: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+.current-match {
+  background-color: #ff6b35;
+  color: white;
+  border-color: #e55a2b;
+}
+
+.editor-content {
+  position: relative;
+}
+
 .status-valid {
   color: #059669;
   font-size: 14px;
