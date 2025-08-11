@@ -582,6 +582,253 @@ body {
   border-color: #c7d2db;
 }
 
+/* JSON Code Editor with Monaco */
+.json-code-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.monaco-editor-container {
+  border: 1px solid #d1d9e0;
+  border-radius: 6px;
+  overflow: hidden;
+  background: white;
+}
+
+.monaco-editor-container:focus-within {
+  border-color: #0969da;
+  box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.12);
+}
+
+/* Simple JSON Editor styles */
+.simple-json-editor {
+  background: white;
+  border: 1px solid #d1d9e0;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #f6f8fa;
+  border-bottom: 1px solid #d1d9e0;
+}
+
+.editor-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.format-btn, .save-btn, .cancel-btn {
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid #d1d9e0;
+  background: white;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.format-btn:hover, .cancel-btn:hover {
+  background: #f6f8fa;
+  border-color: #8c959f;
+}
+
+.save-btn {
+  background: #0969da;
+  color: white;
+  border-color: #0969da;
+}
+
+.save-btn:hover:not(:disabled) {
+  background: #0860ca;
+  border-color: #0860ca;
+}
+
+.save-btn:disabled, .format-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.json-textarea {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace !important;
+}
+
+.json-textarea:focus {
+  border: 1px solid #0969da !important;
+  box-shadow: 0 0 0 1px #0969da !important;
+}
+
+.editor-footer {
+  padding: 8px 16px;
+  background: #f6f8fa;
+  border-top: 1px solid #d1d9e0;
+  font-size: 11px;
+  color: #656d76;
+}
+
+.status-valid {
+  color: #1a7f37;
+  font-weight: 500;
+}
+
+.status-invalid {
+  color: #cf222e;
+  font-weight: 500;
+}
+
+.error-message {
+  color: #cf222e;
+  font-size: 12px;
+}
+
+/* JSON Tree View Styles */
+.json-tree-view {
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  padding: 12px;
+  background: #ffffff;
+  border: 1px solid #d1d9e0;
+  border-radius: 6px;
+  max-height: 500px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.json-line {
+  display: flex;
+  align-items: flex-start;
+  min-height: 20px;
+  width: 100%;
+}
+
+.json-spacer {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.json-nested {
+  flex: 1;
+  width: 100%;
+}
+
+.json-nested .json-line {
+  width: 100%;
+}
+
+.json-indent {
+  white-space: pre;
+}
+
+.fold-button {
+  background: none;
+  border: none;
+  color: #656d76;
+  cursor: pointer;
+  padding: 0 4px;
+  margin-right: 4px;
+  font-size: 10px;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+  min-width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fold-button:hover {
+  background: #f6f8fa;
+  color: #24292f;
+}
+
+.delete-button {
+  background: none;
+  border: none;
+  color: #656d76;
+  cursor: pointer;
+  padding: 0 4px;
+  margin-left: 8px;
+  font-size: 12px;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+}
+
+.delete-button:hover {
+  background: #ffebee;
+  color: #cf222e;
+  opacity: 1;
+}
+
+.json-key {
+  color: #0969da;
+  font-weight: 500;
+}
+
+.json-string {
+  color: #1a7f37;
+}
+
+.json-number {
+  color: #8250df;
+}
+
+.json-boolean {
+  color: #cf222e;
+  font-weight: 500;
+}
+
+.json-null {
+  color: #656d76;
+  font-style: italic;
+}
+
+.json-brace {
+  color: #24292f;
+  font-weight: 600;
+}
+
+.json-colon {
+  color: #24292f;
+  margin: 0 4px 0 0;
+}
+
+.json-comma {
+  color: #24292f;
+}
+
+.json-ellipsis {
+  color: #656d76;
+  font-style: italic;
+}
+
+.view-mode-btn {
+  padding: 6px 8px;
+  border-radius: 4px;
+  border: 1px solid #d1d9e0;
+  background: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 32px;
+}
+
+.view-mode-btn:hover:not(:disabled) {
+  background: #f6f8fa;
+  border-color: #8c959f;
+}
+
 /* JSON Search Component */
 .json-search {
   display: flex;
@@ -809,4 +1056,38 @@ body {
   font-size: 12px;
   color: #856404;
   text-align: center;
+}
+
+/* Inline editing styles */
+.editable-value {
+  cursor: pointer;
+  border-radius: 3px;
+  padding: 1px 3px;
+  transition: background-color 0.15s ease;
+}
+
+.editable-value:hover {
+  background-color: #f0f6ff;
+  box-shadow: 0 0 0 1px #0969da;
+}
+
+.inline-editor {
+  display: inline-block;
+}
+
+.json-input {
+  border: 1px solid #0969da;
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  background: #fff;
+  color: #24292f;
+  min-width: 60px;
+  outline: none;
+}
+
+.json-input:focus {
+  border-color: #0969da;
+  box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.3);
 }

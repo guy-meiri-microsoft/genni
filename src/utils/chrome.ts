@@ -76,29 +76,41 @@ export async function executeInTab<T>(
  * Gets all localStorage items matching a search term (searches within API names)
  */
 export async function getLocalStorageItems(searchTerm: string = ''): Promise<LocalStorageItem[]> {
+  console.log('🌐 Chrome: Getting localStorage items with searchTerm:', searchTerm);
+  
   const tab = await getCurrentTab();
   if (!tab) {
     throw new Error('No active tab found');
   }
 
+  console.log('🌐 Chrome: Current tab:', tab);
+
   const items = await executeInTab(tab.id, () => {
     const items: { key: string; value: string }[] = [];
+    
+    console.log('🌐 Chrome: Executing in tab, localStorage.length:', localStorage.length);
     
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
       if (key && key.startsWith('mock_')) {
         const value = localStorage.getItem(key);
         if (value !== null) {
+          console.log('🌐 Chrome: Found mock item - key:', key, 'value length:', value.length);
           items.push({ key, value });
         }
       }
     }
     
+    console.log('🌐 Chrome: Total mock items found:', items.length);
     return items;
   });
 
+  console.log('🌐 Chrome: Items received from tab:', items.length);
+
   return items
     .map(item => {
+      console.log('🌐 Chrome: Processing item:', item.key, 'value length:', item.value.length);
+      
       let parsedValue: unknown;
       let isValidJson = false;
       let error: string | undefined;
@@ -106,21 +118,32 @@ export async function getLocalStorageItems(searchTerm: string = ''): Promise<Loc
       try {
         parsedValue = JSON.parse(item.value);
         isValidJson = true;
+        console.log('🌐 Chrome: Successfully parsed JSON for:', item.key);
       } catch (e) {
         error = e instanceof Error ? e.message : 'Invalid JSON';
         isValidJson = false;
+        console.log('🌐 Chrome: JSON parse error for:', item.key, error);
       }
 
       // Parse mock key structure
       const mockParts = parseMockKey(item.key);
 
-      return {
+      const processedItem = {
         ...item,
         parsedValue,
         isValidJson,
         error,
         mockParts: mockParts || undefined
       };
+      
+      console.log('🌐 Chrome: Processed item:', {
+        key: processedItem.key,
+        valueLength: processedItem.value.length,
+        isValidJson: processedItem.isValidJson,
+        hasError: !!processedItem.error
+      });
+
+      return processedItem;
     })
     .filter(item => {
       // If no search term, return all mock items

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import type { LocalStorageItem } from '../types';
-import { JsonEditor } from './JsonEditor';
+import { SimpleJsonEditor } from './SimpleJsonEditor';
 
 interface LocalStorageItemComponentProps {
   item: LocalStorageItem;
@@ -98,13 +98,24 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
   };
 
   const handleStartEdit = () => {
+    console.log('🔍 LocalStorageItem: Starting edit for key:', item.key);
+    console.log('🔍 LocalStorageItem: Item value:', item.value);
+    console.log('🔍 LocalStorageItem: Item value type:', typeof item.value);
+    console.log('🔍 LocalStorageItem: Item value length:', item.value?.length);
+    console.log('🔍 LocalStorageItem: Item isValidJson:', item.isValidJson);
+    
     setIsEditing(true);
     // Reset edit state to current item values
     setEditValue(item.value);
     setIsValidJson(item.isValidJson);
     setEditError(item.error);
+    
+    console.log('🔍 LocalStorageItem: Edit state set, editValue will be:', item.value);
+    console.log('🔍 LocalStorageItem: isEditing set to true');
+    
     if (!isExpanded) {
       setIsExpanded(true);
+      console.log('🔍 LocalStorageItem: Expanded item');
     }
   };
 
@@ -201,7 +212,8 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
         <div className="item-content">
           {isEditing ? (
             <div className="edit-mode">
-              <JsonEditor
+              <SimpleJsonEditor
+                key={`editor-${item.key}-${isEditing}`}
                 value={editValue}
                 onChange={handleEditChange}
                 onSave={handleSave}
