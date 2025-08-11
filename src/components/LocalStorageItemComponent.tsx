@@ -124,6 +124,11 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
         <div className="item-title">
           <h3 className="item-key">
             {item.mockParts ? item.mockParts.api : item.key}
+            {item.mockParts?.startDate && item.mockParts?.endDate && (
+              <span className="date-preview">
+                <small> ({item.mockParts.startDate} → {item.mockParts.endDate})</small>
+              </span>
+            )}
           </h3>
           <div className="item-status">
             {item.isValidJson ? (

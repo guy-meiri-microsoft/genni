@@ -160,6 +160,44 @@ export async function updateLocalStorageItem(key: string, value: string): Promis
 }
 
 /**
+ * Refreshes the current tab
+ */
+export async function refreshCurrentTab(): Promise<void> {
+  const tab = await getCurrentTab();
+  if (!tab) {
+    throw new Error('No active tab found');
+  }
+
+  await chrome.tabs.reload(tab.id);
+}
+
+/**
+ * Clears all localStorage items with "mock_" prefix from the current tab
+ */
+export async function clearAllMocks(): Promise<number> {
+  const tab = await getCurrentTab();
+  if (!tab) {
+    throw new Error('No active tab found');
+  }
+
+  const deletedCount = await executeInTab(tab.id, () => {
+    const keysToDelete: string[] = [];
+    
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('mock_')) {
+        keysToDelete.push(key);
+      }
+    }
+    
+    keysToDelete.forEach(key => localStorage.removeItem(key));
+    return keysToDelete.length;
+  });
+
+  return deletedCount;
+}
+
+/**
  * Formats JSON string with proper indentation
  */
 export function formatJson(jsonString: string): string {

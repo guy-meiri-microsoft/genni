@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { LocalStorageItem } from './types';
 import { LocalStorageItemComponent } from './components/LocalStorageItemComponent';
-import { getLocalStorageItems, updateLocalStorageItem, getCurrentTab } from './utils/chrome';
+import { getLocalStorageItems, updateLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks } from './utils/chrome';
 import './App.css';
 
 function App() {
@@ -52,6 +52,35 @@ function App() {
     // Don't auto-reload, let user click refresh
   };
 
+  const handleRefreshPage = async () => {
+    try {
+      await refreshCurrentTab();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to refresh page');
+    }
+  };
+
+  const handleClearAllMocks = async () => {
+    if (!confirm('Are you sure you want to clear all mock data? This cannot be undone.')) {
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const deletedCount = await clearAllMocks();
+      
+      // Reload items to reflect the changes
+      await loadItems();
+      
+      // Show success message temporarily
+      alert(`Successfully cleared ${deletedCount} mock item${deletedCount !== 1 ? 's' : ''}`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to clear mocks');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="app">
@@ -80,7 +109,15 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Genni </h1>
+        <div > 🔥 Genni 🔥 </div>
+        <div className="top-actions">
+          <button onClick={handleRefreshPage} className="action-btn refresh-page-btn">
+            🔄 Refresh Page
+          </button>
+          <button onClick={handleClearAllMocks} className="action-btn clear-mocks-btn">
+            🗑️ Clear All Mocks
+          </button>
+        </div>
       </header>
 
       <div className="controls">
@@ -107,10 +144,6 @@ function App() {
           </div>
         ) : (
           <div className="items-list">
-            <div className="items-count">
-              Found {items.length} item{items.length !== 1 ? 's' : ''}
-              {searchTerm && ` matching "${searchTerm}"`}
-            </div>
             {items.map((item) => (
               <LocalStorageItemComponent
                 key={item.key}

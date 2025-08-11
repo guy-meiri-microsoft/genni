@@ -29,23 +29,58 @@ body {
   padding: 24px;
   border-bottom: 1px solid #e1e5e9;
   background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.app-header h1 {
-  margin: 0 0 8px 0;
-  font-size: 24px;
+.app-header {
+  margin: 0;
+  font-size: 14px;
   font-weight: 600;
   color: #24292f;
 }
 
-.current-tab {
-  margin-top: 8px;
+.top-actions {
+  display: flex;
+  gap: 8px;
 }
 
-.current-tab small {
-  color: #656d76;
-  font-size: 14px;
-  word-break: break-all;
+.action-btn {
+  padding: 6px 12px;
+  border: 1px solid #d1d9e0;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  background: white;
+  color: #24292f;
+}
+
+.action-btn:hover {
+  background: #f3f4f6;
+  border-color: #c7d2db;
+}
+
+.refresh-page-btn {
+  color: #0969da;
+  border-color: #0969da;
+}
+
+.refresh-page-btn:hover {
+  background: #f0f6ff;
+  border-color: #0550ae;
+}
+
+.clear-mocks-btn {
+  color: #d1242f;
+  border-color: #d1242f;
+}
+
+.clear-mocks-btn:hover {
+  background: #ffeef0;
+  border-color: #a40e26;
 }
 
 /* Controls */
@@ -213,6 +248,7 @@ body {
   justify-content: space-between;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  gap: 12px;
 }
 
 .item-header:hover {
@@ -222,8 +258,9 @@ body {
 .item-title {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   flex: 1;
+  min-width: 0;
 }
 
 .item-key {
@@ -231,9 +268,26 @@ body {
   font-size: 16px;
   font-weight: 600;
   color: #24292f;
-  font-family: 'Monaco', 'Menlo', monospace;
-  word-break: break-all;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
   flex: 1;
+}
+
+.date-preview small {
+  color: #656d76;
+  font-size: 11px;
+  font-weight: 400;
+  font-family: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Courier New', monospace;
+  white-space: nowrap;
+}
+
+.item-status {
+  display: flex;
+  align-items: center;
 }
 
 .item-controls {
