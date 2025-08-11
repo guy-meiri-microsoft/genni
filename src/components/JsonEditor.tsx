@@ -196,7 +196,7 @@ export const JsonEditor: React.FC<JsonEditorProps> = ({
           onChange={(e) => handleChange(e.target.value)}
           onKeyDown={handleKeyDown}
           className={`json-textarea ${!isValid ? 'invalid' : ''}`}
-          rows={8}
+          rows={12}
           placeholder="Enter JSON here..."
           spellCheck={false}
           autoFocus

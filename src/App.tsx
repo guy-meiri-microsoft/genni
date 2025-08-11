@@ -49,7 +49,18 @@ function App() {
 
   const handleSearchChange = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);
-    // Don't auto-reload, let user click refresh
+    // Don't auto-reload, let user press enter or click search
+  };
+
+  const handleSearchSubmit = () => {
+    loadItems();
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleSearchSubmit();
+    }
   };
 
   const handleRefreshPage = async () => {
@@ -109,8 +120,21 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <div > 🔥 Genni 🔥 </div>
+        <div>🔥 Genni 🔥</div>
         <div className="top-actions">
+          <div className="header-search">
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => handleSearchChange(e.target.value)}
+              onKeyDown={handleSearchKeyDown}
+              placeholder="Search API..."
+              className="header-search-input"
+            />
+            <button onClick={handleSearchSubmit} className="header-search-btn">
+              🔍
+            </button>
+          </div>
           <button onClick={handleRefreshPage} className="action-btn refresh-page-btn">
             🔄 Refresh Page
           </button>
@@ -119,22 +143,6 @@ function App() {
           </button>
         </div>
       </header>
-
-      <div className="controls">
-        <div className="prefix-control">
-          <label htmlFor="search">Search API:</label>
-          <input
-            id="search"
-            type="text"
-            value={searchTerm}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            placeholder="e.g., billing, summary, order..."
-          />
-        </div>
-        <button onClick={loadItems} className="refresh-btn">
-          Search
-        </button>
-      </div>
 
       <main className="main-content">
         {items.length === 0 ? (

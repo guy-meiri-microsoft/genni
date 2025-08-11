@@ -43,7 +43,45 @@ body {
 
 .top-actions {
   display: flex;
+  align-items: center;
   gap: 8px;
+}
+
+.header-search {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header-search-input {
+  padding: 6px 10px;
+  border: 1px solid #d1d9e0;
+  border-radius: 4px;
+  font-size: 12px;
+  background: white;
+  color: #24292f;
+  width: 150px;
+}
+
+.header-search-input:focus {
+  outline: none;
+  border-color: #0969da;
+  box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.12);
+}
+
+.header-search-btn {
+  padding: 6px 8px;
+  border: 1px solid #d1d9e0;
+  border-radius: 4px;
+  font-size: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.header-search-btn:hover {
+  background: #f3f4f6;
+  border-color: #c7d2db;
 }
 
 .action-btn {
@@ -81,65 +119,6 @@ body {
 .clear-mocks-btn:hover {
   background: #ffeef0;
   border-color: #a40e26;
-}
-
-/* Controls */
-.controls {
-  padding: 16px 24px;
-  background: #f6f8fa;
-  border-bottom: 1px solid #e1e5e9;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.prefix-control {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-}
-
-.prefix-control label {
-  font-size: 14px;
-  font-weight: 500;
-  color: #24292f;
-  white-space: nowrap;
-}
-
-.prefix-control input {
-  padding: 8px 12px;
-  border: 1px solid #d1d9e0;
-  border-radius: 6px;
-  font-size: 14px;
-  background: white;
-  color: #24292f;
-  flex: 1;
-  min-width: 0;
-  max-width: 300px;
-}
-
-.prefix-control input:focus {
-  outline: none;
-  border-color: #0969da;
-  box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.12);
-}
-
-.refresh-btn {
-  padding: 4px 12px;
-  background: #f6f8fa;
-  border: 1px solid #d1d9e0;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #24292f;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.refresh-btn:hover {
-  background: #f3f4f6;
-  border-color: #c7d2db;
 }
 
 /* Main content */
@@ -662,8 +641,8 @@ body {
   resize: vertical;
   background: white;
   color: #24292f;
-  min-height: 120px;
-  max-height: 250px;
+  min-height: 200px;
+  max-height: 400px;
 }
 
 .json-textarea:focus {
