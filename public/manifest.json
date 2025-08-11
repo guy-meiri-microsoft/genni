@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "LocalStorage JSON Manager",
+  "version": "1.0.0",
+  "description": "A tool to help manage and edit JSON values in localStorage with specific prefixes",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "LocalStorage JSON Manager"
+  },
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
