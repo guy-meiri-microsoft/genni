@@ -175,6 +175,19 @@ export const JsonEditor: React.FC<JsonEditorProps> = ({
           >
             Format
           </button>
+          <button 
+            onClick={onSave}
+            disabled={!hasChanges || !isValid}
+            className="save-btn"
+          >
+            Save Changes
+          </button>
+          <button 
+            onClick={onCancel}
+            className="cancel-btn"
+          >
+            Cancel
+          </button>
         </div>
       </div>
 

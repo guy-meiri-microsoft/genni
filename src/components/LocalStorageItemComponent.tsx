@@ -156,21 +156,8 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
 
       {isExpanded && (
         <div className="item-content">
-          <div className="content-actions">
-            {isEditing ? (
-              <div className="edit-actions">
-                <button 
-                  onClick={handleSave} 
-                  disabled={!isValidJson || isSaving}
-                  className="save-btn"
-                >
-                  {isSaving ? 'Saving...' : 'Save Changes'}
-                </button>
-                <button onClick={handleCancel} className="cancel-btn">
-                  Cancel
-                </button>
-              </div>
-            ) : (
+          {!isEditing && (
+            <div className="content-actions">
               <div className="view-actions">
                 <button 
                   onClick={handleStartEdit}
@@ -179,8 +166,8 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
                   Edit JSON
                 </button>
               </div>
-            )}
-          </div>
+            </div>
+          )}
           
           {isEditing ? (
             <div className="edit-mode">

@@ -496,6 +496,65 @@ body {
   border-color: #c7d2db;
 }
 
+.editor-controls .format-btn {
+  padding: 4px 8px;
+  background: #f6f8fa;
+  border: 1px solid #d1d9e0;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: #24292f;
+}
+
+.editor-controls .format-btn:hover {
+  background: #f3f4f6;
+  border-color: #c7d2db;
+}
+
+.editor-controls .format-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.editor-controls .save-btn {
+  padding: 4px 12px;
+  background: #1f883d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.editor-controls .save-btn:hover:not(:disabled) {
+  background: #1a7431;
+}
+
+.editor-controls .save-btn:disabled {
+  background: #94d3a2;
+  cursor: not-allowed;
+}
+
+.editor-controls .cancel-btn {
+  padding: 4px 12px;
+  background: #f6f8fa;
+  color: #24292f;
+  border: 1px solid #d1d9e0;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.editor-controls .cancel-btn:hover {
+  background: #f3f4f6;
+  border-color: #c7d2db;
+}
+
 /* JSON Search Component */
 .json-search {
   display: flex;
