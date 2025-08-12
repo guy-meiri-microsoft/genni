@@ -182,6 +182,18 @@ export async function updateLocalStorageItem(key: string, value: string): Promis
   }, key, value);
 }
 
+export async function deleteLocalStorageItem(key: string): Promise<void> {
+  const tab = await getCurrentTab();
+  if (!tab) {
+    throw new Error('No active tab found');
+  }
+
+  await executeInTab(tab.id, (...args: unknown[]) => {
+    const key = args[0] as string;
+    localStorage.removeItem(key);
+  }, key);
+}
+
 /**
  * Refreshes the current tab
  */

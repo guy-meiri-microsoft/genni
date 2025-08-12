@@ -291,6 +291,23 @@ body {
   border-color: #c7d2db;
 }
 
+.item-controls .delete-btn {
+  padding: 4px 8px;
+  background: #f6f8fa;
+  border: 1px solid #d1d9e0;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: #cf222e;
+}
+
+.item-controls .delete-btn:hover {
+  background: #ffebe9;
+  border-color: #cf222e;
+  color: #a40e26;
+}
+
 .expand-btn {
   padding: 4px 8px;
   background: transparent;

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type { LocalStorageItem } from './types';
 import { LocalStorageItemComponent } from './components/LocalStorageItemComponent';
-import { getLocalStorageItems, updateLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks } from './utils/chrome';
+import { getLocalStorageItems, updateLocalStorageItem, deleteLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks } from './utils/chrome';
 import './App.css';
 
 function App() {
@@ -40,6 +40,16 @@ function App() {
       await loadItems();
     } catch (err) {
       throw new Error(err instanceof Error ? err.message : 'Failed to update item');
+    }
+  };
+
+  const handleDeleteItem = async (key: string) => {
+    try {
+      await deleteLocalStorageItem(key);
+      // Reload items to reflect the change
+      await loadItems();
+    } catch (err) {
+      throw new Error(err instanceof Error ? err.message : 'Failed to delete item');
     }
   };
 
@@ -158,6 +168,7 @@ function App() {
                 key={item.key}
                 item={item}
                 onUpdate={handleUpdateItem}
+                onDelete={handleDeleteItem}
                 autoExpand={index === 0 && searchTerm.length > 0}
                 searchTerm={searchTerm}
                 isFirstResult={index === 0 && searchTerm.length > 0}

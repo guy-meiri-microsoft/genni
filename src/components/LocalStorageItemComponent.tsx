@@ -5,6 +5,7 @@ import { SimpleJsonEditor } from './SimpleJsonEditor';
 interface LocalStorageItemComponentProps {
   item: LocalStorageItem;
   onUpdate: (key: string, newValue: string) => Promise<void>;
+  onDelete: (key: string) => Promise<void>;
   autoExpand?: boolean;
   searchTerm?: string;
   isFirstResult?: boolean;
@@ -13,6 +14,7 @@ interface LocalStorageItemComponentProps {
 export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps> = ({
   item,
   onUpdate,
+  onDelete,
   autoExpand = false,
   searchTerm = '',
   isFirstResult = false
@@ -95,6 +97,21 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
     setEditError(undefined);
     setIsValidJson(item.isValidJson);
     setIsEditing(false);
+  };
+
+  const handleDelete = async () => {
+    const displayName = item.mockParts?.api || item.key;
+    const confirmMessage = `Are you sure you want to delete "${displayName}"?\n\nThis action cannot be undone.`;
+    
+    if (!confirm(confirmMessage)) {
+      return;
+    }
+
+    try {
+      await onDelete(item.key);
+    } catch (error) {
+      alert(`Failed to delete item: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   };
 
   const handleStartEdit = () => {
@@ -194,6 +211,16 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
             title="Edit JSON"
           >
             ✏️
+          </button>
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDelete();
+            }}
+            className="delete-btn"
+            title="Delete this item"
+          >
+            🗑️
           </button>
           <button 
             className={`expand-btn ${isExpanded ? 'expanded' : ''}`}
