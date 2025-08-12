@@ -155,11 +155,19 @@ function App() {
               console.log('Mock toggle changed:', isEnabled);
             }}
           />
-          <button onClick={handleRefreshPage} className="action-btn refresh-page-btn">
-            🔄 Refresh Page
+          <button 
+            onClick={handleRefreshPage} 
+            className="action-btn refresh-page-btn"
+            title="Refresh Page"
+          >
+            🔄
           </button>
-          <button onClick={handleClearAllMocks} className="action-btn clear-mocks-btn">
-            🗑️ Clear All Mocks
+          <button 
+            onClick={handleClearAllMocks} 
+            className="action-btn clear-mocks-btn"
+            title="Clear All Mocks"
+          >
+            🗑️
           </button>
         </div>
       </header>

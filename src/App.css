@@ -104,6 +104,9 @@ body {
 .refresh-page-btn {
   color: #0969da;
   border-color: #0969da;
+  min-width: 32px;
+  padding: 6px;
+  font-size: 14px;
 }
 
 .refresh-page-btn:hover {
@@ -114,6 +117,9 @@ body {
 .clear-mocks-btn {
   color: #d1242f;
   border-color: #d1242f;
+  min-width: 32px;
+  padding: 6px;
+  font-size: 14px;
 }
 
 .clear-mocks-btn:hover {

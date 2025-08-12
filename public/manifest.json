@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "LocalStorage JSON Manager",
+  "name": "Genni - Analytics mocking tool",
   "version": "1.1.0",
-  "description": "A tool to help manage and edit JSON values in localStorage with specific prefixes",
+  "description": "A tool to help manage Analytics mocks",
   "action": {
     "default_popup": "index.html",
-    "default_title": "LocalStorage JSON Manager"
+    "default_title": "Genni - Analytics mocking tool"
   },
   "permissions": [
     "activeTab",
