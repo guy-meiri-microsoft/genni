@@ -219,6 +219,14 @@ function App() {
           <small>Current tab: {currentTab}</small>
         </div>
       </main>
+      
+      <button 
+        className="fab-button report-bug-fab"
+        onClick={() => window.open('https://github.com/guy-meiri-microsoft/genni/issues/new', '_blank')}
+        title="Report a bug"
+      >
+        🐛
+      </button>
     </div>
   );
 }
