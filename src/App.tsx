@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import type { LocalStorageItem } from './types';
 import { LocalStorageItemComponent } from './components/LocalStorageItemComponent';
 import { VersionChecker } from './components/VersionChecker';
+import { MockToggle } from './components/MockToggle';
 import { getLocalStorageItems, updateLocalStorageItem, deleteLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks } from './utils/chrome';
 import './App.css';
 
@@ -148,6 +149,12 @@ function App() {
               🔍
             </button>
           </div>
+          <MockToggle 
+            currentTabUrl={currentTab}
+            onToggle={(isEnabled) => {
+              console.log('Mock toggle changed:', isEnabled);
+            }}
+          />
           <button onClick={handleRefreshPage} className="action-btn refresh-page-btn">
             🔄 Refresh Page
           </button>

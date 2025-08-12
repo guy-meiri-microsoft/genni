@@ -1072,6 +1072,49 @@ body {
   box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.3);
 }
 
+/* Mock Toggle Button styles */
+.mock-toggle-btn {
+  font-weight: 600;
+  min-width: 50px;
+  padding: 4px 8px;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.mock-toggle-btn.enabled {
+  background: #1a7f37;
+  color: white;
+  border-color: #1a7f37;
+}
+
+.mock-toggle-btn.enabled:hover:not(:disabled) {
+  background: #2da44e;
+  border-color: #2da44e;
+}
+
+.mock-toggle-btn.disabled {
+  background: #cf222e;
+  color: white;
+  border-color: #cf222e;
+}
+
+.mock-toggle-btn.disabled:hover:not(:disabled) {
+  background: #e85c75;
+  border-color: #e85c75;
+}
+
+.mock-toggle-btn.loading {
+  background: #656d76;
+  color: white;
+  border-color: #656d76;
+}
+
+.mock-toggle-btn.error {
+  background: #8b949e;
+  color: white;
+  border-color: #8b949e;
+}
+
 /* Version checker styles */
 .version-checker {
   padding: 8px 12px;
