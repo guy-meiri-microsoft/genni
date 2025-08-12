@@ -1,11 +1,12 @@
 import type { LocalStorageItem, ChromeTabInfo, MockKeyParts } from '../types';
+import { extractIdsFromUrl } from './mockToggle';
 
 /**
  * Parses a mock key into its component parts
  * Expected format: mock_<api>_<start>_<end>_<id>
  * Example: mock_billingSummary_05/08_12/08_4f91ba29-52bc-ef11-8ee7-000d3a5a9be8
  */
-export function parseMockKey(key: string): MockKeyParts | null {
+export function parseMockKey(key: string, currentTabUrl?: string): MockKeyParts | null {
   const parts = key.split('_');
   
   if (parts.length < 2 || parts[0] !== 'mock') {
@@ -27,6 +28,13 @@ export function parseMockKey(key: string): MockKeyParts | null {
   }
   if (parts.length >= 5) {
     result.id = parts[4];
+  }
+
+  // If no ID was found in the key but we have URL context, use environment/bot ID
+  if (!result.id && currentTabUrl) {
+    const { envId, botId } = extractIdsFromUrl(currentTabUrl);
+    // Use botId if available, otherwise envId
+    result.id = botId || envId || undefined;
   }
 
   return result;
@@ -126,7 +134,7 @@ export async function getLocalStorageItems(searchTerm: string = ''): Promise<Loc
       }
 
       // Parse mock key structure
-      const mockParts = parseMockKey(item.key);
+      const mockParts = parseMockKey(item.key, tab.url);
 
       const processedItem = {
         ...item,

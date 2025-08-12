@@ -4,6 +4,7 @@ import { LocalStorageItemComponent } from './components/LocalStorageItemComponen
 import { VersionChecker } from './components/VersionChecker';
 import { MockToggle } from './components/MockToggle';
 import { getLocalStorageItems, updateLocalStorageItem, deleteLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks } from './utils/chrome';
+import { extractIdsFromUrl } from './utils/mockToggle';
 import './App.css';
 
 function App() {
@@ -53,6 +54,24 @@ function App() {
     } catch (err) {
       throw new Error(err instanceof Error ? err.message : 'Failed to delete item');
     }
+  };
+
+  // Filter items based on current environment/bot context
+  const getFilteredItems = () => {
+    if (!currentTab) return items;
+    
+    const { envId, botId } = extractIdsFromUrl(currentTab);
+    
+    // If no environment context, show all items
+    if (!envId) return items;
+    
+    return items.filter(item => {
+      // If item has no mockParts or no id, include it
+      if (!item.mockParts?.id) return true;
+      
+      // Check if the item's id matches current environment or bot
+      return item.mockParts.id === envId || item.mockParts.id === botId;
+    });
   };
 
   // Load items on mount
@@ -173,26 +192,29 @@ function App() {
       </header>
 
       <main className="main-content">
-        {items.length === 0 ? (
-          <div className="no-items">
-            <p>No localStorage mock items found{searchTerm && ` matching "${searchTerm}"`}</p>
-            <p>Make sure you're on a page that has localStorage items with the "mock_" prefix.</p>
-          </div>
-        ) : (
-          <div className="items-list" ref={itemsListRef}>
-            {items.map((item) => (
-              <LocalStorageItemComponent
-                key={item.key}
-                item={item}
-                onUpdate={handleUpdateItem}
-                onDelete={handleDeleteItem}
-                autoExpand={false}
-                searchTerm=""
-                isFirstResult={false}
-              />
-            ))}
-          </div>
-        )}
+        {(() => {
+          const filteredItems = getFilteredItems();
+          return filteredItems.length === 0 ? (
+            <div className="no-items">
+              <p>No localStorage mock items found{searchTerm && ` matching "${searchTerm}"`}</p>
+              <p>Make sure you're on a page that has localStorage items with the "mock_" prefix.</p>
+            </div>
+          ) : (
+            <div className="items-list" ref={itemsListRef}>
+              {filteredItems.map((item) => (
+                <LocalStorageItemComponent
+                  key={item.key}
+                  item={item}
+                  onUpdate={handleUpdateItem}
+                  onDelete={handleDeleteItem}
+                  autoExpand={false}
+                  searchTerm=""
+                  isFirstResult={false}
+                />
+              ))}
+            </div>
+          );
+        })()}
         <div className="current-tab">
           <small>Current tab: {currentTab}</small>
         </div>
