@@ -33,7 +33,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
   
   const [hasChanges, setHasChanges] = useState(false);
   const [originalValue] = useState(value);
-  const [viewMode, setViewMode] = useState<'formatted' | 'raw'>('raw');
+  const [viewMode, setViewMode] = useState<'formatted' | 'raw'>('formatted');
   const [parsedJson, setParsedJson] = useState<JsonNode | null>(null);
   const [collapsedNodes, setCollapsedNodes] = useState<Set<string>>(new Set());
   const [editingNode, setEditingNode] = useState<string | null>(null);
