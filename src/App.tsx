@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import type { LocalStorageItem } from './types';
 import { LocalStorageItemComponent } from './components/LocalStorageItemComponent';
+import { VersionChecker } from './components/VersionChecker';
 import { getLocalStorageItems, updateLocalStorageItem, deleteLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks } from './utils/chrome';
 import './App.css';
 
@@ -130,6 +131,7 @@ function App() {
 
   return (
     <div className="app">
+      <VersionChecker />
       <header className="app-header">
         <div>🔥 Genni 🔥</div>
         <div className="top-actions">

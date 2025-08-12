@@ -1071,3 +1071,55 @@ body {
   border-color: #0969da;
   box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.3);
 }
+
+/* Version checker styles */
+.version-checker {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e1e5e9;
+  font-size: 12px;
+  text-align: center;
+  background: #f6f8fa;
+}
+
+.version-checker.loading {
+  color: #656d76;
+  background: #f6f8fa;
+}
+
+.version-checker.up-to-date {
+  color: #1a7f37;
+  background: #dafbe1;
+}
+
+.version-checker.error {
+  color: #cf222e;
+  background: #ffebe9;
+}
+
+.version-checker.update-available {
+  background: #fff8c5;
+  padding: 6px 12px;
+}
+
+.update-button {
+  background: #ffd33d;
+  border: 1px solid #f9c513;
+  border-radius: 6px;
+  color: #24292f;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  width: 100%;
+}
+
+.update-button:hover {
+  background: #f9c513;
+  border-color: #edb100;
+  transform: translateY(-1px);
+}
+
+.version-text {
+  font-weight: 500;
+}
