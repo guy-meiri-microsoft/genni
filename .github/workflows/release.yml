@@ -1,0 +1,111 @@
+name: Create Release
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'public/manifest.json'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+      should-release: ${{ steps.check-tag.outputs.should-release }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for tag checking
+
+      - name: Get version from manifest.json
+        id: get-version
+        run: |
+          VERSION=$(cat public/manifest.json | jq -r '.version')
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "📦 Detected version: ${VERSION}"
+
+      - name: Check if tag already exists
+        id: check-tag
+        run: |
+          VERSION="${{ steps.get-version.outputs.version }}"
+          if git tag -l | grep -q "^v${VERSION}$"; then
+            echo "🏷️  Tag v${VERSION} already exists, skipping release"
+            echo "should-release=false" >> $GITHUB_OUTPUT
+          else
+            echo "✨ Tag v${VERSION} does not exist, proceeding with release"
+            echo "should-release=true" >> $GITHUB_OUTPUT
+          fi
+
+  build-and-release:
+    needs: check-version
+    if: needs.check-version.outputs.should-release == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build extension
+        run: npm run build:extension
+
+      - name: Verify build output
+        run: |
+          VERSION="${{ needs.check-version.outputs.version }}"
+          echo "🔍 Checking build output for version ${VERSION}:"
+          ls -la dist/
+          if [ -f "dist/${VERSION}.zip" ]; then
+            echo "✅ Found zip file: dist/${VERSION}.zip"
+            ls -lh "dist/${VERSION}.zip"
+          else
+            echo "❌ Zip file not found!"
+            exit 1
+          fi
+
+      - name: Rename asset for release
+        run: |
+          VERSION="${{ needs.check-version.outputs.version }}"
+          cp "./dist/${VERSION}.zip" "./genni-v${VERSION}.zip"
+          echo "📦 Created release asset: genni-v${VERSION}.zip"
+          ls -lh "./genni-v${VERSION}.zip"
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ needs.check-version.outputs.version }}
+          name: Genni v${{ needs.check-version.outputs.version }}
+          body: |
+            ## 🚀 Genni v${{ needs.check-version.outputs.version }}
+            
+            ### What's New
+            - Automatic release from manifest.json version ${{ needs.check-version.outputs.version }}
+            
+            ### Installation
+            1. Download the `genni-v${{ needs.check-version.outputs.version }}.zip` file below
+            2. Extract the zip file
+            3. Open Chrome and go to `chrome://extensions/`
+            4. Enable "Developer mode"
+            5. Click "Load unpacked" and select the extracted folder
+            
+            ### Files
+            - `genni-v${{ needs.check-version.outputs.version }}.zip` - Chrome extension package
+          files: |
+            ./genni-v${{ needs.check-version.outputs.version }}.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release Summary
+        run: |
+          echo "🎉 Successfully created release v${{ needs.check-version.outputs.version }}"
+          echo "📦 Uploaded: genni-v${{ needs.check-version.outputs.version }}.zip"
