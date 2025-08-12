@@ -44,13 +44,16 @@ body {
 .top-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
+  flex: 1;
 }
 
 .header-search {
   display: flex;
   align-items: center;
   gap: 4px;
+  padding-left: 4px;
+  flex: 1;
 }
 
 .header-search-input {
@@ -60,7 +63,9 @@ body {
   font-size: 12px;
   background: white;
   color: #24292f;
-  width: 150px;
+  flex: 1;
+  height: 32px;
+  box-sizing: border-box;
 }
 
 .header-search-input:focus {
@@ -77,6 +82,11 @@ body {
   background: white;
   cursor: pointer;
   transition: all 0.15s ease;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .header-search-btn:hover {
@@ -93,7 +103,11 @@ body {
   cursor: pointer;
   transition: all 0.15s ease;
   background: white;
-  color: #24292f;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .action-btn:hover {
@@ -106,7 +120,7 @@ body {
   border-color: #0969da;
   min-width: 32px;
   padding: 6px;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .refresh-page-btn:hover {
@@ -119,7 +133,7 @@ body {
   border-color: #d1242f;
   min-width: 32px;
   padding: 6px;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 .clear-mocks-btn:hover {
@@ -1082,7 +1096,7 @@ body {
 .mock-toggle-btn {
   font-weight: 600;
   min-width: 50px;
-  padding: 4px 8px;
+  padding: 6px 8px;
   font-size: 12px;
   transition: all 0.2s ease;
 }
