@@ -7,8 +7,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:extension": "npm run build && npm run copy-manifest",
+    "build:extension": "npm run build && npm run copy-manifest-versioned",
     "copy-manifest": "cp public/manifest.json dist/",
+    "copy-manifest-versioned": "node scripts/build-versioned.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },
