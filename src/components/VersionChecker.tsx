@@ -30,7 +30,7 @@ export const VersionChecker: React.FC = () => {
   }, []);
 
   const handleUpdateClick = () => {
-    window.open('https://github.com/guy-meiri-microsoft/genni/', '_blank');
+    window.open('https://github.com/guy-meiri-microsoft/genni/releases', '_blank');
   };
 
   if (isLoading) {
