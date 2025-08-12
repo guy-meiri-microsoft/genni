@@ -165,15 +165,15 @@ function App() {
           </div>
         ) : (
           <div className="items-list" ref={itemsListRef}>
-            {items.map((item, index) => (
+            {items.map((item) => (
               <LocalStorageItemComponent
                 key={item.key}
                 item={item}
                 onUpdate={handleUpdateItem}
                 onDelete={handleDeleteItem}
-                autoExpand={index === 0 && searchTerm.length > 0}
-                searchTerm={searchTerm}
-                isFirstResult={index === 0 && searchTerm.length > 0}
+                autoExpand={false}
+                searchTerm=""
+                isFirstResult={false}
               />
             ))}
           </div>
