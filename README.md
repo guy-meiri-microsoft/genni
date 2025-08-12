@@ -1,106 +1,60 @@
-# LocalStorage JSON Manager - Chrome/Edge Extension
+# Genni - Analytics Mocking Tool
 
-A Chrome/Edge browser extension built with TypeScript, React, and Vite to help manage localStorage JSON values with specific prefixes.
+A browser extension for managing analytics mocks in **Microsoft Copilot Studio**. This tool helps developers easily view, edit, and manage mock data stored in localStorage during development and testing.
 
-## Features
+## 🚀 Installation
 
-- 🔍 **Filter by Prefix**: Display localStorage items that match a specific prefix (default: "mock_")
-- 📝 **JSON Editor**: Built-in JSON editor with syntax validation and formatting
-- ✅ **Real-time Validation**: Instant JSON validation with error messages
-- 🔄 **Auto-refresh**: Automatically reload data after changes
-- 🎨 **Clean UI**: Modern, responsive interface designed for developer productivity
-- 🛡️ **Type Safe**: Built with TypeScript for better code quality
+### Step 1: Download the Latest Release
 
-## Use Case
+1. Go to the [Releases page](https://github.com/guy-meiri-microsoft/genni/releases)
+2. Download the latest `x.x.x.zip` file
 
-This extension is perfect for developers who:
-- Store JSON configuration data in localStorage
-- Use naming conventions like "mock_" prefixes for test data
-- Need to quickly edit JSON values without manual copy/paste workflows
-- Want a user-friendly alternative to browser DevTools for localStorage management
+![Download Release](docs/images/download-release.png)
 
-## Installation
+### Step 2: Extract the ZIP File
 
-### Development
+1. Extract the downloaded ZIP file to a folder on your computer
+2. Remember the location of this folder
 
-1. Clone and build the extension:
-```bash
-npm install
-npm run build:extension
-```
+### Step 3: Install in Your Browser
 
-2. Load the extension in Chrome/Edge:
-   - Open Chrome/Edge and navigate to `chrome://extensions/` (or `edge://extensions/`)
-   - Enable "Developer mode"
-   - Click "Load unpacked" and select the `dist` folder
+#### For Microsoft Edge:
+1. Open Edge and go to `edge://extensions/`
+2. Turn on **Developer mode** (toggle in the left sidebar)
+3. Click **Load unpacked**
+4. Select the extracted folder from Step 2
+5. The Genni extension should now appear in your extensions list
 
-### Usage
+![Edge Installation](docs/images/edge-install.png)
 
-1. Navigate to any webpage that has localStorage items with your chosen prefix
-2. Click the extension icon in the toolbar
-3. The popup will display all localStorage items matching the prefix
-4. Click "Edit" on any item to modify its JSON value
-5. Use the built-in JSON formatter and validator
-6. Save changes to update the localStorage directly
+#### For Google Chrome:
+1. Open Chrome and go to `chrome://extensions/`
+2. Turn on **Developer mode** (toggle in the top right)
+3. Click **Load unpacked**
+4. Select the extracted folder from Step 2
+5. The Genni extension should now appear in your extensions list
 
-## Project Structure
+![Chrome Installation](docs/images/chrome-install.png)
 
-```
-src/
-├── components/           # React components
-│   ├── JsonEditor.tsx   # JSON editing component
-│   └── LocalStorageItemComponent.tsx
-├── types/               # TypeScript type definitions
-│   └── index.ts
-├── utils/               # Utility functions
-│   └── chrome.ts        # Chrome extension API helpers
-├── App.tsx              # Main application component
-├── App.css              # Styles
-└── main.tsx             # Application entry point
+## 🎯 Usage
 
-public/
-├── manifest.json        # Chrome extension manifest
-└── icons/               # Extension icons (placeholders)
-```
+1. Navigate to your Microsoft Copilot Studio environment
+2. Click the Genni extension icon in your browser toolbar
+3. View and edit your analytics mock data
+4. Changes are saved directly to localStorage
 
-## Development Scripts
+## 🔧 Features
 
-- `npm run dev` - Start development server with Vite
-- `npm run build` - Build the React application
-- `npm run build:extension` - Build and prepare extension for Chrome/Edge
-- `npm run lint` - Run ESLint for code quality
+- **View Mock Data**: See all analytics mocks for your current environment/bot
+- **Edit JSON**: Built-in editor with validation and formatting
+- **Environment Filtering**: Automatically shows relevant mocks based on your current page
+- **Mock Toggle**: Enable/disable mocks with a single click
+- **Version Checking**: Get notified when updates are available
 
-## Technical Details
+## 📞 Support
 
-- **Framework**: React 19 with TypeScript
-- **Build Tool**: Vite 7.x for fast development and optimized builds
-- **Extension API**: Chrome Extension Manifest V3
-- **Permissions**: `activeTab`, `scripting` for localStorage access
-- **CSS**: Custom styles optimized for extension popup (500x600px)
-
-## Browser Compatibility
-
-- ✅ Chrome (Manifest V3)
-- ✅ Microsoft Edge (Manifest V3)
-- ✅ Other Chromium-based browsers
-
-## Security
-
-The extension only requests minimal permissions:
-- `activeTab`: Access to the currently active tab
-- `scripting`: Execute scripts to read/write localStorage
-- No network permissions or broad site access
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test with `npm run build:extension`
-5. Submit a pull request
-
-## Notes
-
-- Remember to create actual PNG icon files in `public/icons/` before publishing
-- The extension works only on pages that have localStorage items with your specified prefix
-- JSON validation prevents saving invalid data to localStorage
+If you encounter any issues:
+1. Check that you're on a Microsoft Copilot Studio page
+2. Ensure the extension has proper permissions
+3. Try refreshing the page and reopening the extension
+4. contact guymeiri@microsoft.com for further support
