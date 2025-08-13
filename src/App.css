@@ -165,6 +165,12 @@ body {
   cursor: pointer;
   border-bottom: 2px solid transparent;
   transition: all 0.15s ease;
+  outline: none; /* Remove black focus outline */
+}
+
+.tab-button:focus {
+  outline: none; /* Ensure no outline on focus */
+  box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.12); /* Add subtle focus indicator for accessibility */
 }
 
 .tab-button:hover {
