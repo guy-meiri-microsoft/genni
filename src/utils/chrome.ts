@@ -299,3 +299,67 @@ export async function getFavoriteItems(): Promise<FavoriteItem[]> {
     throw new Error('Failed to retrieve favorite items');
   }
 }
+
+/**
+ * Update a favorite item in Chrome's local storage
+ */
+export async function updateFavoriteItem(originalKey: string, newValue: string): Promise<void> {
+  try {
+    console.log('🌐 Chrome: Updating favorite item:', originalKey);
+    
+    // Get all storage items to find the favorite
+    const result = await chrome.storage.local.get(null);
+    const favoriteEntry = Object.entries(result).find(([, value]) => {
+      const favorite = value as FavoriteItem;
+      return favorite.key === originalKey;
+    });
+
+    if (!favoriteEntry) {
+      throw new Error('Favorite item not found');
+    }
+
+    const [storageKey, favoriteItem] = favoriteEntry;
+    const updatedFavorite: FavoriteItem = {
+      ...favoriteItem as FavoriteItem,
+      value: {
+        ...(favoriteItem as FavoriteItem).value,
+        value: newValue,
+        parsedValue: JSON.parse(newValue),
+        isValidJson: true
+      }
+    };
+
+    await chrome.storage.local.set({ [storageKey]: updatedFavorite });
+    console.log('🌐 Chrome: Successfully updated favorite item');
+  } catch (error) {
+    console.error('🌐 Chrome: Failed to update favorite:', error);
+    throw new Error(`Failed to update favorite item: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
+/**
+ * Delete a favorite item from Chrome's local storage
+ */
+export async function deleteFavoriteItem(originalKey: string): Promise<void> {
+  try {
+    console.log('🌐 Chrome: Deleting favorite item:', originalKey);
+    
+    // Get all storage items to find the favorite
+    const result = await chrome.storage.local.get(null);
+    const favoriteEntry = Object.entries(result).find(([, value]) => {
+      const favorite = value as FavoriteItem;
+      return favorite.key === originalKey;
+    });
+
+    if (!favoriteEntry) {
+      throw new Error('Favorite item not found');
+    }
+
+    const [storageKey] = favoriteEntry;
+    await chrome.storage.local.remove(storageKey);
+    console.log('🌐 Chrome: Successfully deleted favorite item');
+  } catch (error) {
+    console.error('🌐 Chrome: Failed to delete favorite:', error);
+    throw new Error(`Failed to delete favorite item: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}

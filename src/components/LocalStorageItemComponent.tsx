@@ -6,7 +6,7 @@ interface LocalStorageItemComponentProps {
   item: LocalStorageItem;
   onUpdate: (key: string, newValue: string) => Promise<void>;
   onDelete: (key: string) => Promise<void>;
-  onSave: (key: string, item: LocalStorageItem) => Promise<void>;
+  onSave?: (key: string, item: LocalStorageItem) => Promise<void>;
   autoExpand?: boolean;
   searchTerm?: string;
   isFirstResult?: boolean;
@@ -117,6 +117,8 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
   };
 
   const handleSaveToFavorites = async () => {
+    if (!onSave) return;
+    
     try {
       await onSave(item.key, item);
     } catch (error) {
@@ -222,16 +224,18 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
           >
             ✏️
           </button>
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSaveToFavorites();
-            }}
-            className="save-btn"
-            title="Save to favorites"
-          >
-            ⭐
-          </button>
+          {onSave && (
+            <button 
+              onClick={(e) => {
+                e.stopPropagation();
+                handleSaveToFavorites();
+              }}
+              className="save-btn"
+              title="Save to favorites"
+            >
+              ⭐
+            </button>
+          )}
           <button 
             onClick={(e) => {
               e.stopPropagation();

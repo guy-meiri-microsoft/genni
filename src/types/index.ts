@@ -36,3 +36,13 @@ export interface FavoriteItem {
   displayName: string;
   savedAt: string;
 }
+
+export type ActiveExtensionTab = 
+  | {
+      type: 'active-mocks';
+      items: LocalStorageItem[];
+    }
+  | {
+      type: 'favorites';
+      items: FavoriteItem[];
+    };

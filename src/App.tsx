@@ -1,21 +1,24 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { LocalStorageItem } from './types';
+import type { LocalStorageItem, FavoriteItem, ActiveExtensionTab } from './types';
 import { VersionChecker } from './components/VersionChecker';
 import { MockToggle } from './components/MockToggle';
 import { ActiveMocksTab } from './components/ActiveMocksTab';
 import { FavoritesTab } from './components/FavoritesTab';
-import { getLocalStorageItems, updateLocalStorageItem, deleteLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks, saveItemToFavorites } from './utils/chrome';
+import { getLocalStorageItems, updateLocalStorageItem, deleteLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks, saveItemToFavorites, getFavoriteItems, updateFavoriteItem, deleteFavoriteItem } from './utils/chrome';
 import { extractIdsFromUrl } from './utils/mockToggle';
 import './App.css';
 
 function App() {
   const [items, setItems] = useState<LocalStorageItem[]>([]);
-  const [itemsInView, setItemsInView] = useState<LocalStorageItem[]>([]);
+  const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
+  const [activeExtensionTab, setActiveExtensionTab] = useState<ActiveExtensionTab>({
+    type: 'active-mocks',
+    items: []
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | undefined>();
   const [searchTerm, setSearchTerm] = useState('');
   const [currentWebTab, setCurrentWebTab] = useState<string>('');
-  const [activeExtensionTab, setActiveExtensionTab] = useState<'active-mocks' | 'favorites'>('active-mocks');
 
   const loadItems = useCallback(async () => {
     setLoading(true);
@@ -37,6 +40,16 @@ function App() {
       setLoading(false);
     }
   }, [searchTerm]);
+
+  const loadFavorites = useCallback(async () => {
+    try {
+      const favoriteItems = await getFavoriteItems();
+      setFavorites(favoriteItems);
+    } catch (err) {
+      console.error('Error loading favorites:', err);
+      // Don't set error state for favorites, just log it
+    }
+  }, []);
 
   const handleUpdateItem = async (key: string, newValue: string) => {
     try {
@@ -67,8 +80,30 @@ function App() {
     try {
       await saveItemToFavorites(key, item, displayName);
       alert('Item saved to favorites successfully!');
+      // Reload favorites to show the new item
+      await loadFavorites();
     } catch (err) {
       alert(`Failed to save item: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  };
+
+  const handleUpdateFavoriteItem = async (key: string, newValue: string) => {
+    try {
+      await updateFavoriteItem(key, newValue);
+      // Reload favorites to reflect the change
+      await loadFavorites();
+    } catch (err) {
+      throw new Error(err instanceof Error ? err.message : 'Failed to update favorite item');
+    }
+  };
+
+  const handleDeleteFavoriteItem = async (key: string) => {
+    try {
+      await deleteFavoriteItem(key);
+      // Reload favorites to reflect the change
+      await loadFavorites();
+    } catch (err) {
+      throw new Error(err instanceof Error ? err.message : 'Failed to delete favorite item');
     }
   };
 
@@ -90,26 +125,51 @@ function App() {
     });
   }, [items, currentWebTab]);
 
-  // Update items in view based on active tab and filtering
-  const updateItemsInView = useCallback(() => {
-    if (activeExtensionTab === 'active-mocks') {
-      const filteredItems = getFilteredItems();
-      setItemsInView(filteredItems);
-    } else if (activeExtensionTab === 'favorites') {
-      // For now, favorites are empty, but this could be extended later
-      setItemsInView([]);
-    }
-  }, [getFilteredItems, activeExtensionTab]);
+  // Filter favorites based on search term
+  const getFilteredFavorites = useCallback(() => {
+    if (!searchTerm) return favorites;
+    
+    return favorites
+      .filter(fav => {
+        const displayName = fav.displayName.toLowerCase();
+        const key = fav.key.toLowerCase();
+        const apiName = fav.value.mockParts?.api?.toLowerCase() || '';
+        const searchLower = searchTerm.toLowerCase();
+        
+        return displayName.includes(searchLower) || 
+               key.includes(searchLower) || 
+               apiName.includes(searchLower);
+      });
+  }, [favorites, searchTerm]);
 
-  // Update items in view whenever dependencies change
+  // Update items in view whenever data changes
   useEffect(() => {
-    updateItemsInView();
-  }, [updateItemsInView]);
+    if (activeExtensionTab.type === 'active-mocks') {
+      const filteredItems = getFilteredItems();
+      setActiveExtensionTab(prev => 
+        prev.type === 'active-mocks' 
+          ? { type: 'active-mocks', items: filteredItems }
+          : prev
+      );
+    }
+  }, [items, currentWebTab, getFilteredItems, activeExtensionTab.type]);
+
+  useEffect(() => {
+    if (activeExtensionTab.type === 'favorites') {
+      const filteredFavorites = getFilteredFavorites();
+      setActiveExtensionTab(prev => 
+        prev.type === 'favorites' 
+          ? { type: 'favorites', items: filteredFavorites }
+          : prev
+      );
+    }
+  }, [favorites, searchTerm, getFilteredFavorites, activeExtensionTab.type]);
 
   // Load items on mount
   useEffect(() => {
     loadItems();
-  }, [loadItems]);
+    loadFavorites();
+  }, [loadItems, loadFavorites]);
 
   const handleSearchChange = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);
@@ -226,23 +286,29 @@ function App() {
       <div className="tabs-container">
         <div className="tabs-header">
           <button
-            className={`tab-button ${activeExtensionTab === 'active-mocks' ? 'active' : ''}`}
-            onClick={() => setActiveExtensionTab('active-mocks')}
+            className={`tab-button ${activeExtensionTab.type === 'active-mocks' ? 'active' : ''}`}
+            onClick={() => setActiveExtensionTab({
+              type: 'active-mocks',
+              items: getFilteredItems()
+            })}
           >
             Active Mocks
           </button>
           <button
-            className={`tab-button ${activeExtensionTab === 'favorites' ? 'active' : ''}`}
-            onClick={() => setActiveExtensionTab('favorites')}
+            className={`tab-button ${activeExtensionTab.type === 'favorites' ? 'active' : ''}`}
+            onClick={() => setActiveExtensionTab({
+              type: 'favorites',
+              items: getFilteredFavorites()
+            })}
           >
             Favorites
           </button>
         </div>
 
         <main className="main-content">
-          {activeExtensionTab === 'active-mocks' ? (
+          {activeExtensionTab.type === 'active-mocks' ? (
             <ActiveMocksTab
-              items={itemsInView}
+              items={activeExtensionTab.items}
               currentTab={currentWebTab}
               searchTerm={searchTerm}
               loading={loading}
@@ -253,7 +319,15 @@ function App() {
               onReload={loadItems}
             />
           ) : (
-            <FavoritesTab />
+            <FavoritesTab 
+              items={activeExtensionTab.items}
+              searchTerm={searchTerm}
+              loading={loading}
+              error={error}
+              onUpdateItem={handleUpdateFavoriteItem}
+              onDeleteItem={handleDeleteFavoriteItem}
+              onReload={loadFavorites}
+            />
           )}
         </main>
       </div>
