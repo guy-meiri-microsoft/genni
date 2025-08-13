@@ -4,7 +4,7 @@ import { VersionChecker } from './components/VersionChecker';
 import { MockToggle } from './components/MockToggle';
 import { ActiveMocksTab } from './components/ActiveMocksTab';
 import { FavoritesTab } from './components/FavoritesTab';
-import { getLocalStorageItems, updateLocalStorageItem, deleteLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks } from './utils/chrome';
+import { getLocalStorageItems, updateLocalStorageItem, deleteLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks, saveItemToFavorites } from './utils/chrome';
 import { extractIdsFromUrl } from './utils/mockToggle';
 import './App.css';
 
@@ -17,7 +17,7 @@ function App() {
   const [currentWebTab, setCurrentWebTab] = useState<string>('');
   const [activeExtensionTab, setActiveExtensionTab] = useState<'active-mocks' | 'favorites'>('active-mocks');
 
-  const loadItems = async () => {
+  const loadItems = useCallback(async () => {
     setLoading(true);
     setError(undefined);
 
@@ -36,7 +36,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchTerm]);
 
   const handleUpdateItem = async (key: string, newValue: string) => {
     try {
@@ -55,6 +55,20 @@ function App() {
       await loadItems();
     } catch (err) {
       throw new Error(err instanceof Error ? err.message : 'Failed to delete item');
+    }
+  };
+
+  const handleSaveItem = async (key: string, item: LocalStorageItem) => {
+    const displayName = prompt(`Enter a name for this saved item:`, key);
+    if (!displayName) {
+      return; // User cancelled
+    }
+
+    try {
+      await saveItemToFavorites(key, item, displayName);
+      alert('Item saved to favorites successfully!');
+    } catch (err) {
+      alert(`Failed to save item: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
   };
 
@@ -95,7 +109,7 @@ function App() {
   // Load items on mount
   useEffect(() => {
     loadItems();
-  }, []);
+  }, [loadItems]);
 
   const handleSearchChange = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);
@@ -235,6 +249,7 @@ function App() {
               error={error}
               onUpdateItem={handleUpdateItem}
               onDeleteItem={handleDeleteItem}
+              onSaveItem={handleSaveItem}
               onReload={loadItems}
             />
           ) : (

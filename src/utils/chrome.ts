@@ -1,4 +1,4 @@
-import type { LocalStorageItem, ChromeTabInfo, MockKeyParts } from '../types';
+import type { LocalStorageItem, ChromeTabInfo, MockKeyParts, FavoriteItem } from '../types';
 import { extractIdsFromUrl } from './mockToggle';
 
 /**
@@ -249,5 +249,53 @@ export function formatJson(jsonString: string): string {
     return JSON.stringify(parsed, null, 2);
   } catch {
     return jsonString;
+  }
+}
+
+/**
+ * Save an item to Chrome's local storage
+ */
+export async function saveItemToFavorites(key: string, item: LocalStorageItem, displayName: string): Promise<void> {
+  console.log('🌐 Chrome: Attempting to save item to favorites:', { key, displayName });
+  
+  const favoriteItem: FavoriteItem = {
+    key: key,
+    value: item,
+    displayName: displayName,
+    savedAt: new Date().toISOString()
+  };
+
+  const storageKey = `genni_favorite_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  
+  try {
+    // Check if chrome.storage is available
+    if (!chrome?.storage?.local) {
+      throw new Error('Chrome storage API is not available. Make sure the extension has storage permissions.');
+    }
+    
+    await chrome.storage.local.set({ [storageKey]: favoriteItem });
+    console.log('🌐 Chrome: Successfully saved item to favorites:', storageKey);
+  } catch (error) {
+    console.error('🌐 Chrome: Failed to save to favorites:', error);
+    throw new Error(`Failed to save item to favorites: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
+/**
+ * Get all saved favorite items from Chrome's local storage
+ */
+export async function getFavoriteItems(): Promise<FavoriteItem[]> {
+  try {
+    const result = await chrome.storage.local.get(null);
+    const favorites = Object.entries(result)
+      .filter(([key]) => key.startsWith('genni_favorite_'))
+      .map(([, value]) => value as FavoriteItem)
+      .sort((a: FavoriteItem, b: FavoriteItem) => new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime());
+    
+    console.log('🌐 Chrome: Retrieved favorites:', favorites.length);
+    return favorites;
+  } catch (error) {
+    console.error('🌐 Chrome: Failed to get favorites:', error);
+    throw new Error('Failed to retrieve favorite items');
   }
 }

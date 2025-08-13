@@ -6,6 +6,7 @@ interface LocalStorageItemComponentProps {
   item: LocalStorageItem;
   onUpdate: (key: string, newValue: string) => Promise<void>;
   onDelete: (key: string) => Promise<void>;
+  onSave: (key: string, item: LocalStorageItem) => Promise<void>;
   autoExpand?: boolean;
   searchTerm?: string;
   isFirstResult?: boolean;
@@ -15,6 +16,7 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
   item,
   onUpdate,
   onDelete,
+  onSave,
   autoExpand = false,
   searchTerm = '',
   isFirstResult = false
@@ -111,6 +113,14 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
       await onDelete(item.key);
     } catch (error) {
       alert(`Failed to delete item: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
+
+  const handleSaveToFavorites = async () => {
+    try {
+      await onSave(item.key, item);
+    } catch (error) {
+      console.error('Failed to save item:', error);
     }
   };
 
@@ -211,6 +221,16 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
             title="Edit JSON"
           >
             ✏️
+          </button>
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSaveToFavorites();
+            }}
+            className="save-btn"
+            title="Save to favorites"
+          >
+            ⭐
           </button>
           <button 
             onClick={(e) => {

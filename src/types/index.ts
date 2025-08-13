@@ -29,3 +29,10 @@ export interface LocalStorageManagerProps {
   loading: boolean;
   error?: string;
 }
+
+export interface FavoriteItem {
+  key: string;
+  value: LocalStorageItem;
+  displayName: string;
+  savedAt: string;
+}

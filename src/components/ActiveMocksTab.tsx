@@ -10,6 +10,7 @@ interface ActiveMocksTabProps {
   error?: string;
   onUpdateItem: (key: string, newValue: string) => Promise<void>;
   onDeleteItem: (key: string) => Promise<void>;
+  onSaveItem: (key: string, item: LocalStorageItem) => Promise<void>;
   onReload: () => Promise<void>;
 }
 
@@ -21,6 +22,7 @@ export function ActiveMocksTab({
   error,
   onUpdateItem,
   onDeleteItem,
+  onSaveItem,
   onReload
 }: ActiveMocksTabProps) {
   const itemsListRef = useRef<HTMLDivElement>(null);
@@ -61,6 +63,7 @@ export function ActiveMocksTab({
               item={item}
               onUpdate={onUpdateItem}
               onDelete={onDeleteItem}
+              onSave={onSaveItem}
               autoExpand={false}
               searchTerm=""
               isFirstResult={false}

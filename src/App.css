@@ -372,6 +372,23 @@ body {
   color: #a40e26;
 }
 
+.item-controls .save-btn {
+  padding: 4px 8px;
+  background: #f6f8fa;
+  border: 1px solid #d1d9e0;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: #0969da;
+}
+
+.item-controls .save-btn:hover {
+  background: #dbeafe;
+  border-color: #0969da;
+  color: #0550ae;
+}
+
 .expand-btn {
   padding: 4px 8px;
   background: transparent;
