@@ -1,19 +1,21 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { LocalStorageItem } from './types';
-import { LocalStorageItemComponent } from './components/LocalStorageItemComponent';
 import { VersionChecker } from './components/VersionChecker';
 import { MockToggle } from './components/MockToggle';
+import { ActiveMocksTab } from './components/ActiveMocksTab';
+import { FavoritesTab } from './components/FavoritesTab';
 import { getLocalStorageItems, updateLocalStorageItem, deleteLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks } from './utils/chrome';
 import { extractIdsFromUrl } from './utils/mockToggle';
 import './App.css';
 
 function App() {
   const [items, setItems] = useState<LocalStorageItem[]>([]);
+  const [itemsInView, setItemsInView] = useState<LocalStorageItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | undefined>();
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentTab, setCurrentTab] = useState<string>('');
-  const itemsListRef = useRef<HTMLDivElement>(null);
+  const [currentWebTab, setCurrentWebTab] = useState<string>('');
+  const [activeExtensionTab, setActiveExtensionTab] = useState<'active-mocks' | 'favorites'>('active-mocks');
 
   const loadItems = async () => {
     setLoading(true);
@@ -22,7 +24,7 @@ function App() {
     try {
       const tab = await getCurrentTab();
       if (tab) {
-        setCurrentTab(tab.url);
+        setCurrentWebTab(tab.url);
         const loadedItems = await getLocalStorageItems(searchTerm);
         setItems(loadedItems);
       } else {
@@ -57,10 +59,10 @@ function App() {
   };
 
   // Filter items based on current environment/bot context
-  const getFilteredItems = () => {
-    if (!currentTab) return items;
+  const getFilteredItems = useCallback(() => {
+    if (!currentWebTab) return items;
     
-    const { envId, botId } = extractIdsFromUrl(currentTab);
+    const { envId, botId } = extractIdsFromUrl(currentWebTab);
     
     // If no environment context, show all items
     if (!envId) return items;
@@ -72,7 +74,23 @@ function App() {
       // Check if the item's id matches current environment or bot
       return item.mockParts.id === envId || item.mockParts.id === botId;
     });
-  };
+  }, [items, currentWebTab]);
+
+  // Update items in view based on active tab and filtering
+  const updateItemsInView = useCallback(() => {
+    if (activeExtensionTab === 'active-mocks') {
+      const filteredItems = getFilteredItems();
+      setItemsInView(filteredItems);
+    } else if (activeExtensionTab === 'favorites') {
+      // For now, favorites are empty, but this could be extended later
+      setItemsInView([]);
+    }
+  }, [getFilteredItems, activeExtensionTab]);
+
+  // Update items in view whenever dependencies change
+  useEffect(() => {
+    updateItemsInView();
+  }, [updateItemsInView]);
 
   // Load items on mount
   useEffect(() => {
@@ -169,7 +187,7 @@ function App() {
             </button>
           </div>
           <MockToggle 
-            currentTabUrl={currentTab}
+            currentTabUrl={currentWebTab}
             onToggle={(isEnabled) => {
               console.log('Mock toggle changed:', isEnabled);
             }}
@@ -191,34 +209,39 @@ function App() {
         </div>
       </header>
 
-      <main className="main-content">
-        {(() => {
-          const filteredItems = getFilteredItems();
-          return filteredItems.length === 0 ? (
-            <div className="no-items">
-              <p>No localStorage mock items found{searchTerm && ` matching "${searchTerm}"`}</p>
-              <p>Make sure you're on a page that has localStorage items with the "mock_" prefix.</p>
-            </div>
-          ) : (
-            <div className="items-list" ref={itemsListRef}>
-              {filteredItems.map((item) => (
-                <LocalStorageItemComponent
-                  key={item.key}
-                  item={item}
-                  onUpdate={handleUpdateItem}
-                  onDelete={handleDeleteItem}
-                  autoExpand={false}
-                  searchTerm=""
-                  isFirstResult={false}
-                />
-              ))}
-            </div>
-          );
-        })()}
-        <div className="current-tab">
-          <small>Current tab: {currentTab}</small>
+      <div className="tabs-container">
+        <div className="tabs-header">
+          <button
+            className={`tab-button ${activeExtensionTab === 'active-mocks' ? 'active' : ''}`}
+            onClick={() => setActiveExtensionTab('active-mocks')}
+          >
+            Active Mocks
+          </button>
+          <button
+            className={`tab-button ${activeExtensionTab === 'favorites' ? 'active' : ''}`}
+            onClick={() => setActiveExtensionTab('favorites')}
+          >
+            Favorites
+          </button>
         </div>
-      </main>
+
+        <main className="main-content">
+          {activeExtensionTab === 'active-mocks' ? (
+            <ActiveMocksTab
+              items={itemsInView}
+              currentTab={currentWebTab}
+              searchTerm={searchTerm}
+              loading={loading}
+              error={error}
+              onUpdateItem={handleUpdateItem}
+              onDeleteItem={handleDeleteItem}
+              onReload={loadItems}
+            />
+          ) : (
+            <FavoritesTab />
+          )}
+        </main>
+      </div>
     </div>
   );
 }
