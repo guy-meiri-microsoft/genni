@@ -53,21 +53,24 @@ export const MockToggle: React.FC<MockToggleProps> = ({ currentTabUrl, onToggle 
 
   if (isLoading) {
     return (
-      <button className="action-btn mock-toggle-btn loading" disabled>
-        ⏳ Loading...
-      </button>
+      <div className="mock-toggle-switch loading">
+        <span className="mock-toggle-slider">
+          <span className="mock-toggle-text">⏳</span>
+        </span>
+      </div>
     );
   }
 
   if (!mockInfo || mockInfo.error) {
     return (
-      <button 
-        className="action-btn mock-toggle-btn error" 
-        disabled
+      <div 
+        className="mock-toggle-switch error"
         title={mockInfo?.error || 'Unable to determine mock state'}
       >
-        ❌ Mocks N/A
-      </button>
+        <span className="mock-toggle-slider">
+          <span className="mock-toggle-text">❌</span>
+        </span>
+      </div>
     );
   }
 
@@ -75,13 +78,22 @@ export const MockToggle: React.FC<MockToggleProps> = ({ currentTabUrl, onToggle 
   const targetId = (mockInfo.botId || mockInfo.envId || '').substring(0, 8);
 
   return (
-    <button
-      className={`action-btn mock-toggle-btn ${mockInfo.isEnabled ? 'enabled' : 'disabled'}`}
-      onClick={handleToggle}
-      disabled={isToggling}
+    <label 
+      className={`mock-toggle-switch ${isToggling ? 'toggling' : ''}`}
       title={`${mockInfo.isEnabled ? 'Disable' : 'Enable'} mocks for ${targetLabel}: ${targetId}...`}
     >
-      {isToggling ? '...' : mockInfo.isEnabled ? 'ON' : 'OFF'}
-    </button>
+      <input
+        type="checkbox"
+        checked={mockInfo.isEnabled}
+        onChange={handleToggle}
+        disabled={isToggling}
+        className="mock-toggle-input"
+      />
+      <span className="mock-toggle-slider">
+        <span className="mock-toggle-text">
+          {isToggling ? '...' : mockInfo.isEnabled ? 'ON' : 'OFF'}
+        </span>
+      </span>
+    </label>
   );
 };
