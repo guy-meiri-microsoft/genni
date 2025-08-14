@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import type { FavoriteItem } from '../types';
-import { LocalStorageItemComponent } from './LocalStorageItemComponent';
+import { FavoriteItemComponent } from './FavoriteItemComponent';
 
 interface FavoritesTabProps {
   items: FavoriteItem[];
@@ -54,13 +54,13 @@ export function FavoritesTab({
       ) : (
         <div className="items-list" ref={itemsListRef}>
           {items.map((item) => (
-            <LocalStorageItemComponent
+            <FavoriteItemComponent
               key={item.displayName}
-              item={item.value}
+              item={item}
               onUpdate={onUpdateItem}
               onDelete={onDeleteItem}
               autoExpand={false}
-              searchTerm=""
+              searchTerm={searchTerm}
               isFirstResult={false}
             />
           ))}
