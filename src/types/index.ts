@@ -35,6 +35,7 @@ export interface FavoriteItem {
   value: LocalStorageItem;
   displayName: string;
   savedAt: string;
+  dateFilterOption: DateFilterOptions;
 }
 
 export type ActiveExtensionTab = 
@@ -46,3 +47,5 @@ export type ActiveExtensionTab =
       type: 'favorites';
       items: FavoriteItem[];
     };
+
+export type DateFilterOptions = 'Last7Days' | 'Last14Days' | 'Last30Days';

@@ -1,5 +1,48 @@
-import type { LocalStorageItem, ChromeTabInfo, MockKeyParts, FavoriteItem } from '../types';
+import type { LocalStorageItem, ChromeTabInfo, MockKeyParts, FavoriteItem, DateFilterOptions } from '../types';
 import { extractIdsFromUrl } from './mockToggle';
+
+/**
+ * Calculates the appropriate DateFilterOptions based on start and end dates
+ */
+function calculateDateFilterOption(startDate?: string, endDate?: string): DateFilterOptions {
+  if (!startDate || !endDate) {
+    return 'Last30Days'; // Default fallback
+  }
+
+  try {
+    // Parse dates assuming DD/MM format and current year
+    const currentYear = new Date().getFullYear();
+    
+    // Split DD/MM format and create proper date strings
+    const [startDay, startMonth] = startDate.split('/');
+    const [endDay, endMonth] = endDate.split('/');
+    
+    // Create dates in YYYY-MM-DD format for proper parsing
+    const start = new Date(`${currentYear}-${startMonth.padStart(2, '0')}-${startDay.padStart(2, '0')}`);
+    let end = new Date(`${currentYear}-${endMonth.padStart(2, '0')}-${endDay.padStart(2, '0')}`);
+    
+    // Handle year overflow: if end date is before start date, end date is in the next year
+    if (end < start) {
+      end = new Date(`${currentYear + 1}-${endMonth.padStart(2, '0')}-${endDay.padStart(2, '0')}`);
+    }
+    
+    // Calculate the difference in days
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    // Return appropriate filter based on date range
+    if (diffDays <= 7) {
+      return 'Last7Days';
+    } else if (diffDays <= 14) {
+      return 'Last14Days';
+    } else {
+      return 'Last30Days';
+    }
+  } catch (error) {
+    console.warn('Failed to parse dates for filter calculation:', { startDate, endDate, error });
+    return 'Last30Days'; // Default fallback
+  }
+}
 
 /**
  * Parses a mock key into its component parts
@@ -256,13 +299,20 @@ export function formatJson(jsonString: string): string {
  * Save an item to Chrome's local storage
  */
 export async function saveItemToFavorites(key: string, item: LocalStorageItem, displayName: string): Promise<void> {
-  console.log('🌐 Chrome: Attempting to save item to favorites:', { key, displayName });
+  console.log('🌐 Chrome: Attempting to save item to favorites:', { key, displayName, mockParts: item.mockParts });
+
+  // Calculate date filter option from mock parts
+  const dateFilterOption = calculateDateFilterOption(
+    item.mockParts?.startDate,
+    item.mockParts?.endDate
+  );
   
   const favoriteItem: FavoriteItem = {
     key: key,
     value: item,
     displayName: displayName,
-    savedAt: new Date().toISOString()
+    savedAt: new Date().toISOString(),
+    dateFilterOption: dateFilterOption
   };
 
   const storageKey = `genni_favorite_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -274,7 +324,7 @@ export async function saveItemToFavorites(key: string, item: LocalStorageItem, d
     }
     
     await chrome.storage.local.set({ [storageKey]: favoriteItem });
-    console.log('🌐 Chrome: Successfully saved item to favorites:', storageKey);
+    console.log('🌐 Chrome: Successfully saved item to favorites:', storageKey, 'with date filter:', dateFilterOption);
   } catch (error) {
     console.error('🌐 Chrome: Failed to save to favorites:', error);
     throw new Error(`Failed to save item to favorites: ${error instanceof Error ? error.message : 'Unknown error'}`);
