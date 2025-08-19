@@ -246,6 +246,37 @@ export async function deleteLocalStorageItem(key: string): Promise<void> {
 }
 
 /**
+ * Applies a favorite item to localStorage with updated dates
+ */
+export async function applyFavoriteToLocalStorage(oldKey: string, newKey: string, value: string): Promise<void> {
+  const tab = await getCurrentTab();
+  if (!tab) {
+    throw new Error('No active tab found');
+  }
+
+  // Validate JSON before applying
+  try {
+    JSON.parse(value);
+  } catch (e) {
+    throw new Error(`Invalid JSON: ${e instanceof Error ? e.message : 'Unknown error'}`);
+  }
+
+  await executeInTab(tab.id, (...args: unknown[]) => {
+    const oldKey = args[0] as string;
+    const newKey = args[1] as string;
+    const value = args[2] as string;
+    
+    // Remove old key if it exists and is different from new key
+    if (oldKey !== newKey && localStorage.getItem(oldKey)) {
+      localStorage.removeItem(oldKey);
+    }
+    
+    // Set the new item
+    localStorage.setItem(newKey, value);
+  }, oldKey, newKey, value);
+}
+
+/**
  * Refreshes the current tab
  */
 export async function refreshCurrentTab(): Promise<void> {

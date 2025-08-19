@@ -107,6 +107,17 @@ function App() {
     }
   };
 
+  const handleApplyFavoriteItem = async (key: string) => {
+    try {
+      // Reload the active mocks to reflect the new item
+      await loadItems();
+      console.log('Applied favorite item to localStorage:', key);
+    } catch (err) {
+      console.error('Failed to refresh after applying favorite:', err);
+      // Don't throw error since the apply operation itself succeeded
+    }
+  };
+
   // Filter items based on current environment/bot context
   const getFilteredItems = useCallback(() => {
     if (!currentWebTab) return items;
@@ -326,6 +337,7 @@ function App() {
               error={error}
               onUpdateItem={handleUpdateFavoriteItem}
               onDeleteItem={handleDeleteFavoriteItem}
+              onApplyItem={handleApplyFavoriteItem}
               onReload={loadFavorites}
             />
           )}

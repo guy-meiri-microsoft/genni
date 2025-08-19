@@ -9,6 +9,7 @@ interface FavoritesTabProps {
   error?: string;
   onUpdateItem: (key: string, newValue: string) => Promise<void>;
   onDeleteItem: (key: string) => Promise<void>;
+  onApplyItem?: (key: string) => Promise<void>;
   onReload: () => Promise<void>;
 }
 
@@ -19,6 +20,7 @@ export function FavoritesTab({
   error,
   onUpdateItem,
   onDeleteItem,
+  onApplyItem,
   onReload
 }: FavoritesTabProps) {
   const itemsListRef = useRef<HTMLDivElement>(null);
@@ -59,6 +61,7 @@ export function FavoritesTab({
               item={item}
               onUpdate={onUpdateItem}
               onDelete={onDeleteItem}
+              onApply={onApplyItem}
               autoExpand={false}
               searchTerm={searchTerm}
               isFirstResult={false}
