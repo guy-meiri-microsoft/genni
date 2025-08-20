@@ -29,3 +29,23 @@ export interface LocalStorageManagerProps {
   loading: boolean;
   error?: string;
 }
+
+export interface FavoriteItem {
+  key: string;
+  value: LocalStorageItem;
+  displayName: string;
+  savedAt: string;
+  dateFilterOption: DateFilterOptions;
+}
+
+export type ActiveExtensionTab = 
+  | {
+      type: 'active-mocks';
+      items: LocalStorageItem[];
+    }
+  | {
+      type: 'favorites';
+      items: FavoriteItem[];
+    };
+
+export type DateFilterOptions = 'Last7Days' | 'Last14Days' | 'Last30Days';

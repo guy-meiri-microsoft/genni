@@ -1,5 +1,48 @@
-import type { LocalStorageItem, ChromeTabInfo, MockKeyParts } from '../types';
+import type { LocalStorageItem, ChromeTabInfo, MockKeyParts, FavoriteItem, DateFilterOptions } from '../types';
 import { extractIdsFromUrl } from './mockToggle';
+
+/**
+ * Calculates the appropriate DateFilterOptions based on start and end dates
+ */
+function calculateDateFilterOption(startDate?: string, endDate?: string): DateFilterOptions {
+  if (!startDate || !endDate) {
+    return 'Last30Days'; // Default fallback
+  }
+
+  try {
+    // Parse dates assuming DD/MM format and current year
+    const currentYear = new Date().getFullYear();
+    
+    // Split DD/MM format and create proper date strings
+    const [startDay, startMonth] = startDate.split('/');
+    const [endDay, endMonth] = endDate.split('/');
+    
+    // Create dates in YYYY-MM-DD format for proper parsing
+    const start = new Date(`${currentYear}-${startMonth.padStart(2, '0')}-${startDay.padStart(2, '0')}`);
+    let end = new Date(`${currentYear}-${endMonth.padStart(2, '0')}-${endDay.padStart(2, '0')}`);
+    
+    // Handle year overflow: if end date is before start date, end date is in the next year
+    if (end < start) {
+      end = new Date(`${currentYear + 1}-${endMonth.padStart(2, '0')}-${endDay.padStart(2, '0')}`);
+    }
+    
+    // Calculate the difference in days
+    const diffTime = Math.abs(end.getTime() - start.getTime());
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    // Return appropriate filter based on date range
+    if (diffDays <= 7) {
+      return 'Last7Days';
+    } else if (diffDays <= 14) {
+      return 'Last14Days';
+    } else {
+      return 'Last30Days';
+    }
+  } catch (error) {
+    console.warn('Failed to parse dates for filter calculation:', { startDate, endDate, error });
+    return 'Last30Days'; // Default fallback
+  }
+}
 
 /**
  * Parses a mock key into its component parts
@@ -203,6 +246,37 @@ export async function deleteLocalStorageItem(key: string): Promise<void> {
 }
 
 /**
+ * Applies a favorite item to localStorage with updated dates
+ */
+export async function applyFavoriteToLocalStorage(oldKey: string, newKey: string, value: string): Promise<void> {
+  const tab = await getCurrentTab();
+  if (!tab) {
+    throw new Error('No active tab found');
+  }
+
+  // Validate JSON before applying
+  try {
+    JSON.parse(value);
+  } catch (e) {
+    throw new Error(`Invalid JSON: ${e instanceof Error ? e.message : 'Unknown error'}`);
+  }
+
+  await executeInTab(tab.id, (...args: unknown[]) => {
+    const oldKey = args[0] as string;
+    const newKey = args[1] as string;
+    const value = args[2] as string;
+    
+    // Remove old key if it exists and is different from new key
+    if (oldKey !== newKey && localStorage.getItem(oldKey)) {
+      localStorage.removeItem(oldKey);
+    }
+    
+    // Set the new item
+    localStorage.setItem(newKey, value);
+  }, oldKey, newKey, value);
+}
+
+/**
  * Refreshes the current tab
  */
 export async function refreshCurrentTab(): Promise<void> {
@@ -249,5 +323,124 @@ export function formatJson(jsonString: string): string {
     return JSON.stringify(parsed, null, 2);
   } catch {
     return jsonString;
+  }
+}
+
+/**
+ * Save an item to Chrome's local storage
+ */
+export async function saveItemToFavorites(key: string, item: LocalStorageItem, displayName: string): Promise<void> {
+  console.log('🌐 Chrome: Attempting to save item to favorites:', { key, displayName, mockParts: item.mockParts });
+
+  // Calculate date filter option from mock parts
+  const dateFilterOption = calculateDateFilterOption(
+    item.mockParts?.startDate,
+    item.mockParts?.endDate
+  );
+  
+  const favoriteItem: FavoriteItem = {
+    key: key,
+    value: item,
+    displayName: displayName,
+    savedAt: new Date().toISOString(),
+    dateFilterOption: dateFilterOption
+  };
+
+  const storageKey = `genni_favorite_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  
+  try {
+    // Check if chrome.storage is available
+    if (!chrome?.storage?.local) {
+      throw new Error('Chrome storage API is not available. Make sure the extension has storage permissions.');
+    }
+    
+    await chrome.storage.local.set({ [storageKey]: favoriteItem });
+    console.log('🌐 Chrome: Successfully saved item to favorites:', storageKey, 'with date filter:', dateFilterOption);
+  } catch (error) {
+    console.error('🌐 Chrome: Failed to save to favorites:', error);
+    throw new Error(`Failed to save item to favorites: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
+/**
+ * Get all saved favorite items from Chrome's local storage
+ */
+export async function getFavoriteItems(): Promise<FavoriteItem[]> {
+  try {
+    const result = await chrome.storage.local.get(null);
+    const favorites = Object.entries(result)
+      .filter(([key]) => key.startsWith('genni_favorite_'))
+      .map(([, value]) => value as FavoriteItem)
+      .sort((a: FavoriteItem, b: FavoriteItem) => new Date(b.savedAt).getTime() - new Date(a.savedAt).getTime());
+    
+    console.log('🌐 Chrome: Retrieved favorites:', favorites.length);
+    return favorites;
+  } catch (error) {
+    console.error('🌐 Chrome: Failed to get favorites:', error);
+    throw new Error('Failed to retrieve favorite items');
+  }
+}
+
+/**
+ * Update a favorite item in Chrome's local storage
+ */
+export async function updateFavoriteItem(originalKey: string, newValue: string): Promise<void> {
+  try {
+    console.log('🌐 Chrome: Updating favorite item:', originalKey);
+    
+    // Get all storage items to find the favorite
+    const result = await chrome.storage.local.get(null);
+    const favoriteEntry = Object.entries(result).find(([, value]) => {
+      const favorite = value as FavoriteItem;
+      return favorite.key === originalKey;
+    });
+
+    if (!favoriteEntry) {
+      throw new Error('Favorite item not found');
+    }
+
+    const [storageKey, favoriteItem] = favoriteEntry;
+    const updatedFavorite: FavoriteItem = {
+      ...favoriteItem as FavoriteItem,
+      value: {
+        ...(favoriteItem as FavoriteItem).value,
+        value: newValue,
+        parsedValue: JSON.parse(newValue),
+        isValidJson: true
+      }
+    };
+
+    await chrome.storage.local.set({ [storageKey]: updatedFavorite });
+    console.log('🌐 Chrome: Successfully updated favorite item');
+  } catch (error) {
+    console.error('🌐 Chrome: Failed to update favorite:', error);
+    throw new Error(`Failed to update favorite item: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  }
+}
+
+/**
+ * Delete a favorite item from Chrome's local storage
+ */
+export async function deleteFavoriteItem(originalKey: string): Promise<void> {
+  try {
+    console.log('🌐 Chrome: Deleting favorite item:', originalKey);
+    
+    // Get all storage items to find the favorite
+    const result = await chrome.storage.local.get(null);
+    const favoriteEntry = Object.entries(result).find(([, value]) => {
+      const favorite = value as FavoriteItem;
+      return favorite.key === originalKey;
+    });
+
+    if (!favoriteEntry) {
+      throw new Error('Favorite item not found');
+    }
+
+    const [storageKey] = favoriteEntry;
+    await chrome.storage.local.remove(storageKey);
+    console.log('🌐 Chrome: Successfully deleted favorite item');
+  } catch (error) {
+    console.error('🌐 Chrome: Failed to delete favorite:', error);
+    throw new Error(`Failed to delete favorite item: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
