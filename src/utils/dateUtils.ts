@@ -142,6 +142,8 @@ export function updateJsonDates(jsonString: string, newStartDate: string, newEnd
 /**
  * Updates a mock key with new start and end dates
  * Expected format: mock_<api>_<start>_<end>_<id>
+ * The end date in the key represents the full range (inclusive), so for a 7-day range 
+ * from 07/08 to 13/08, the key should be mock_api_07/08_14/08_id (showing the day after the last day)
  */
 export function updateMockKey(originalKey: string, newStartDate: string, newEndDate: string): string {
   const parts = originalKey.split('_');
@@ -150,12 +152,21 @@ export function updateMockKey(originalKey: string, newStartDate: string, newEndD
     return originalKey; // Return original if not a mock key
   }
 
+  // Calculate the day after the end date for the key format
+  const [endDay, endMonth] = newEndDate.split('/');
+  const endDateObj = new Date(new Date().getFullYear(), parseInt(endMonth) - 1, parseInt(endDay) + 1);
+  
+  // Format the day after end date as DD/MM
+  const dayAfterEnd = endDateObj.getDate().toString().padStart(2, '0');
+  const monthAfterEnd = (endDateObj.getMonth() + 1).toString().padStart(2, '0');
+  const keyEndDate = `${dayAfterEnd}/${monthAfterEnd}`;
+
   // Replace the date parts if they exist
   if (parts.length >= 3) {
     parts[2] = newStartDate; // startDate
   }
   if (parts.length >= 4) {
-    parts[3] = newEndDate; // endDate
+    parts[3] = keyEndDate; // endDate + 1 day
   }
 
   return parts.join('_');
