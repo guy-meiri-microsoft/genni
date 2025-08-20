@@ -281,7 +281,7 @@ function App() {
         <div className="error">
           <h2>Error</h2>
           <p>{error}</p>
-          <button onClick={loadItems} className="retry-btn">
+          <button onClick={loadItems} className="retry-btn" title="Retry loading items">
             Try Again
           </button>
         </div>
@@ -335,6 +335,7 @@ function App() {
               type: 'active-mocks',
               items: getFilteredItems()
             })}
+            title="View active mock data in localStorage"
           >
             Active Mocks
           </button>
@@ -344,6 +345,7 @@ function App() {
               type: 'favorites',
               items: getFilteredFavorites()
             })}
+            title="View saved favorite mock configurations"
           >
             Favorites
           </button>

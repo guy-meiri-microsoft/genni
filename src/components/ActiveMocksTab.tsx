@@ -41,7 +41,7 @@ export function ActiveMocksTab({
       <div className="error">
         <h2>Error</h2>
         <p>{error}</p>
-        <button onClick={onReload} className="retry-btn">
+        <button onClick={onReload} className="retry-btn" title="Retry loading active mocks">
           Try Again
         </button>
       </div>

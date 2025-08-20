@@ -566,6 +566,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
             }}
             disabled={!hasChanges || !isValid}
             className="save-btn"
+            title="Save changes to localStorage"
           >
             Save Changes
           </button>
@@ -575,6 +576,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
               onCancel();
             }}
             className="cancel-btn"
+            title="Cancel editing and discard changes"
           >
             Cancel
           </button>
