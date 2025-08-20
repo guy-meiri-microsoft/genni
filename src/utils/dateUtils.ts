@@ -92,6 +92,16 @@ export function updateJsonDates(jsonString: string, newStartDate: string, newEnd
   try {
     const parsed = JSON.parse(jsonString);
     
+    // Helper function to update a date field
+    const updateDateField = (value: unknown, fallbackValue: string): unknown => {
+      // If we have original dates and the value is a string, map it using offset
+      if (typeof value === 'string' && originalStartDate && originalEndDate) {
+        return mapTimestampToNewRange(value, originalStartDate, originalEndDate, newStartDate, newEndDate);
+      }
+      // Otherwise use the fallback value
+      return fallbackValue;
+    };
+    
     // Recursively update date fields
     const updateDatesInObject = (obj: unknown): unknown => {
       if (typeof obj !== 'object' || obj === null) {
@@ -107,20 +117,13 @@ export function updateJsonDates(jsonString: string, newStartDate: string, newEnd
         if (typeof key === 'string') {
           const keyLower = key.toLowerCase();
           
-          // Update fields that contain 'startDate' or 'startdate' (case insensitive)
           if (keyLower.includes('startdate')) {
-            updated[key] = newStartDate;
-          }
-          // Update fields that contain 'endDate' or 'enddate' (case insensitive)
-          else if (keyLower.includes('enddate')) {
-            updated[key] = newEndDate;
-          }
-          // Update fields that contain 'timestamp' (case insensitive)
-          else if (keyLower.includes('timestamp') && typeof value === 'string' && originalStartDate && originalEndDate) {
+            updated[key] = updateDateField(value, newStartDate);
+          } else if (keyLower.includes('enddate')) {
+            updated[key] = updateDateField(value, newEndDate);
+          } else if (keyLower.includes('timestamp') && typeof value === 'string' && originalStartDate && originalEndDate) {
             updated[key] = mapTimestampToNewRange(value, originalStartDate, originalEndDate, newStartDate, newEndDate);
-          }
-          // Recursively process nested objects
-          else if (typeof value === 'object' && value !== null) {
+          } else if (typeof value === 'object' && value !== null) {
             updated[key] = updateDatesInObject(value);
           }
         }
