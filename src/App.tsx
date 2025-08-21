@@ -302,6 +302,7 @@ function App() {
               onChange={(e) => handleSearchChange(e.target.value)}
               placeholder="Search API..."
               className="header-search-input"
+              title="Search for API names, dates, or mock IDs"
             />
           </div>
           <MockToggle 

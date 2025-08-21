@@ -32,9 +32,6 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.app-header {
   margin: 0;
   font-size: 14px;
   font-weight: 600;
@@ -946,11 +943,13 @@ body {
 .status-valid {
   color: #1a7f37;
   font-weight: 500;
+  font-size: 14px;
 }
 
 .status-invalid {
   color: #cf222e;
   font-weight: 500;
+  font-size: 14px;
 }
 
 .error-message {
@@ -1187,23 +1186,6 @@ body {
 
 .editor-content {
   position: relative;
-}
-
-.status-valid {
-  color: #059669;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.status-invalid {
-  color: #dc2626;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-.error-message {
-  color: #dc2626;
-  font-size: 13px;
 }
 
 .format-btn {
@@ -1506,4 +1488,294 @@ body {
 
 .version-text {
   font-weight: 500;
+}
+
+/* Tooltip Styles */
+[title] {
+  position: relative;
+  cursor: help;
+}
+
+[title]:hover::before {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  animation: tooltipFadeIn 0.2s ease-out forwards;
+  max-width: 250px;
+  white-space: normal;
+  text-align: center;
+  font-weight: 400;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+[title]:hover::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(2px);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  animation: tooltipFadeIn 0.2s ease-out forwards;
+}
+
+/* Animation for tooltip fade-in */
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Specific tooltip positioning for buttons */
+button[title]:hover::before {
+  bottom: calc(100% + 8px);
+}
+
+button[title]:hover::after {
+  bottom: calc(100% + 2px);
+}
+
+/* Tooltip positioning for small elements like mock-id spans */
+.mock-id[title]:hover::before {
+  bottom: calc(100% + 8px);
+  left: 0;
+  transform: translateX(0);
+  white-space: nowrap;
+  max-width: 300px;
+}
+
+.mock-id[title]:hover::after {
+  bottom: calc(100% + 2px);
+  left: 12px;
+  transform: translateX(0);
+}
+
+/* Tooltip for status elements */
+.status-invalid[title]:hover::before {
+  bottom: calc(100% + 8px);
+  left: 0;
+  transform: translateX(0);
+  max-width: 200px;
+  text-align: left;
+  background: rgba(220, 53, 69, 0.95);
+  color: white;
+  border: 1px solid rgba(184, 44, 58, 0.8);
+}
+
+.status-invalid[title]:hover::after {
+  left: 12px;
+  transform: translateX(0);
+  bottom: calc(100% + 2px);
+  border-top-color: rgba(220, 53, 69, 0.95);
+}
+
+/* Tooltip for action buttons in the header */
+.header-actions button[title]:hover::before {
+  bottom: calc(100% + 12px);
+}
+
+.header-actions button[title]:hover::after {
+  bottom: calc(100% + 6px);
+}
+
+/* Prevent tooltip overflow issues */
+.item-content [title]:hover::before {
+  max-width: min(250px, 90vw);
+}
+
+/* Tooltip for retry buttons */
+.retry-btn[title]:hover::before {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.retry-btn[title]:hover::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Enhanced tooltip positioning for edge cases */
+/* Right-aligned tooltips for elements near the right edge */
+.item-controls button:last-child[title]:hover::before {
+  left: auto;
+  right: 0;
+  transform: translateX(0);
+}
+
+.item-controls button:last-child[title]:hover::after {
+  left: auto;
+  right: 12px;
+  transform: translateX(0);
+}
+
+/* Left-aligned tooltips for elements near the left edge */
+.save-btn[title]:hover::before,
+.edit-btn[title]:hover::before {
+  left: 0;
+  transform: translateX(0);
+}
+
+.save-btn[title]:hover::after,
+.edit-btn[title]:hover::after {
+  left: 12px;
+  transform: translateX(0);
+}
+
+/* Improved mobile responsiveness */
+@media (max-width: 640px) {
+  [title]:hover::before {
+    max-width: 200px;
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
+
+/* Tooltip theme variants for different contexts */
+.update-button[title]:hover::before {
+  background: rgba(255, 211, 61, 0.95);
+  color: #24292f;
+  border: 1px solid rgba(249, 197, 19, 0.8);
+}
+
+.update-button[title]:hover::after {
+  border-top-color: rgba(255, 211, 61, 0.95);
+}
+
+/* Success/valid state tooltips */
+.status-valid[title]:hover::before {
+  background: rgba(40, 167, 69, 0.95);
+  color: white;
+  border: 1px solid rgba(33, 136, 56, 0.8);
+}
+
+.status-valid[title]:hover::after {
+  border-top-color: rgba(40, 167, 69, 0.95);
+}
+
+/* Input field tooltips */
+input[title]:hover::before,
+textarea[title]:hover::before {
+  bottom: calc(100% + 8px);
+  left: 0;
+  transform: translateX(0);
+  max-width: 250px;
+  text-align: left;
+}
+
+input[title]:hover::after,
+textarea[title]:hover::after {
+  bottom: calc(100% + 2px);
+  left: 12px;
+  transform: translateX(0);
+}
+
+/* Special positioning for search input */
+.header-search-input[title]:hover::before {
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.header-search-input[title]:hover::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Tooltip for MockToggle error state divs */
+.mock-toggle-switch[title]:hover::before {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 200px;
+}
+
+.mock-toggle-switch[title]:hover::after {
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Tooltip for label elements */
+label[title]:hover::before {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+label[title]:hover::after {
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Tooltip for div elements */
+div[title]:hover::before {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+div[title]:hover::after {
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Tooltip for editable JSON values */
+.editable-value[title]:hover::before {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.editable-value[title]:hover::after {
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Override cursor for clickable elements */
+button[title],
+label[title],
+.editable-value[title] {
+  cursor: pointer;
+}
+
+/* Tooltip for tab buttons */
+.tab-button[title]:hover::before {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 250px;
+  text-align: center;
+}
+
+.tab-button[title]:hover::after {
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
 }
