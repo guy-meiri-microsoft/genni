@@ -293,10 +293,10 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
+  padding: 12px 20px;
   border-bottom: 1px solid #e1e5e9;
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .favorites-meta h3 {
@@ -314,34 +314,34 @@ body {
 
 /* Import/Export Section */
 .import-export-section {
-  margin-top: 24px;
-  padding: 16px;
+  margin-top: 0;
+  padding: 8px 12px;
   background: #f6f8fa;
   border: 1px solid #e1e5e9;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
 .section-header {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   text-align: center;
 }
 
 .section-header h4 {
-  margin: 0 0 4px 0;
-  font-size: 14px;
+  margin: 0 0 3px 0;
+  font-size: 13px;
   font-weight: 600;
   color: #24292f;
 }
 
 .section-header p {
   margin: 0;
-  font-size: 12px;
+  font-size: 11px;
   color: #656d76;
 }
 
 .import-export-actions {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   justify-content: center;
   align-items: center;
 }
@@ -350,19 +350,19 @@ body {
 .elegant-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
+  gap: 4px;
+  padding: 6px 10px;
   border: 1px solid;
-  border-radius: 6px;
-  font-size: 12px;
+  border-radius: 5px;
+  font-size: 11px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   text-decoration: none;
   background: white;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  min-width: 80px;
-  height: 32px;
+  min-width: 70px;
+  height: 28px;
   justify-content: center;
 }
 
