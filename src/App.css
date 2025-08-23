@@ -251,13 +251,168 @@ body {
 
 /* No items state */
 .no-items {
-  text-align: center;
-  color: #656d76;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
   padding: 40px 20px;
+}
+
+.no-items-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.no-items-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.no-items h3 {
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #24292f;
 }
 
 .no-items p {
   margin: 0 0 8px 0;
+  color: #656d76;
+  line-height: 1.5;
+}
+
+.search-info {
+  font-style: italic;
+  color: #8b949e !important;
+  margin-top: 8px !important;
+}
+
+/* Favorites header with actions */
+.favorites-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e1e5e9;
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  margin-bottom: 16px;
+}
+
+.favorites-meta h3 {
+  margin: 0 0 2px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #24292f;
+}
+
+.favorites-meta p {
+  margin: 0;
+  font-size: 12px;
+  color: #656d76;
+}
+
+/* Import/Export Section */
+.import-export-section {
+  margin-top: 0;
+  padding: 8px 12px;
+  background: #f6f8fa;
+  border: 1px solid #e1e5e9;
+  border-radius: 6px;
+}
+
+.section-header {
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.section-header h4 {
+  margin: 0 0 3px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #24292f;
+}
+
+.section-header p {
+  margin: 0;
+  font-size: 11px;
+  color: #656d76;
+}
+
+.import-export-actions {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Elegant button styling */
+.elegant-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border: 1px solid;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  background: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  min-width: 70px;
+  height: 28px;
+  justify-content: center;
+}
+
+.elegant-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.elegant-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn-icon {
+  font-size: 12px;
+}
+
+.btn-text {
+  font-weight: 500;
+}
+
+.export-btn {
+  color: #0969da;
+  border-color: #d1d9e0;
+  background: white;
+}
+
+.export-btn:hover {
+  background: #f0f6ff;
+  border-color: #0550ae;
+}
+
+.import-btn {
+  color: #1f883d;
+  border-color: #d1d9e0;
+  background: white;
+}
+
+.import-btn:hover {
+  background: #f0fff4;
+  border-color: #1a7f37;
+}
+
+/* Legacy cleanup - remove old styles */
+.favorites-toolbar {
+  display: none;
+}
+
+.favorites-actions {
+  display: none;
 }
 
 /* Items list */
@@ -678,9 +833,9 @@ body {
 
 .editor-controls .save-btn {
   padding: 4px 12px;
-  background: #1f883d;
-  color: white;
-  border: none;
+  background: white;
+  color: #1f883d;
+  border: 1px solid #d1d9e0;
   border-radius: 4px;
   font-size: 12px;
   font-weight: 500;
@@ -689,7 +844,8 @@ body {
 }
 
 .editor-controls .save-btn:hover:not(:disabled) {
-  background: #1a7431;
+  background: #f0fff4;
+  border-color: #1a7f37;
 }
 
 .editor-controls .save-btn:disabled {
@@ -752,14 +908,14 @@ body {
 }
 
 .save-btn {
-  background: #0969da;
-  color: white;
-  border-color: #0969da;
+  color: #0969da;
+  background: white;
+  border: 1px solid #d1d9e0;
 }
 
 .save-btn:hover:not(:disabled) {
-  background: #0860ca;
-  border-color: #0860ca;
+  background: #f0f6ff;
+  border-color: #0550ae;
 }
 
 .save-btn:disabled, .format-btn:disabled {
@@ -1124,9 +1280,9 @@ body {
 
 .save-btn {
   padding: 6px 12px;
-  background: #1a7f37;
-  color: white;
-  border: none;
+  background: white;
+  color: #1f883d;
+  border: 1px solid #d1d9e0;
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500;
@@ -1134,7 +1290,8 @@ body {
 }
 
 .save-btn:hover:not(:disabled) {
-  background: #1a7f37dd;
+  background: #f0fff4;
+  border-color: #1a7f37;
 }
 
 .save-btn:disabled {
