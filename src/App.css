@@ -391,9 +391,8 @@ body {
 }
 
 .export-btn:hover {
-  color: #ffffff;
-  background: #0969da;
-  border-color: #0969da;
+  background: #f0f6ff;
+  border-color: #0550ae;
 }
 
 .import-btn {
@@ -403,9 +402,8 @@ body {
 }
 
 .import-btn:hover {
-  color: #ffffff;
-  background: #1f883d;
-  border-color: #1f883d;
+  background: #f0fff4;
+  border-color: #1a7f37;
 }
 
 /* Legacy cleanup - remove old styles */
