@@ -303,7 +303,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
                   <button
                     className="fold-button"
                     onClick={() => toggleCollapse(`${path}.${child.key}`)}
-                    title={collapsedNodes.has(`${path}.${child.key}`) ? 'Expand' : 'Collapse'}
+                    data-tooltip={collapsedNodes.has(`${path}.${child.key}`) ? 'Expand' : 'Collapse'}
                   >
                     {collapsedNodes.has(`${path}.${child.key}`) ? '▶' : '▼'}
                   </button>
@@ -337,7 +337,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
                       <span 
                         className={`json-${child.type} editable-value`}
                         onClick={() => startEditing(`${path}.${child.key}`, child.value)}
-                        title="Click to edit"
+                        data-tooltip="Click to edit"
                       >
                         {child.type === 'string' ? `"${child.value}"` : String(child.value)}
                       </span>
@@ -357,7 +357,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
                         <button
                           className="delete-button"
                           onClick={() => deleteNode(`${path}.${child.key}`)}
-                          title={`Delete this ${child.type}`}
+                          data-tooltip={`Delete this ${child.type}`}
                         >
                           🗑️
                         </button>
@@ -442,7 +442,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
                     <span 
                       className={`json-${child.type} editable-value`}
                       onClick={() => startEditing(`${path}[${index}]`, child.value)}
-                      title="Click to edit"
+                      data-tooltip="Click to edit"
                     >
                       {child.type === 'string' ? `"${child.value}"` : String(child.value)}
                     </span>
@@ -480,7 +480,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
           <span 
             className={`json-${node.type} editable-value`}
             onClick={() => startEditing(path, node.value)}
-            title="Click to edit"
+            data-tooltip="Click to edit"
           >
             {node.type === 'string' ? `"${node.value}"` : String(node.value)}
           </span>
@@ -544,7 +544,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
             onClick={handleFormat}
             disabled={!isValid}
             className="format-btn"
-            title="Format JSON"
+            data-tooltip="Format JSON"
           >
             Format
           </button>
@@ -552,7 +552,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
             onClick={() => setViewMode(viewMode === 'formatted' ? 'raw' : 'formatted')}
             disabled={!isValid}
             className="view-mode-btn"
-            title={`Switch to ${viewMode === 'formatted' ? 'raw' : 'formatted'} view`}
+            data-tooltip={`Switch to ${viewMode === 'formatted' ? 'raw' : 'formatted'} view`}
           >
             {viewMode === 'formatted' ? '📝' : '🌳'}
           </button>
@@ -566,6 +566,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
             }}
             disabled={!hasChanges || !isValid}
             className="save-btn"
+            data-tooltip="Save changes to localStorage"
           >
             Save Changes
           </button>
@@ -575,6 +576,7 @@ export const SimpleJsonEditor: React.FC<SimpleJsonEditorProps> = ({
               onCancel();
             }}
             className="cancel-btn"
+            data-tooltip="Cancel editing and discard changes"
           >
             Cancel
           </button>

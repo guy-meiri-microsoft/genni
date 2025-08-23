@@ -281,7 +281,7 @@ function App() {
         <div className="error">
           <h2>Error</h2>
           <p>{error}</p>
-          <button onClick={loadItems} className="retry-btn">
+          <button onClick={loadItems} className="retry-btn" data-tooltip="Retry loading items">
             Try Again
           </button>
         </div>
@@ -302,6 +302,7 @@ function App() {
               onChange={(e) => handleSearchChange(e.target.value)}
               placeholder="Search API..."
               className="header-search-input"
+              data-tooltip="Search for API names, dates, or mock IDs"
             />
           </div>
           <MockToggle 
@@ -313,14 +314,14 @@ function App() {
           <button 
             onClick={handleRefreshPage} 
             className="action-btn refresh-page-btn"
-            title="Refresh Page"
+            data-tooltip="Refresh Page"
           >
             🔄
           </button>
           <button 
             onClick={handleClearAllMocks} 
             className="action-btn clear-mocks-btn"
-            title="Clear All Mocks"
+            data-tooltip="Clear All Mocks"
           >
             🗑️
           </button>
@@ -335,6 +336,7 @@ function App() {
               type: 'active-mocks',
               items: getFilteredItems()
             })}
+            data-tooltip="View active mock data in localStorage"
           >
             Active Mocks
           </button>
@@ -344,6 +346,7 @@ function App() {
               type: 'favorites',
               items: getFilteredFavorites()
             })}
+            data-tooltip="View saved favorite mock configurations"
           >
             Favorites
           </button>
