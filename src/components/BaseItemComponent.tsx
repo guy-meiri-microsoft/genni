@@ -150,7 +150,7 @@ export const BaseItemComponent: React.FC<BaseItemProps> = ({
             {initialIsValidJson ? (
               <span className="status-valid">JSON</span>
             ) : (
-              <span className="status-invalid" title={initialError}>
+              <span className="status-invalid" data-tooltip={initialError}>
                 Invalid JSON
               </span>
             )}
@@ -163,7 +163,7 @@ export const BaseItemComponent: React.FC<BaseItemProps> = ({
               handleStartEdit();
             }}
             className="edit-btn"
-            title="Edit JSON"
+            data-tooltip="Edit JSON"
           >
             ✏️
           </button>
@@ -174,7 +174,7 @@ export const BaseItemComponent: React.FC<BaseItemProps> = ({
               handleDelete();
             }}
             className="delete-btn"
-            title="Delete this item"
+            data-tooltip="Delete this item"
           >
             🗑️
           </button>
@@ -184,7 +184,7 @@ export const BaseItemComponent: React.FC<BaseItemProps> = ({
               e.stopPropagation();
               toggleExpanded();
             }}
-            title={isExpanded ? 'Collapse' : 'Expand'}
+            data-tooltip={isExpanded ? 'Collapse' : 'Expand'}
           >
             {isExpanded ? '▼' : '▶'}
           </button>

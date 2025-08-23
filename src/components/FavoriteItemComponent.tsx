@@ -90,7 +90,7 @@ export const FavoriteItemComponent: React.FC<FavoriteItemComponentProps> = ({
                         {id && (
                             <>
                                 <span className="separator">•</span>
-                                <span className="mock-id" title={id}>{id.substring(0, 8)}...</span>
+                                <span className="mock-id" data-tooltip={id}>{id.substring(0, 8)}...</span>
                             </>
                         )}
                     </div>
@@ -121,7 +121,7 @@ export const FavoriteItemComponent: React.FC<FavoriteItemComponentProps> = ({
                 handleApplyFavorite();
             }}
             className="apply-btn"
-            title="Apply favorite to localStorage with current dates"
+            data-tooltip="Apply favorite to localStorage with current dates"
         >
             📥
         </button>

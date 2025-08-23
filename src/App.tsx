@@ -314,14 +314,14 @@ function App() {
           <button 
             onClick={handleRefreshPage} 
             className="action-btn refresh-page-btn"
-            title="Refresh Page"
+            data-tooltip="Refresh Page"
           >
             🔄
           </button>
           <button 
             onClick={handleClearAllMocks} 
             className="action-btn clear-mocks-btn"
-            title="Clear All Mocks"
+            data-tooltip="Clear All Mocks"
           >
             🗑️
           </button>
@@ -336,7 +336,7 @@ function App() {
               type: 'active-mocks',
               items: getFilteredItems()
             })}
-            title="View active mock data in localStorage"
+            data-tooltip="View active mock data in localStorage"
           >
             Active Mocks
           </button>
@@ -346,7 +346,7 @@ function App() {
               type: 'favorites',
               items: getFilteredFavorites()
             })}
-            title="View saved favorite mock configurations"
+            data-tooltip="View saved favorite mock configurations"
           >
             Favorites
           </button>

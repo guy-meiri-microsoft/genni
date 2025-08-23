@@ -58,7 +58,7 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
             {id && (
               <>
                 <span className="separator">•</span>
-                <span className="mock-id" title={id}>{id.substring(0, 8)}...</span>
+                <span className="mock-id" data-tooltip={id}>{id.substring(0, 8)}...</span>
               </>
             )}
           </div>
@@ -82,7 +82,7 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
           handleSaveToFavorites();
         }}
         className="save-btn"
-        title="Save to favorites"
+        data-tooltip="Save to favorites"
       >
         ⭐
       </button>

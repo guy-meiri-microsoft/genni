@@ -92,14 +92,14 @@ body {
 }
 
 /* Specific tooltip positioning for search button to avoid clipping */
-.header-search-btn[title]:hover::before {
+.header-search-btn[data-tooltip]:hover::before {
   top: calc(100% + 8px);
   bottom: auto;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.header-search-btn[title]:hover::after {
+.header-search-btn[data-tooltip]:hover::after {
   top: calc(100% + 2px);
   bottom: auto;
   left: 50%;
@@ -158,16 +158,16 @@ body {
 }
 
 /* Specific tooltip positioning for action buttons to avoid clipping */
-.refresh-page-btn[title]:hover::before,
-.clear-mocks-btn[title]:hover::before {
+.refresh-page-btn[data-tooltip]:hover::before,
+.clear-mocks-btn[data-tooltip]:hover::before {
   top: calc(100% + 8px);
   bottom: auto;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.refresh-page-btn[title]:hover::after,
-.clear-mocks-btn[title]:hover::after {
+.refresh-page-btn[data-tooltip]:hover::after,
+.clear-mocks-btn[data-tooltip]:hover::after {
   top: calc(100% + 2px);
   bottom: auto;
   left: 50%;
@@ -479,7 +479,7 @@ body {
 
 /* Allow tooltips to overflow storage items */
 .storage-item:hover,
-.storage-item:has([title]:hover),
+.storage-item:has([data-tooltip]:hover),
 .storage-item.tooltip-active {
   border-color: #d1d9e0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -1544,13 +1544,13 @@ body {
 }
 
 /* Tooltip Styles */
-[title] {
+[data-tooltip] {
   position: relative;
   cursor: help;
 }
 
-[title]:hover::before {
-  content: attr(title);
+[data-tooltip]:hover::before {
+  content: attr(data-tooltip);
   position: absolute;
   bottom: 100%;
   left: 50%;
@@ -1573,7 +1573,7 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-[title]:hover::after {
+[data-tooltip]:hover::after {
   content: '';
   position: absolute;
   bottom: 100%;
@@ -1603,16 +1603,16 @@ body {
 }
 
 /* Specific tooltip positioning for buttons */
-button[title]:hover::before {
+button[data-tooltip]:hover::before {
   bottom: calc(100% + 8px);
 }
 
-button[title]:hover::after {
+button[data-tooltip]:hover::after {
   bottom: calc(100% + 2px);
 }
 
 /* Tooltip positioning for small elements like mock-id spans */
-.mock-id[title]:hover::before {
+.mock-id[data-tooltip]:hover::before {
   bottom: calc(100% + 8px);
   left: 0;
   transform: translateX(0);
@@ -1620,14 +1620,14 @@ button[title]:hover::after {
   max-width: 300px;
 }
 
-.mock-id[title]:hover::after {
+.mock-id[data-tooltip]:hover::after {
   bottom: calc(100% + 2px);
   left: 12px;
   transform: translateX(0);
 }
 
 /* Tooltip for status elements */
-.status-invalid[title]:hover::before {
+.status-invalid[data-tooltip]:hover::before {
   bottom: calc(100% + 8px);
   left: 0;
   transform: translateX(0);
@@ -1638,7 +1638,7 @@ button[title]:hover::after {
   border: 1px solid rgba(184, 44, 58, 0.8);
 }
 
-.status-invalid[title]:hover::after {
+.status-invalid[data-tooltip]:hover::after {
   left: 12px;
   transform: translateX(0);
   bottom: calc(100% + 2px);
@@ -1646,14 +1646,14 @@ button[title]:hover::after {
 }
 
 /* Tooltip for action buttons in the header */
-.top-actions .action-btn[title]:hover::before {
+.top-actions .action-btn[data-tooltip]:hover::before {
   top: calc(100% + 8px);
   bottom: auto;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.top-actions .action-btn[title]:hover::after {
+.top-actions .action-btn[data-tooltip]:hover::after {
   top: calc(100% + 2px);
   bottom: auto;
   left: 50%;
@@ -1665,30 +1665,30 @@ button[title]:hover::after {
 }
 
 /* Prevent tooltip overflow issues */
-.item-content [title]:hover::before {
+.item-content [data-tooltip]:hover::before {
   max-width: min(250px, 90vw);
 }
 
 /* Tooltip for retry buttons */
-.retry-btn[title]:hover::before {
+.retry-btn[data-tooltip]:hover::before {
   left: 50%;
   transform: translateX(-50%);
 }
 
-.retry-btn[title]:hover::after {
+.retry-btn[data-tooltip]:hover::after {
   left: 50%;
   transform: translateX(-50%);
 }
 
 /* Enhanced tooltip positioning for edge cases */
 /* All item control buttons should show tooltips below to avoid clipping */
-.item-controls button[title]:hover::before {
+.item-controls button[data-tooltip]:hover::before {
   top: calc(100% + 8px);
   bottom: auto;
   z-index: 9999;
 }
 
-.item-controls button[title]:hover::after {
+.item-controls button[data-tooltip]:hover::after {
   top: calc(100% + 2px);
   bottom: auto;
   border-top: 6px solid transparent;
@@ -1699,13 +1699,13 @@ button[title]:hover::after {
 }
 
 /* General rule for storage items - all tooltips appear below */
-.storage-item [title]:hover::before {
+.storage-item [data-tooltip]:hover::before {
   top: calc(100% + 8px);
   bottom: auto;
   z-index: 9999;
 }
 
-.storage-item [title]:hover::after {
+.storage-item [data-tooltip]:hover::after {
   top: calc(100% + 2px);
   bottom: auto;
   border-top: 6px solid transparent;
@@ -1716,7 +1716,7 @@ button[title]:hover::after {
 }
 
 /* Right-aligned tooltips for elements near the right edge */
-.item-controls button:last-child[title]:hover::before {
+.item-controls button:last-child[data-tooltip]:hover::before {
   top: calc(100% + 8px);
   bottom: auto;
   left: auto;
@@ -1724,7 +1724,7 @@ button[title]:hover::after {
   transform: translateX(0);
 }
 
-.item-controls button:last-child[title]:hover::after {
+.item-controls button:last-child[data-tooltip]:hover::after {
   top: calc(100% + 2px);
   bottom: auto;
   left: auto;
@@ -1737,16 +1737,17 @@ button[title]:hover::after {
 }
 
 /* Left-aligned tooltips for elements near the left edge */
-.save-btn[title]:hover::before,
-.edit-btn[title]:hover::before {
+.save-btn[data-tooltip]:hover::before,
+.edit-btn[data-tooltip]:hover::before {
   top: calc(100% + 8px);
   bottom: auto;
   left: 0;
   transform: translateX(0);
 }
 
-.save-btn[title]:hover::after,
-.edit-btn[title]:hover::after {
+.save-btn[data-tooltip]:hover::after,
+.save-btn[data-tooltip]:hover::after,
+.edit-btn[data-tooltip]:hover::after {
   top: calc(100% + 2px);
   bottom: auto;
   left: 12px;
@@ -1758,18 +1759,18 @@ button[title]:hover::after {
 }
 
 /* Specific positioning for delete buttons and expand buttons */
-.delete-btn[title]:hover::before,
-.expand-btn[title]:hover::before,
-.apply-btn[title]:hover::before {
+.delete-btn[data-tooltip]:hover::before,
+.expand-btn[data-tooltip]:hover::before,
+.apply-btn[data-tooltip]:hover::before {
   top: calc(100% + 8px);
   bottom: auto;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.delete-btn[title]:hover::after,
-.expand-btn[title]:hover::after,
-.apply-btn[title]:hover::after {
+.delete-btn[data-tooltip]:hover::after,
+.expand-btn[data-tooltip]:hover::after,
+.apply-btn[data-tooltip]:hover::after {
   top: calc(100% + 2px);
   bottom: auto;
   left: 50%;
@@ -1790,13 +1791,13 @@ button[title]:hover::after {
 }
 
 /* Tooltip theme variants for different contexts */
-.update-button[title]:hover::before {
+.update-button[data-tooltip]:hover::before {
   background: rgba(255, 211, 61, 0.95);
   color: #24292f;
   border: 1px solid rgba(249, 197, 19, 0.8);
 }
 
-.update-button[title]:hover::after {
+.update-button[data-tooltip]:hover::after {
   border-top-color: rgba(255, 211, 61, 0.95);
 }
 

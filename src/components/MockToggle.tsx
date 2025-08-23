@@ -65,7 +65,7 @@ export const MockToggle: React.FC<MockToggleProps> = ({ currentTabUrl, onToggle 
     return (
       <div 
         className="mock-toggle-switch error"
-        title={mockInfo?.error || 'Unable to determine mock state'}
+        data-tooltip={mockInfo?.error || 'Unable to determine mock state'}
       >
         <span className="mock-toggle-slider">
           <span className="mock-toggle-text">❌</span>
@@ -80,7 +80,7 @@ export const MockToggle: React.FC<MockToggleProps> = ({ currentTabUrl, onToggle 
   return (
     <label 
       className={`mock-toggle-switch ${isToggling ? 'toggling' : ''}`}
-      title={`${mockInfo.isEnabled ? 'Disable' : 'Enable'} mocks for ${targetLabel}: ${targetId}...`}
+      data-tooltip={`${mockInfo.isEnabled ? 'Disable' : 'Enable'} mocks for ${targetLabel}: ${targetId}...`}
     >
       <input
         type="checkbox"
