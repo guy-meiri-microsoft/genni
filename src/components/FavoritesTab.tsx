@@ -54,38 +54,59 @@ export function FavoritesTab({
     <div className="tab-content">
       {items.length === 0 ? (
         <div className="no-items">
-          <p>No favorites found{searchTerm && ` matching "${searchTerm}"`}</p>
-          <p>Save some mock items to favorites by clicking the ⭐ button on any item in the Active Mocks tab.</p>
-          <div className="favorites-actions">
-            <input
-              type="file"
-              accept=".json"
-              onChange={onImportFavorites}
-              style={{ display: 'none' }}
-              id="import-favorites-input"
-            />
-            <label htmlFor="import-favorites-input" className="action-btn import-btn">
-              📁 Import Favorites
-            </label>
+          <div className="no-items-content">
+            <div className="no-items-icon">⭐</div>
+            <h3>No favorites yet</h3>
+            <p>Save some mock items to favorites by clicking the ⭐ button on any item in the Active Mocks tab.</p>
+            {searchTerm && (
+              <p className="search-info">No favorites found matching "{searchTerm}"</p>
+            )}
+            <div className="import-export-section">
+              <div className="section-header">
+                <h4>Manage Favorites</h4>
+                <p>Import favorites from a previous export</p>
+              </div>
+              <div className="import-export-actions">
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={onImportFavorites}
+                  style={{ display: 'none' }}
+                  id="import-favorites-empty"
+                />
+                <label htmlFor="import-favorites-empty" className="elegant-btn import-btn">
+                  <span className="btn-icon">⤴️</span>
+                  <span className="btn-text">Import Favorites</span>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
       ) : (
         <>
-          <div className="favorites-toolbar">
-            <div className="favorites-actions">
-              <button onClick={onExportFavorites} className="action-btn export-btn">
-                💾 Export Favorites
-              </button>
-              <input
-                type="file"
-                accept=".json"
-                onChange={onImportFavorites}
-                style={{ display: 'none' }}
-                id="import-favorites-input"
-              />
-              <label htmlFor="import-favorites-input" className="action-btn import-btn">
-                📁 Import Favorites
-              </label>
+          <div className="favorites-header">
+            <div className="favorites-meta">
+              <h3>Your Favorites ({items.length})</h3>
+              <p>Manage and organize your saved mock configurations</p>
+            </div>
+            <div className="import-export-section">
+              <div className="import-export-actions">
+                <button onClick={onExportFavorites} className="elegant-btn export-btn">
+                  <span className="btn-icon">💾</span>
+                  <span className="btn-text">Export</span>
+                </button>
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={onImportFavorites}
+                  style={{ display: 'none' }}
+                  id="import-favorites-list"
+                />
+                <label htmlFor="import-favorites-list" className="elegant-btn import-btn">
+                  <span className="btn-icon">⤴️</span>
+                  <span className="btn-text">Import</span>
+                </label>
+              </div>
             </div>
           </div>
           <div className="items-list" ref={itemsListRef}>
