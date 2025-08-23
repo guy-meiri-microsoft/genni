@@ -833,9 +833,9 @@ body {
 
 .editor-controls .save-btn {
   padding: 4px 12px;
-  background: #1f883d;
-  color: white;
-  border: none;
+  background: white;
+  color: #1f883d;
+  border: 1px solid #d1d9e0;
   border-radius: 4px;
   font-size: 12px;
   font-weight: 500;
@@ -844,7 +844,8 @@ body {
 }
 
 .editor-controls .save-btn:hover:not(:disabled) {
-  background: #1a7431;
+  background: #f0fff4;
+  border-color: #1a7f37;
 }
 
 .editor-controls .save-btn:disabled {
@@ -907,14 +908,14 @@ body {
 }
 
 .save-btn {
-  background: #0969da;
-  color: white;
-  border-color: #0969da;
+  color: #0969da;
+  background: white;
+  border: 1px solid #d1d9e0;
 }
 
 .save-btn:hover:not(:disabled) {
-  background: #0860ca;
-  border-color: #0860ca;
+  background: #f0f6ff;
+  border-color: #0550ae;
 }
 
 .save-btn:disabled, .format-btn:disabled {
@@ -1279,9 +1280,9 @@ body {
 
 .save-btn {
   padding: 6px 12px;
-  background: #1a7f37;
-  color: white;
-  border: none;
+  background: white;
+  color: #1f883d;
+  border: 1px solid #d1d9e0;
   border-radius: 6px;
   font-size: 12px;
   font-weight: 500;
@@ -1289,7 +1290,8 @@ body {
 }
 
 .save-btn:hover:not(:disabled) {
-  background: #1a7f37dd;
+  background: #f0fff4;
+  border-color: #1a7f37;
 }
 
 .save-btn:disabled {
