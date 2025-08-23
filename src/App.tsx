@@ -4,7 +4,7 @@ import { VersionChecker } from './components/VersionChecker';
 import { MockToggle } from './components/MockToggle';
 import { ActiveMocksTab } from './components/ActiveMocksTab';
 import { FavoritesTab } from './components/FavoritesTab';
-import { getLocalStorageItems, updateLocalStorageItem, deleteLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks, saveItemToFavorites, getFavoriteItems, updateFavoriteItem, deleteFavoriteItem } from './utils/chrome';
+import { getLocalStorageItems, updateLocalStorageItem, deleteLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks, saveItemToFavorites, getFavoriteItems, updateFavoriteItem, deleteFavoriteItem, exportFavorites, importFavorites } from './utils/chrome';
 import { extractIdsFromUrl } from './utils/mockToggle';
 import './App.css';
 
@@ -227,6 +227,36 @@ function App() {
     }
   };
 
+  const handleExportFavorites = async () => {
+    try {
+      console.log('Export button clicked, starting export...');
+      await exportFavorites();
+      console.log('Export completed successfully');
+      // Success message is handled by the export function through file download
+    } catch (err) {
+      console.error('Export failed:', err);
+      alert(`Failed to export favorites: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  };
+
+  const handleImportFavorites = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const importedCount = await importFavorites(file);
+      alert(`Successfully imported ${importedCount} favorite${importedCount !== 1 ? 's' : ''}!`);
+      
+      // Reload favorites to show the imported items
+      await loadFavorites();
+    } catch (err) {
+      alert(`Failed to import favorites: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    } finally {
+      // Reset the file input so the same file can be selected again
+      event.target.value = '';
+    }
+  };
+
   if (loading) {
     return (
       <div className="app">
@@ -339,6 +369,8 @@ function App() {
               onDeleteItem={handleDeleteFavoriteItem}
               onApplyItem={handleApplyFavoriteItem}
               onReload={loadFavorites}
+              onExportFavorites={handleExportFavorites}
+              onImportFavorites={handleImportFavorites}
             />
           )}
         </main>

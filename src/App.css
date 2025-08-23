@@ -260,6 +260,55 @@ body {
   margin: 0 0 8px 0;
 }
 
+/* Favorites toolbar and actions */
+.favorites-toolbar {
+  margin-bottom: 20px;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e1e5e9;
+  background: #f8f9fa;
+}
+
+.favorites-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+
+.export-btn {
+  background: #0969da;
+  color: white;
+  border-color: #0969da;
+}
+
+.export-btn:hover {
+  background: #0550ae;
+  border-color: #0550ae;
+}
+
+.import-btn {
+  background: #1f883d;
+  color: white;
+  border-color: #1f883d;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  height: 32px;
+  box-sizing: border-box;
+}
+
+.import-btn:hover {
+  background: #1a7f37;
+  border-color: #1a7f37;
+}
+
 /* Items list */
 .items-count {
   margin-bottom: 20px;
