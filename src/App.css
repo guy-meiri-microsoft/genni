@@ -1783,7 +1783,7 @@ button[data-tooltip]:hover::after {
 
 /* Improved mobile responsiveness */
 @media (max-width: 640px) {
-  [title]:hover::before {
+  [data-tooltip]:hover::before {
     max-width: 200px;
     font-size: 11px;
     padding: 6px 10px;
@@ -1802,19 +1802,19 @@ button[data-tooltip]:hover::after {
 }
 
 /* Success/valid state tooltips */
-.status-valid[title]:hover::before {
+.status-valid[data-tooltip]:hover::before {
   background: rgba(40, 167, 69, 0.95);
   color: white;
   border: 1px solid rgba(33, 136, 56, 0.8);
 }
 
-.status-valid[title]:hover::after {
+.status-valid[data-tooltip]:hover::after {
   border-top-color: rgba(40, 167, 69, 0.95);
 }
 
 /* Input field tooltips */
-input[title]:hover::before,
-textarea[title]:hover::before {
+input[data-tooltip]:hover::before,
+textarea[data-tooltip]:hover::before {
   bottom: calc(100% + 8px);
   left: 0;
   transform: translateX(0);
@@ -1822,15 +1822,15 @@ textarea[title]:hover::before {
   text-align: left;
 }
 
-input[title]:hover::after,
-textarea[title]:hover::after {
+input[data-tooltip]:hover::after,
+textarea[data-tooltip]:hover::after {
   bottom: calc(100% + 2px);
   left: 12px;
   transform: translateX(0);
 }
 
 /* Special positioning for search input */
-.header-search-input[title]:hover::before {
+.header-search-input[data-tooltip]:hover::before {
   top: calc(100% + 8px);
   bottom: auto;
   left: 50%;
@@ -1838,7 +1838,7 @@ textarea[title]:hover::after {
   text-align: center;
 }
 
-.header-search-input[title]:hover::after {
+.header-search-input[data-tooltip]:hover::after {
   top: calc(100% + 2px);
   bottom: auto;
   left: 50%;
@@ -1850,7 +1850,7 @@ textarea[title]:hover::after {
 }
 
 /* Tooltip for MockToggle error state divs */
-.mock-toggle-switch[title]:hover::before {
+.mock-toggle-switch[data-tooltip]:hover::before {
   top: calc(100% + 8px);
   bottom: auto;
   left: 50%;
@@ -1858,7 +1858,7 @@ textarea[title]:hover::after {
   max-width: 200px;
 }
 
-.mock-toggle-switch[title]:hover::after {
+.mock-toggle-switch[data-tooltip]:hover::after {
   top: calc(100% + 2px);
   bottom: auto;
   left: 50%;
@@ -1870,14 +1870,14 @@ textarea[title]:hover::after {
 }
 
 /* Tooltip for label elements */
-label[title]:hover::before {
+label[data-tooltip]:hover::before {
   top: calc(100% + 8px);
   bottom: auto;
   left: 50%;
   transform: translateX(-50%);
 }
 
-label[title]:hover::after {
+label[data-tooltip]:hover::after {
   top: calc(100% + 2px);
   bottom: auto;
   left: 50%;
@@ -1889,14 +1889,14 @@ label[title]:hover::after {
 }
 
 /* Special positioning for header labels to avoid clipping */
-.app-header label[title]:hover::before,
-.top-actions label[title]:hover::before {
+.app-header label[data-tooltip]:hover::before,
+.top-actions label[data-tooltip]:hover::before {
   top: calc(100% + 8px);
   bottom: auto;
 }
 
-.app-header label[title]:hover::after,
-.top-actions label[title]:hover::after {
+.app-header label[data-tooltip]:hover::after,
+.top-actions label[data-tooltip]:hover::after {
   top: calc(100% + 2px);
   bottom: auto;
   border-top: 6px solid transparent;
@@ -1906,41 +1906,41 @@ label[title]:hover::after {
 }
 
 /* Tooltip for div elements */
-div[title]:hover::before {
+div[data-tooltip]:hover::before {
   bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
 }
 
-div[title]:hover::after {
+div[data-tooltip]:hover::after {
   bottom: calc(100% + 2px);
   left: 50%;
   transform: translateX(-50%);
 }
 
 /* Tooltip for editable JSON values */
-.editable-value[title]:hover::before {
+.editable-value[data-tooltip]:hover::before {
   bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
 }
 
-.editable-value[title]:hover::after {
+.editable-value[data-tooltip]:hover::after {
   bottom: calc(100% + 2px);
   left: 50%;
   transform: translateX(-50%);
 }
 
 /* Override cursor for clickable elements */
-button[title],
-label[title],
-.editable-value[title] {
+button[data-tooltip],
+label[data-tooltip],
+.editable-value[data-tooltip] {
   cursor: pointer;
 }
 
 /* Tooltip for tab buttons */
-.tab-button[title]:hover::before {
+.tab-button[data-tooltip]:hover::before {
   bottom: calc(100% + 8px);
   left: 50%;
   transform: translateX(-50%);
@@ -1948,7 +1948,7 @@ label[title],
   text-align: center;
 }
 
-.tab-button[title]:hover::after {
+.tab-button[data-tooltip]:hover::after {
   bottom: calc(100% + 2px);
   left: 50%;
   transform: translateX(-50%);

@@ -70,7 +70,7 @@ export const VersionChecker: React.FC = () => {
       <button 
         className="update-button"
         onClick={handleUpdateClick}
-        title={`Update from v${versionInfo.currentVersion} to v${versionInfo.latestVersion}`}
+        data-tooltip={`Update from v${versionInfo.currentVersion} to v${versionInfo.latestVersion}`}
       >
         🔄 v{versionInfo.currentVersion} → v{versionInfo.latestVersion} • Update Available
       </button>

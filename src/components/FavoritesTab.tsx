@@ -43,7 +43,7 @@ export function FavoritesTab({
       <div className="error">
         <h2>Error</h2>
         <p>{error}</p>
-        <button onClick={onReload} className="retry-btn" title="Retry loading favorites">
+        <button onClick={onReload} className="retry-btn" data-tooltip="Retry loading favorites">
           Try Again
         </button>
       </div>

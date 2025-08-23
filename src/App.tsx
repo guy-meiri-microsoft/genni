@@ -281,7 +281,7 @@ function App() {
         <div className="error">
           <h2>Error</h2>
           <p>{error}</p>
-          <button onClick={loadItems} className="retry-btn" title="Retry loading items">
+          <button onClick={loadItems} className="retry-btn" data-tooltip="Retry loading items">
             Try Again
           </button>
         </div>
@@ -302,7 +302,7 @@ function App() {
               onChange={(e) => handleSearchChange(e.target.value)}
               placeholder="Search API..."
               className="header-search-input"
-              title="Search for API names, dates, or mock IDs"
+              data-tooltip="Search for API names, dates, or mock IDs"
             />
           </div>
           <MockToggle 
