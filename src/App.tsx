@@ -28,7 +28,7 @@ function App() {
       const tab = await getCurrentTab();
       if (tab) {
         setCurrentWebTab(tab.url);
-        const loadedItems = await getLocalStorageItems(searchTerm);
+        const loadedItems = await getLocalStorageItems(''); // Load all items, filter client-side
         setItems(loadedItems);
       } else {
         setError('No active tab found');
@@ -39,7 +39,7 @@ function App() {
     } finally {
       setLoading(false);
     }
-  }, [searchTerm]);
+  }, []); // Remove searchTerm dependency
 
   const loadFavorites = useCallback(async () => {
     try {
@@ -118,23 +118,41 @@ function App() {
     }
   };
 
-  // Filter items based on current environment/bot context
+  // Filter items based on current environment/bot context and search term
   const getFilteredItems = useCallback(() => {
     if (!currentWebTab) return items;
     
     const { envId, botId } = extractIdsFromUrl(currentWebTab);
     
-    // If no environment context, show all items
-    if (!envId) return items;
+    // First filter by environment context
+    let filteredItems = items;
+    if (envId) {
+      filteredItems = items.filter(item => {
+        // If item has no mockParts or no id, include it
+        if (!item.mockParts?.id) return true;
+        
+        // Check if the item's id matches current environment or bot
+        return item.mockParts.id === envId || item.mockParts.id === botId;
+      });
+    }
     
-    return items.filter(item => {
-      // If item has no mockParts or no id, include it
-      if (!item.mockParts?.id) return true;
-      
-      // Check if the item's id matches current environment or bot
-      return item.mockParts.id === envId || item.mockParts.id === botId;
-    });
-  }, [items, currentWebTab]);
+    // Then filter by search term
+    if (searchTerm.trim()) {
+      filteredItems = filteredItems.filter(item => {
+        const searchLower = searchTerm.toLowerCase();
+        
+        // Search in API name if available
+        if (item.mockParts?.api) {
+          return item.mockParts.api.toLowerCase().includes(searchLower);
+        }
+        
+        // Fallback to searching in the full key
+        return item.key.toLowerCase().includes(searchLower);
+      });
+    }
+    
+    return filteredItems;
+  }, [items, currentWebTab, searchTerm]);
 
   // Filter favorites based on search term
   const getFilteredFavorites = useCallback(() => {
@@ -163,7 +181,7 @@ function App() {
           : prev
       );
     }
-  }, [items, currentWebTab, getFilteredItems, activeExtensionTab.type]);
+  }, [items, currentWebTab, searchTerm, getFilteredItems, activeExtensionTab.type]);
 
   useEffect(() => {
     if (activeExtensionTab.type === 'favorites') {
@@ -184,18 +202,7 @@ function App() {
 
   const handleSearchChange = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);
-    // Don't auto-reload, let user press enter or click search
-  };
-
-  const handleSearchSubmit = async () => {
-    await loadItems();
-  };
-
-  const handleSearchKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleSearchSubmit();
-    }
+    // Search filtering happens automatically via useEffect
   };
 
   const handleRefreshPage = async () => {
@@ -293,13 +300,9 @@ function App() {
               type="text"
               value={searchTerm}
               onChange={(e) => handleSearchChange(e.target.value)}
-              onKeyDown={handleSearchKeyDown}
               placeholder="Search API..."
               className="header-search-input"
             />
-            <button onClick={handleSearchSubmit} className="header-search-btn">
-              🔍
-            </button>
           </div>
           <MockToggle 
             currentTabUrl={currentWebTab}

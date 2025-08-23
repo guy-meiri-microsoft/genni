@@ -65,7 +65,7 @@ export function ActiveMocksTab({
               onDelete={onDeleteItem}
               onSave={onSaveItem}
               autoExpand={false}
-              searchTerm=""
+              searchTerm={searchTerm}
               isFirstResult={false}
             />
           ))}
