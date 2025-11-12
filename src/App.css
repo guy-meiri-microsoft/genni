@@ -1498,6 +1498,7 @@ body {
   font-size: 12px;
   text-align: center;
   background: #f6f8fa;
+  max-height: 20px;
 }
 
 .version-checker.loading {
