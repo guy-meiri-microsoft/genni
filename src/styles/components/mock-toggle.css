@@ -1,0 +1,106 @@
+/* ==========================================================================
+   Mock Toggle Switch
+   ========================================================================== */
+.mock-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 22px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mock-toggle-switch.toggling {
+  cursor: wait;
+}
+
+.mock-toggle-switch.loading,
+.mock-toggle-switch.error {
+  cursor: default;
+}
+
+.mock-toggle-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.mock-toggle-slider {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-danger);
+  border-radius: 11px;
+  transition: all var(--transition-slow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent;
+}
+
+.mock-toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: white;
+  border-radius: 50%;
+  transition: all var(--transition-slow);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.mock-toggle-input:checked + .mock-toggle-slider {
+  background-color: var(--color-success-hover);
+}
+
+.mock-toggle-input:checked + .mock-toggle-slider::before {
+  transform: translateX(20px) translateY(-50%);
+}
+
+.mock-toggle-switch:hover:not(.loading):not(.error) .mock-toggle-slider {
+  box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.3);
+}
+
+.mock-toggle-input:checked + .mock-toggle-slider:hover {
+  background-color: #2da44e;
+}
+
+.mock-toggle-input:not(:checked) + .mock-toggle-slider:hover {
+  background-color: #e85c75;
+}
+
+.mock-toggle-text {
+  position: absolute;
+  font-size: 8px;
+  font-weight: 600;
+  color: white;
+  transition: all var(--transition-slow);
+  pointer-events: none;
+}
+
+.mock-toggle-input:checked + .mock-toggle-slider .mock-toggle-text {
+  left: 5px;
+}
+
+.mock-toggle-input:not(:checked) + .mock-toggle-slider .mock-toggle-text {
+  right: 5px;
+}
+
+.mock-toggle-switch.loading .mock-toggle-slider,
+.mock-toggle-switch.error .mock-toggle-slider {
+  background-color: #656d76;
+  cursor: default;
+}
+
+.mock-toggle-switch.loading .mock-toggle-slider::before,
+.mock-toggle-switch.error .mock-toggle-slider::before {
+  animation: none;
+  transform: translateX(12px) translateY(-50%);
+}
+
+.mock-toggle-switch.error .mock-toggle-slider {
+  background-color: var(--color-text-light);
+}

@@ -1,0 +1,23 @@
+/* ==========================================================================
+   Items List & Main Content
+   ========================================================================== */
+.main-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.items-count {
+  margin-bottom: var(--spacing-xl);
+  font-size: 14px;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  position: relative;
+}

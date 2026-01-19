@@ -1,0 +1,207 @@
+/* ==========================================================================
+   Storage Item Card
+   ========================================================================== */
+.storage-item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  background: var(--color-bg);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  position: relative;
+}
+
+.storage-item:hover,
+.storage-item:has([data-tooltip]:hover),
+.storage-item.tooltip-active {
+  border-color: var(--color-border-muted);
+  box-shadow: var(--shadow-lg);
+  overflow: visible;
+  z-index: 10;
+}
+
+.item-controls:hover {
+  position: relative;
+  z-index: 11;
+}
+
+.item-header {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background: var(--color-bg-subtle);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: background-color var(--transition-normal);
+  gap: var(--spacing-md);
+}
+
+.item-header:hover {
+  background: var(--color-bg-muted);
+}
+
+.item-title {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex: 1;
+  min-width: 0;
+}
+
+.item-key {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.date-preview small {
+  color: var(--color-text-muted);
+  font-size: 11px;
+  font-weight: 400;
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.item-status {
+  display: flex;
+  align-items: center;
+}
+
+/* ==========================================================================
+   Item Control Buttons
+   ========================================================================== */
+.item-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* Shared item control button base */
+.item-controls button {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.item-controls .edit-btn {
+  color: var(--color-text);
+}
+
+.item-controls .edit-btn:hover {
+  background: var(--color-border);
+  border-color: var(--color-border-hover);
+}
+
+.item-controls .delete-btn {
+  color: var(--color-danger);
+}
+
+.item-controls .delete-btn:hover {
+  background: var(--color-danger-bg);
+  border-color: var(--color-danger);
+  color: var(--color-danger-hover);
+}
+
+.item-controls .save-btn {
+  color: var(--color-primary);
+}
+
+.item-controls .save-btn:hover {
+  background: var(--color-primary-bg-hover);
+  border-color: var(--color-primary);
+  color: var(--color-primary-hover);
+}
+
+.item-controls .apply-btn {
+  color: var(--color-success);
+}
+
+.item-controls .apply-btn:hover {
+  background: var(--color-success-bg-alt);
+  border-color: var(--color-success);
+  color: #116329;
+}
+
+.expand-btn {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  user-select: none;
+}
+
+.expand-btn:hover {
+  background: var(--color-border);
+  color: var(--color-text);
+}
+
+.item-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* Standalone edit button */
+.edit-btn {
+  padding: 6px var(--spacing-md);
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition-normal);
+}
+
+.edit-btn:hover {
+  background: #0860ca;
+}
+
+/* Status badges */
+.item-status .status-valid,
+.status-valid {
+  padding: 2px 6px;
+  background: #dcfdf7;
+  color: #065f46;
+  border-radius: var(--radius-md);
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.status-valid {
+  color: var(--color-success-hover);
+  font-size: 14px;
+}
+
+.item-status .status-invalid,
+.status-invalid {
+  padding: 2px 6px;
+  background: #fef2f2;
+  color: #dc2626;
+  border-radius: var(--radius-md);
+  font-size: 10px;
+  font-weight: 500;
+  cursor: help;
+}
+
+.status-invalid {
+  color: var(--color-danger);
+  font-size: 14px;
+}

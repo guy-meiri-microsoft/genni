@@ -1,0 +1,156 @@
+/* ==========================================================================
+   JSON Editor
+   ========================================================================== */
+.json-editor {
+  padding: var(--spacing-xl);
+  background: #fafbfc;
+  border-top: 1px solid var(--color-border);
+}
+
+.simple-json-editor {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.editor-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-bg-subtle);
+  border-bottom: 1px solid var(--color-border-muted);
+}
+
+.editor-controls {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* Editor control buttons */
+.editor-controls button,
+.format-btn,
+.save-btn,
+.cancel-btn {
+  padding: 6px var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-muted);
+  background: var(--color-bg);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.format-btn {
+  color: var(--color-text);
+}
+
+.format-btn:hover:not(:disabled),
+.cancel-btn:hover {
+  background: var(--color-bg-muted);
+  border-color: #8c959f;
+}
+
+.format-btn:disabled,
+.save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.save-btn {
+  color: var(--color-success);
+}
+
+.save-btn:hover:not(:disabled) {
+  background: var(--color-success-bg);
+  border-color: var(--color-success-hover);
+}
+
+.cancel-btn {
+  color: var(--color-text);
+  border-radius: var(--radius-lg);
+}
+
+.cancel-btn:hover {
+  border-color: var(--color-border-hover);
+}
+
+.json-textarea {
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.4;
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--radius-lg);
+  resize: vertical;
+  background: var(--color-bg);
+  color: var(--color-text);
+  min-height: 400px;
+  max-height: 800px;
+  height: 500px;
+}
+
+.json-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.12);
+}
+
+.json-textarea.invalid {
+  border-color: #dc2626;
+}
+
+.json-textarea.invalid:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12);
+}
+
+.editor-footer {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--color-bg-subtle);
+  border-top: 1px solid var(--color-border-muted);
+  font-size: 11px;
+  color: var(--color-text-muted);
+}
+
+.error-message {
+  color: var(--color-danger);
+  font-size: 12px;
+}
+
+.keyboard-shortcuts {
+  color: var(--color-text-muted);
+  font-size: 11px;
+}
+
+.editor-content {
+  position: relative;
+}
+
+.saving-indicator {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--color-warning-bg);
+  border-top: 1px solid var(--color-warning-border);
+  font-size: 12px;
+  color: var(--color-warning-text);
+  text-align: center;
+}
+
+.view-mode-btn {
+  padding: 6px var(--spacing-sm);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-muted);
+  background: var(--color-bg);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  min-width: 32px;
+}
+
+.view-mode-btn:hover:not(:disabled) {
+  background: var(--color-bg-subtle);
+  border-color: #8c959f;
+}

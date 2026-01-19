@@ -6,7 +6,24 @@ import { ActiveMocksTab } from './components/ActiveMocksTab';
 import { FavoritesTab } from './components/FavoritesTab';
 import { getLocalStorageItems, updateLocalStorageItem, deleteLocalStorageItem, getCurrentTab, refreshCurrentTab, clearAllMocks, saveItemToFavorites, getFavoriteItems, updateFavoriteItem, deleteFavoriteItem, exportFavorites, importFavorites } from './utils/chrome';
 import { extractIdsFromUrl } from './utils/mockToggle';
-import './App.css';
+import './index.css';
+import './styles/tokens.css';
+import './styles/base.css';
+import './styles/buttons.css';
+import './styles/states.css';
+import './styles/tooltips.css';
+import './styles/components/header.css';
+import './styles/components/tabs.css';
+import './styles/components/favorites-section.css';
+import './styles/components/items-list.css';
+import './styles/components/item-card.css';
+import './styles/components/item-content.css';
+import './styles/components/json-editor.css';
+import './styles/components/json-tree-view.css';
+import './styles/components/json-search.css';
+import './styles/components/json-inline-edit.css';
+import './styles/components/mock-toggle.css';
+import './styles/components/version-checker.css';
 
 function App() {
   const [items, setItems] = useState<LocalStorageItem[]>([]);
