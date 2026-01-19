@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import type { FavoriteItem } from '../types';
 import { FavoriteItemComponent } from './FavoriteItemComponent';
 
@@ -15,6 +14,38 @@ interface FavoritesTabProps {
   onImportFavorites: (event: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
 }
 
+interface FavoritesSectionProps {
+  title: string;
+  items: FavoriteItem[];
+  searchTerm: string;
+  onUpdateItem: (key: string, newValue: string) => Promise<void>;
+  onDeleteItem: (key: string) => Promise<void>;
+  onApplyItem?: (key: string) => Promise<void>;
+}
+
+function FavoritesSection({ title, items, searchTerm, onUpdateItem, onDeleteItem, onApplyItem }: FavoritesSectionProps): React.ReactNode {
+  if (items.length === 0) return null;
+
+  return (
+    <div className="mocks-section">
+      <h3 className="section-header">{title}</h3>
+      <div className="items-count">{items.length} item{items.length !== 1 ? 's' : ''}</div>
+      <div className="items-list">
+        {items.map((item) => (
+          <FavoriteItemComponent
+            key={item.displayName}
+            item={item}
+            onUpdate={onUpdateItem}
+            onDelete={onDeleteItem}
+            onApply={onApplyItem}
+            searchTerm={searchTerm}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function FavoritesTab({
   items,
   searchTerm,
@@ -26,9 +57,7 @@ export function FavoritesTab({
   onReload,
   onExportFavorites,
   onImportFavorites
-}: FavoritesTabProps) {
-  const itemsListRef = useRef<HTMLDivElement>(null);
-
+}: FavoritesTabProps): React.ReactNode {
   if (loading) {
     return (
       <div className="loading">
@@ -50,14 +79,14 @@ export function FavoritesTab({
     );
   }
 
-  return (
-    <div className="tab-content">
-      {items.length === 0 ? (
+  if (items.length === 0) {
+    return (
+      <div className="tab-content">
         <div className="no-items">
           <div className="no-items-content">
-            <div className="no-items-icon">⭐</div>
+            <div className="no-items-icon">&#x2B50;</div>
             <h3>No favorites yet</h3>
-            <p>Save some mock items to favorites by clicking the ⭐ button on any item in the Active Mocks tab.</p>
+            <p>Save some mock items to favorites by clicking the &#x2B50; button on any item in the Active Mocks tab.</p>
             {searchTerm && (
               <p className="search-info">No favorites found matching "{searchTerm}"</p>
             )}
@@ -75,97 +104,65 @@ export function FavoritesTab({
                   id="import-favorites-empty"
                 />
                 <label htmlFor="import-favorites-empty" className="elegant-btn import-btn">
-                  <span className="btn-icon">⤴️</span>
+                  <span className="btn-icon">&#x2934;&#xFE0F;</span>
                   <span className="btn-text">Import Favorites</span>
                 </label>
               </div>
             </div>
           </div>
         </div>
-      ) : (
-        <>
-          <div className="favorites-header">
-            <div className="favorites-meta">
-              <h3>Your Favorites ({items.length})</h3>
-              <p>Manage and organize your saved mock configurations</p>
-            </div>
-            <div className="import-export-section">
-              <div className="import-export-actions">
-                <button onClick={onExportFavorites} className="elegant-btn export-btn">
-                  <span className="btn-icon">💾</span>
-                  <span className="btn-text">Export</span>
-                </button>
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={onImportFavorites}
-                  style={{ display: 'none' }}
-                  id="import-favorites-list"
-                />
-                <label htmlFor="import-favorites-list" className="elegant-btn import-btn">
-                  <span className="btn-icon">⤴️</span>
-                  <span className="btn-text">Import</span>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div ref={itemsListRef}>
-            {(() => {
-              // Split items into Analytics (with date ranges) and Evaluations (timeless)
-              const analyticsFavorites = items.filter(fav => !fav.isTimeless);
-              const evaluationsFavorites = items.filter(fav => fav.isTimeless);
+      </div>
+    );
+  }
 
-              return (
-                <>
-                  {/* Analytics Section - favorites WITH date ranges */}
-                  {analyticsFavorites.length > 0 && (
-                    <div className="mocks-section">
-                      <h3 className="section-header">Analytics</h3>
-                      <div className="items-count">{analyticsFavorites.length} item{analyticsFavorites.length !== 1 ? 's' : ''}</div>
-                      <div className="items-list">
-                        {analyticsFavorites.map((item) => (
-                          <FavoriteItemComponent
-                            key={item.displayName}
-                            item={item}
-                            onUpdate={onUpdateItem}
-                            onDelete={onDeleteItem}
-                            onApply={onApplyItem}
-                            autoExpand={false}
-                            searchTerm={searchTerm}
-                            isFirstResult={false}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
+  const analyticsFavorites = items.filter(fav => !fav.isTimeless);
+  const evaluationsFavorites = items.filter(fav => fav.isTimeless);
 
-                  {/* Evaluations Section - favorites WITHOUT date ranges */}
-                  {evaluationsFavorites.length > 0 && (
-                    <div className="mocks-section">
-                      <h3 className="section-header">Evaluations</h3>
-                      <div className="items-count">{evaluationsFavorites.length} item{evaluationsFavorites.length !== 1 ? 's' : ''}</div>
-                      <div className="items-list">
-                        {evaluationsFavorites.map((item) => (
-                          <FavoriteItemComponent
-                            key={item.displayName}
-                            item={item}
-                            onUpdate={onUpdateItem}
-                            onDelete={onDeleteItem}
-                            onApply={onApplyItem}
-                            autoExpand={false}
-                            searchTerm={searchTerm}
-                            isFirstResult={false}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </>
-              );
-            })()}
+  return (
+    <div className="tab-content">
+      <div className="favorites-header">
+        <div className="favorites-meta">
+          <h3>Your Favorites ({items.length})</h3>
+          <p>Manage and organize your saved mock configurations</p>
+        </div>
+        <div className="import-export-section">
+          <div className="import-export-actions">
+            <button onClick={onExportFavorites} className="elegant-btn export-btn">
+              <span className="btn-icon">&#x1F4BE;</span>
+              <span className="btn-text">Export</span>
+            </button>
+            <input
+              type="file"
+              accept=".json"
+              onChange={onImportFavorites}
+              style={{ display: 'none' }}
+              id="import-favorites-list"
+            />
+            <label htmlFor="import-favorites-list" className="elegant-btn import-btn">
+              <span className="btn-icon">&#x2934;&#xFE0F;</span>
+              <span className="btn-text">Import</span>
+            </label>
           </div>
-        </>
-      )}
+        </div>
+      </div>
+      <div>
+        <FavoritesSection
+          title="Analytics"
+          items={analyticsFavorites}
+          searchTerm={searchTerm}
+          onUpdateItem={onUpdateItem}
+          onDeleteItem={onDeleteItem}
+          onApplyItem={onApplyItem}
+        />
+        <FavoritesSection
+          title="Evaluations"
+          items={evaluationsFavorites}
+          searchTerm={searchTerm}
+          onUpdateItem={onUpdateItem}
+          onDeleteItem={onDeleteItem}
+          onApplyItem={onApplyItem}
+        />
+      </div>
     </div>
   );
 }

@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import type { LocalStorageItem } from '../types';
 import { LocalStorageItemComponent } from './LocalStorageItemComponent';
 
@@ -14,6 +13,38 @@ interface ActiveMocksTabProps {
   onReload: () => Promise<void>;
 }
 
+interface MocksSectionProps {
+  title: string;
+  items: LocalStorageItem[];
+  searchTerm: string;
+  onUpdateItem: (key: string, newValue: string) => Promise<void>;
+  onDeleteItem: (key: string) => Promise<void>;
+  onSaveItem: (key: string, item: LocalStorageItem) => Promise<void>;
+}
+
+function MocksSection({ title, items, searchTerm, onUpdateItem, onDeleteItem, onSaveItem }: MocksSectionProps): React.ReactNode {
+  if (items.length === 0) return null;
+
+  return (
+    <div className="mocks-section">
+      <h3 className="section-header">{title}</h3>
+      <div className="items-count">{items.length} item{items.length !== 1 ? 's' : ''}</div>
+      <div className="items-list">
+        {items.map((item) => (
+          <LocalStorageItemComponent
+            key={item.key}
+            item={item}
+            onUpdate={onUpdateItem}
+            onDelete={onDeleteItem}
+            onSave={onSaveItem}
+            searchTerm={searchTerm}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function ActiveMocksTab({
   items,
   currentTab,
@@ -24,9 +55,7 @@ export function ActiveMocksTab({
   onDeleteItem,
   onSaveItem,
   onReload
-}: ActiveMocksTabProps) {
-  const itemsListRef = useRef<HTMLDivElement>(null);
-
+}: ActiveMocksTabProps): React.ReactNode {
   if (loading) {
     return (
       <div className="loading">
@@ -48,7 +77,6 @@ export function ActiveMocksTab({
     );
   }
 
-  // Split items into Analytics (with date ranges) and Evaluations (timeless)
   const analyticsMocks = items.filter(item => !item.mockParts?.isTimeless);
   const evaluationsMocks = items.filter(item => item.mockParts?.isTimeless);
 
@@ -60,50 +88,23 @@ export function ActiveMocksTab({
           <p>Make sure you're on a page that has localStorage items with the "mock_" prefix.</p>
         </div>
       ) : (
-        <div ref={itemsListRef}>
-          {/* Analytics Section - mocks WITH date ranges */}
-          {analyticsMocks.length > 0 && (
-            <div className="mocks-section">
-              <h3 className="section-header">Analytics</h3>
-              <div className="items-count">{analyticsMocks.length} item{analyticsMocks.length !== 1 ? 's' : ''}</div>
-              <div className="items-list">
-                {analyticsMocks.map((item) => (
-                  <LocalStorageItemComponent
-                    key={item.key}
-                    item={item}
-                    onUpdate={onUpdateItem}
-                    onDelete={onDeleteItem}
-                    onSave={onSaveItem}
-                    autoExpand={false}
-                    searchTerm={searchTerm}
-                    isFirstResult={false}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Evaluations Section - mocks WITHOUT date ranges */}
-          {evaluationsMocks.length > 0 && (
-            <div className="mocks-section">
-              <h3 className="section-header">Evaluations</h3>
-              <div className="items-count">{evaluationsMocks.length} item{evaluationsMocks.length !== 1 ? 's' : ''}</div>
-              <div className="items-list">
-                {evaluationsMocks.map((item) => (
-                  <LocalStorageItemComponent
-                    key={item.key}
-                    item={item}
-                    onUpdate={onUpdateItem}
-                    onDelete={onDeleteItem}
-                    onSave={onSaveItem}
-                    autoExpand={false}
-                    searchTerm={searchTerm}
-                    isFirstResult={false}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+        <div>
+          <MocksSection
+            title="Analytics"
+            items={analyticsMocks}
+            searchTerm={searchTerm}
+            onUpdateItem={onUpdateItem}
+            onDeleteItem={onDeleteItem}
+            onSaveItem={onSaveItem}
+          />
+          <MocksSection
+            title="Evaluations"
+            items={evaluationsMocks}
+            searchTerm={searchTerm}
+            onUpdateItem={onUpdateItem}
+            onDeleteItem={onDeleteItem}
+            onSaveItem={onSaveItem}
+          />
         </div>
       )}
       <div className="current-tab">

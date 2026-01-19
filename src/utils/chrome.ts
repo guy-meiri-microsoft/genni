@@ -6,18 +6,14 @@ import { extractIdsFromUrl } from './mockToggle';
  */
 function calculateDateFilterOption(startDate?: string, endDate?: string): DateFilterOptions {
   if (!startDate || !endDate) {
-    return 'None'; // For timeless mocks
+    return 'None';
   }
 
   try {
-    // Parse dates assuming DD/MM format and current year
     const currentYear = new Date().getFullYear();
-
-    // Split DD/MM format and create proper date strings
     const [startDay, startMonth] = startDate.split('/');
     const [endDay, endMonth] = endDate.split('/');
 
-    // Create dates in YYYY-MM-DD format for proper parsing
     const start = new Date(`${currentYear}-${startMonth.padStart(2, '0')}-${startDay.padStart(2, '0')}`);
     let end = new Date(`${currentYear}-${endMonth.padStart(2, '0')}-${endDay.padStart(2, '0')}`);
 
@@ -26,27 +22,21 @@ function calculateDateFilterOption(startDate?: string, endDate?: string): DateFi
       end = new Date(`${currentYear + 1}-${endMonth.padStart(2, '0')}-${endDay.padStart(2, '0')}`);
     }
 
-    // Calculate the difference in days
     const diffTime = Math.abs(end.getTime() - start.getTime());
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-    // Return appropriate filter based on date range
-    if (diffDays <= 7) {
-      return 'Last7Days';
-    } else if (diffDays <= 14) {
-      return 'Last14Days';
-    } else {
-      return 'Last30Days';
-    }
+    if (diffDays <= 7) return 'Last7Days';
+    if (diffDays <= 14) return 'Last14Days';
+    return 'Last30Days';
   } catch (error) {
     console.warn('Failed to parse dates for filter calculation:', { startDate, endDate, error });
-    return 'Last30Days'; // Default fallback
+    return 'Last30Days';
   }
 }
 
 /**
  * Parses a mock key into its component parts
- * Expected format: mock_<api>_<start>_<end>_<id>
+ * Expected format: mock_<api>_<start>_<end>_<id> or mock_<api> (timeless)
  * Example: mock_billingSummary_05/08_12/08_4f91ba29-52bc-ef11-8ee7-000d3a5a9be8
  */
 export function parseMockKey(key: string, currentTabUrl?: string): MockKeyParts | null {
@@ -56,35 +46,25 @@ export function parseMockKey(key: string, currentTabUrl?: string): MockKeyParts 
     return null;
   }
 
+  const datePattern = /^\d{2}\/\d{2}$/;
+  const hasDateRange = parts.length >= 3 && datePattern.test(parts[2]);
+
   const result: MockKeyParts = {
     prefix: parts[0],
-    api: parts[1] || '',
+    api: parts[1],
     rawKey: key,
-    isTimeless: parts.length === 2 // Timeless if only prefix and API
+    isTimeless: !hasDateRange
   };
 
-  // Only parse dates if we have at least 3 parts and they look like dates
-  if (parts.length >= 3) {
-    // Validate date format DD/MM
-    const datePattern = /^\d{2}\/\d{2}$/;
-    if (datePattern.test(parts[2])) {
-      result.startDate = parts[2];
-      result.isTimeless = false; // Has date range
-    }
-  }
-
-  // Continue parsing remaining parts only if not timeless
-  if (parts.length >= 4 && !result.isTimeless) {
-    result.endDate = parts[3];
-  }
-  if (parts.length >= 5 && !result.isTimeless) {
-    result.id = parts[4];
+  if (hasDateRange) {
+    result.startDate = parts[2];
+    if (parts.length >= 4) result.endDate = parts[3];
+    if (parts.length >= 5) result.id = parts[4];
   }
 
   // If no ID was found in the key but we have URL context, use environment/bot ID
   if (!result.id && currentTabUrl) {
     const { envId, botId } = extractIdsFromUrl(currentTabUrl);
-    // Use botId if available, otherwise envId
     result.id = botId || envId || undefined;
   }
 
@@ -335,38 +315,34 @@ export function formatJson(jsonString: string): string {
 }
 
 /**
- * Save an item to Chrome's local storage
+ * Save an item to Chrome's local storage as a favorite
  */
 export async function saveItemToFavorites(key: string, item: LocalStorageItem, displayName: string): Promise<void> {
-  console.log('🌐 Chrome: Attempting to save item to favorites:', { key, displayName, mockParts: item.mockParts });
+  console.log('Chrome: Saving item to favorites:', { key, displayName, mockParts: item.mockParts });
 
-  // Calculate date filter option from mock parts
-  const dateFilterOption = calculateDateFilterOption(
-    item.mockParts?.startDate,
-    item.mockParts?.endDate
-  );
+  const dateFilterOption = calculateDateFilterOption(item.mockParts?.startDate, item.mockParts?.endDate);
+  const isTimeless = item.mockParts?.isTimeless ?? false;
 
   const favoriteItem: FavoriteItem = {
-    key: key,
+    key,
     value: item,
-    displayName: displayName,
+    displayName,
     savedAt: new Date().toISOString(),
-    dateFilterOption: dateFilterOption,
-    isTimeless: item.mockParts?.isTimeless || false
+    dateFilterOption,
+    isTimeless
   };
 
   const storageKey = `genni_favorite_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-  try {
-    // Check if chrome.storage is available
-    if (!chrome?.storage?.local) {
-      throw new Error('Chrome storage API is not available. Make sure the extension has storage permissions.');
-    }
+  if (!chrome?.storage?.local) {
+    throw new Error('Chrome storage API is not available. Make sure the extension has storage permissions.');
+  }
 
+  try {
     await chrome.storage.local.set({ [storageKey]: favoriteItem });
-    console.log('🌐 Chrome: Successfully saved item to favorites:', storageKey, 'with date filter:', dateFilterOption);
+    console.log('Chrome: Successfully saved item to favorites:', storageKey, 'with date filter:', dateFilterOption);
   } catch (error) {
-    console.error('🌐 Chrome: Failed to save to favorites:', error);
+    console.error('Chrome: Failed to save to favorites:', error);
     throw new Error(`Failed to save item to favorites: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }

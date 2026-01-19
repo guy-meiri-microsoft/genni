@@ -5,172 +5,157 @@ import { calculateDatesFromFilter, updateJsonDates, updateMockKey } from '../uti
 import { applyFavoriteToLocalStorage } from '../utils/chrome';
 
 interface FavoriteItemComponentProps {
-    item: FavoriteItem;
-    onUpdate: (key: string, newValue: string) => Promise<void>;
-    onDelete: (key: string) => Promise<void>;
-    onApply?: (key: string) => Promise<void>;
-    autoExpand?: boolean;
-    searchTerm?: string;
-    isFirstResult?: boolean;
+  item: FavoriteItem;
+  onUpdate: (key: string, newValue: string) => Promise<void>;
+  onDelete: (key: string) => Promise<void>;
+  onApply?: (key: string) => Promise<void>;
+  searchTerm?: string;
 }
 
-export const FavoriteItemComponent: React.FC<FavoriteItemComponentProps> = ({
-    item,
-    onUpdate,
-    onDelete,
-    onApply,
-    autoExpand = false,
-    searchTerm = '',
-    isFirstResult = false
-}) => {
-    const handleApplyFavorite = async () => {
-        try {
-            let updatedJsonValue = item.value.value;
-            let updatedKey = item.key;
+function truncateDisplayName(name: string, maxLength: number = 30): string {
+  return name.length > maxLength ? name.substring(0, maxLength) + '...' : name;
+}
 
-            // Only update dates if NOT timeless
-            if (!item.isTimeless) {
-                // Calculate new dates based on the date filter option
-                const { startDate, endDate } = calculateDatesFromFilter(item.dateFilterOption);
+export function FavoriteItemComponent({
+  item,
+  onUpdate,
+  onDelete,
+  onApply,
+  searchTerm = ''
+}: FavoriteItemComponentProps): React.ReactNode {
+  async function handleApplyFavorite(): Promise<void> {
+    try {
+      let updatedJsonValue = item.value.value;
+      let updatedKey = item.key;
+      let alertMessage: string;
 
-                // Get original dates from the favorite item's mock parts
-                const originalStartDate = item.value.mockParts?.startDate;
-                const originalEndDate = item.value.mockParts?.endDate;
+      if (item.isTimeless) {
+        alertMessage = `Applied timeless favorite "${item.displayName}" to localStorage`;
+      } else {
+        const { startDate, endDate } = calculateDatesFromFilter(item.dateFilterOption);
+        const originalStartDate = item.value.mockParts?.startDate;
+        const originalEndDate = item.value.mockParts?.endDate;
 
-                // Update the JSON value with new dates, preserving timestamp positions
-                updatedJsonValue = updateJsonDates(
-                    item.value.value,
-                    startDate,
-                    endDate,
-                    originalStartDate,
-                    originalEndDate,
-                    false // isTimeless
-                );
-
-                // Update the key with new dates
-                updatedKey = updateMockKey(item.key, startDate, endDate);
-
-                // Apply to localStorage
-                await applyFavoriteToLocalStorage(item.key, updatedKey, updatedJsonValue);
-
-                // Call the optional callback
-                if (onApply) {
-                    await onApply(updatedKey);
-                }
-
-                alert(`Applied favorite "${item.displayName}" to localStorage with updated dates: ${startDate} → ${endDate}`);
-            } else {
-                // For timeless mocks, apply as-is without date updates
-                await applyFavoriteToLocalStorage(item.key, updatedKey, updatedJsonValue);
-
-                // Call the optional callback
-                if (onApply) {
-                    await onApply(updatedKey);
-                }
-
-                alert(`Applied timeless favorite "${item.displayName}" to localStorage`);
-            }
-        } catch (error) {
-            console.error('Failed to apply favorite:', error);
-            alert(`Failed to apply favorite: ${error instanceof Error ? error.message : 'Unknown error'}`);
-        }
-    };
-    const renderTitle = () => (
-        <h3 className="item-key">
-            {highlightText(
-            item.displayName.length > 30
-                ? item.displayName.substring(0, 30) + '...'
-                : item.displayName,
-            searchTerm
-            )}
-            {item.isTimeless ? (
-                <span className="timeless-badge">
-                    <small> Timeless</small>
-                </span>
-            ) : (
-                <span className="date-preview">
-                    <small> {item.dateFilterOption}</small>
-                </span>
-            )}
-        </h3>
-    );
-
-    const renderKeyDisplay = () => {
-        if (item.value.mockParts) {
-            const { api, startDate, endDate, id, isTimeless } = item.value.mockParts;
-            return (
-                <div className="mock-key-parts">
-                    <div className="key-info-inline">
-                        <span className="display-name">{highlightText(item.displayName, searchTerm)}</span>
-                        <span className="separator">•</span>
-                        <span className="api-name">{highlightText(api, searchTerm)}</span>
-                        {item.isTimeless || isTimeless ? (
-                            <>
-                                <span className="separator">•</span>
-                                <span className="timeless-badge">Timeless</span>
-                            </>
-                        ) : startDate && endDate ? (
-                            <>
-                                <span className="separator">•</span>
-                                <span className="date-range">{item.dateFilterOption}</span>
-                            </>
-                        ) : null}
-                        {id && (
-                            <>
-                                <span className="separator">•</span>
-                                <span className="mock-id" data-tooltip={id}>{id.substring(0, 8)}...</span>
-                            </>
-                        )}
-                    </div>
-                    <div className="saved-info">
-                        <small>Saved: {new Date(item.savedAt).toLocaleDateString()}</small>
-                    </div>
-                </div>
-            );
-        }
-
-        // Fallback for non-mock keys or unparseable keys
-        return (
-            <div className="simple-key">
-                <span className="display-name">{highlightText(item.displayName, searchTerm)}</span>
-                <span className="separator">•</span>
-                <span className="value">{highlightText(item.key, searchTerm)}</span>
-                <div className="saved-info">
-                    <small>Saved: {new Date(item.savedAt).toLocaleDateString()}</small>
-                </div>
-            </div>
+        updatedJsonValue = updateJsonDates(
+          item.value.value,
+          startDate,
+          endDate,
+          originalStartDate,
+          originalEndDate,
+          false
         );
-    };
+        updatedKey = updateMockKey(item.key, startDate, endDate);
+        alertMessage = `Applied favorite "${item.displayName}" to localStorage with updated dates: ${startDate} \u2192 ${endDate}`;
+      }
 
-    const renderActionButtons = () => (
-        <button 
-            onClick={(e) => {
-                e.stopPropagation();
-                handleApplyFavorite();
-            }}
-            className="apply-btn"
-            data-tooltip="Apply favorite to localStorage with current dates"
-        >
-            📥
-        </button>
-    );
+      await applyFavoriteToLocalStorage(item.key, updatedKey, updatedJsonValue);
+
+      if (onApply) {
+        await onApply(updatedKey);
+      }
+
+      alert(alertMessage);
+    } catch (error) {
+      console.error('Failed to apply favorite:', error);
+      alert(`Failed to apply favorite: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  }
+
+  function renderTitle(): React.ReactNode {
+    const displayText = truncateDisplayName(item.displayName);
+    const badge = item.isTimeless
+      ? <span className="timeless-badge"><small> Timeless</small></span>
+      : <span className="date-preview"><small> {item.dateFilterOption}</small></span>;
 
     return (
-        <BaseItemComponent
-            itemKey={item.key}
-            itemValue={item.value.value}
-            isValidJson={item.value.isValidJson}
-            error={item.value.error}
-            onUpdate={onUpdate}
-            onDelete={onDelete}
-            autoExpand={autoExpand}
-            isFirstResult={isFirstResult}
-        >
-            {{
-                renderTitle,
-                renderKeyDisplay,
-                renderActionButtons
-            }}
-        </BaseItemComponent>
+      <h3 className="item-key">
+        {highlightText(displayText, searchTerm)}
+        {badge}
+      </h3>
     );
-};
+  }
+
+  function renderKeyDisplay(): React.ReactNode {
+    const savedInfo = (
+      <div className="saved-info">
+        <small>Saved: {new Date(item.savedAt).toLocaleDateString()}</small>
+      </div>
+    );
+
+    if (!item.value.mockParts) {
+      return (
+        <div className="simple-key">
+          <span className="display-name">{highlightText(item.displayName, searchTerm)}</span>
+          <span className="separator">&#x2022;</span>
+          <span className="value">{highlightText(item.key, searchTerm)}</span>
+          {savedInfo}
+        </div>
+      );
+    }
+
+    const { api, startDate, endDate, id, isTimeless } = item.value.mockParts;
+    const isTimelessMock = item.isTimeless || isTimeless;
+    const hasDateRange = !isTimelessMock && startDate && endDate;
+
+    return (
+      <div className="mock-key-parts">
+        <div className="key-info-inline">
+          <span className="display-name">{highlightText(item.displayName, searchTerm)}</span>
+          <span className="separator">&#x2022;</span>
+          <span className="api-name">{highlightText(api, searchTerm)}</span>
+          {isTimelessMock && (
+            <>
+              <span className="separator">&#x2022;</span>
+              <span className="timeless-badge">Timeless</span>
+            </>
+          )}
+          {hasDateRange && (
+            <>
+              <span className="separator">&#x2022;</span>
+              <span className="date-range">{item.dateFilterOption}</span>
+            </>
+          )}
+          {id && (
+            <>
+              <span className="separator">&#x2022;</span>
+              <span className="mock-id" data-tooltip={id}>{id.substring(0, 8)}...</span>
+            </>
+          )}
+        </div>
+        {savedInfo}
+      </div>
+    );
+  }
+
+  function renderActionButtons(): React.ReactNode {
+    return (
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          handleApplyFavorite();
+        }}
+        className="apply-btn"
+        data-tooltip="Apply favorite to localStorage with current dates"
+      >
+        &#x1F4E5;
+      </button>
+    );
+  }
+
+  return (
+    <BaseItemComponent
+      itemKey={item.key}
+      itemValue={item.value.value}
+      isValidJson={item.value.isValidJson}
+      error={item.value.error}
+      onUpdate={onUpdate}
+      onDelete={onDelete}
+    >
+      {{
+        renderTitle,
+        renderKeyDisplay,
+        renderActionButtons
+      }}
+    </BaseItemComponent>
+  );
+}

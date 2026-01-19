@@ -1,29 +1,23 @@
 import type { DateFilterOptions } from '../types';
 
+const DATE_FILTER_DAYS: Record<Exclude<DateFilterOptions, 'None'>, number> = {
+  Last7Days: 6,
+  Last14Days: 13,
+  Last30Days: 29
+};
+
 /**
  * Calculates start and end dates based on DateFilterOptions
  * Returns dates in DD/MM format using UTC to avoid timezone issues
  */
 export function calculateDatesFromFilter(dateFilter: DateFilterOptions): { startDate: string; endDate: string } {
   const today = new Date();
-  
-  // Use UTC dates to avoid timezone issues
   const endDate = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
   const startDate = new Date(endDate);
 
-  switch (dateFilter) {
-    case 'Last7Days':
-      startDate.setUTCDate(endDate.getUTCDate() - 6); // 7 days including today
-      break;
-    case 'Last14Days':
-      startDate.setUTCDate(endDate.getUTCDate() - 13); // 14 days including today
-      break;
-    case 'Last30Days':
-      startDate.setUTCDate(endDate.getUTCDate() - 29); // 30 days including today
-      break;
-  }
+  const daysBack = dateFilter === 'None' ? 0 : DATE_FILTER_DAYS[dateFilter];
+  startDate.setUTCDate(endDate.getUTCDate() - daysBack);
 
-  // Format as DD/MM using UTC dates
   const formatDate = (date: Date): string => {
     const day = date.getUTCDate().toString().padStart(2, '0');
     const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
@@ -88,26 +82,22 @@ function mapTimestampToNewRange(originalTimestamp: string, originalStartDate: st
  * Updates JSON string by replacing date fields with new values
  * Looks for fields containing 'startDate', 'endDate', or 'timestamp' in their names
  */
-export function updateJsonDates(jsonString: string, newStartDate: string, newEndDate: string, originalStartDate?: string, originalEndDate?: string, isTimeless: boolean = false): string {
-  // If timeless, return unchanged
+export function updateJsonDates(
+  jsonString: string,
+  newStartDate: string,
+  newEndDate: string,
+  originalStartDate?: string,
+  originalEndDate?: string,
+  isTimeless: boolean = false
+): string {
   if (isTimeless) {
     return jsonString;
   }
 
   try {
     const parsed = JSON.parse(jsonString);
-    
-    // Helper function to update a date field
-    const updateDateField = (value: unknown, fallbackValue: string): unknown => {
-      // If we have original dates and the value is a string, map it using offset
-      if (typeof value === 'string' && originalStartDate && originalEndDate) {
-        return mapTimestampToNewRange(value, originalStartDate, originalEndDate, newStartDate, newEndDate);
-      }
-      // Otherwise use the fallback value
-      return fallbackValue;
-    };
-    
-    // Recursively update date fields
+    const hasOriginalDates = originalStartDate && originalEndDate;
+
     const updateDatesInObject = (obj: unknown): unknown => {
       if (typeof obj !== 'object' || obj === null) {
         return obj;
@@ -119,25 +109,26 @@ export function updateJsonDates(jsonString: string, newStartDate: string, newEnd
 
       const updated = { ...obj as Record<string, unknown> };
       for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
-        if (typeof key === 'string') {
-          const keyLower = key.toLowerCase();
-          
-          if (keyLower.includes('startdate')) {
-            updated[key] = updateDateField(value, newStartDate);
-          } else if (keyLower.includes('enddate')) {
-            updated[key] = updateDateField(value, newEndDate);
-          } else if (keyLower.includes('timestamp') && typeof value === 'string' && originalStartDate && originalEndDate) {
-            updated[key] = mapTimestampToNewRange(value, originalStartDate, originalEndDate, newStartDate, newEndDate);
-          } else if (typeof value === 'object' && value !== null) {
-            updated[key] = updateDatesInObject(value);
-          }
+        const keyLower = key.toLowerCase();
+
+        if (keyLower.includes('startdate')) {
+          updated[key] = hasOriginalDates && typeof value === 'string'
+            ? mapTimestampToNewRange(value, originalStartDate, originalEndDate, newStartDate, newEndDate)
+            : newStartDate;
+        } else if (keyLower.includes('enddate')) {
+          updated[key] = hasOriginalDates && typeof value === 'string'
+            ? mapTimestampToNewRange(value, originalStartDate, originalEndDate, newStartDate, newEndDate)
+            : newEndDate;
+        } else if (keyLower.includes('timestamp') && hasOriginalDates && typeof value === 'string') {
+          updated[key] = mapTimestampToNewRange(value, originalStartDate, originalEndDate, newStartDate, newEndDate);
+        } else if (typeof value === 'object' && value !== null) {
+          updated[key] = updateDatesInObject(value);
         }
       }
       return updated;
     };
 
-    const updatedData = updateDatesInObject(parsed);
-    return JSON.stringify(updatedData, null, 2);
+    return JSON.stringify(updateDatesInObject(parsed), null, 2);
   } catch (error) {
     console.error('Failed to update JSON dates:', error);
     throw new Error('Invalid JSON format');
