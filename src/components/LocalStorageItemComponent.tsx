@@ -34,25 +34,35 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
   const renderTitle = () => (
     <h3 className="item-key">
       {item.mockParts ? highlightText(item.mockParts.api, searchTerm) : highlightText(item.key, searchTerm)}
-      {item.mockParts?.startDate && item.mockParts?.endDate && (
+      {item.mockParts?.startDate && item.mockParts?.endDate ? (
         <span className="date-preview">
           <small> ({item.mockParts.startDate} → {item.mockParts.endDate})</small>
         </span>
-      )}
+      ) : item.mockParts?.isTimeless ? (
+        <span className="timeless-badge">
+          <small> (no time range)</small>
+        </span>
+      ) : null}
     </h3>
   );
 
   const renderKeyDisplay = () => {
     if (item.mockParts) {
-      const { api, startDate, endDate, id } = item.mockParts;
+      const { api, startDate, endDate, id, isTimeless } = item.mockParts;
       return (
         <div className="mock-key-parts">
           <div className="key-info-inline">
             <span className="api-name">{highlightText(api, searchTerm)}</span>
-            {startDate && endDate && (
+            {!isTimeless && startDate && endDate && (
               <>
                 <span className="separator">•</span>
                 <span className="date-range">{startDate} → {endDate}</span>
+              </>
+            )}
+            {isTimeless && (
+              <>
+                <span className="separator">•</span>
+                <span className="timeless-badge">Timeless</span>
               </>
             )}
             {id && (

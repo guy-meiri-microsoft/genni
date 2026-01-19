@@ -6,7 +6,7 @@ import { extractIdsFromUrl } from './mockToggle';
  */
 function calculateDateFilterOption(startDate?: string, endDate?: string): DateFilterOptions {
   if (!startDate || !endDate) {
-    return 'Last30Days'; // Default fallback
+    return 'None'; // For timeless mocks
   }
 
   try {
@@ -59,17 +59,25 @@ export function parseMockKey(key: string, currentTabUrl?: string): MockKeyParts 
   const result: MockKeyParts = {
     prefix: parts[0],
     api: parts[1] || '',
-    rawKey: key
+    rawKey: key,
+    isTimeless: parts.length === 2 // Timeless if only prefix and API
   };
 
-  // If we have more parts, try to identify dates and ID
+  // Only parse dates if we have at least 3 parts and they look like dates
   if (parts.length >= 3) {
-    result.startDate = parts[2];
+    // Validate date format DD/MM
+    const datePattern = /^\d{2}\/\d{2}$/;
+    if (datePattern.test(parts[2])) {
+      result.startDate = parts[2];
+      result.isTimeless = false; // Has date range
+    }
   }
-  if (parts.length >= 4) {
+
+  // Continue parsing remaining parts only if not timeless
+  if (parts.length >= 4 && !result.isTimeless) {
     result.endDate = parts[3];
   }
-  if (parts.length >= 5) {
+  if (parts.length >= 5 && !result.isTimeless) {
     result.id = parts[4];
   }
 
@@ -343,7 +351,8 @@ export async function saveItemToFavorites(key: string, item: LocalStorageItem, d
     value: item,
     displayName: displayName,
     savedAt: new Date().toISOString(),
-    dateFilterOption: dateFilterOption
+    dateFilterOption: dateFilterOption,
+    isTimeless: item.mockParts?.isTimeless || false
   };
 
   const storageKey = `genni_favorite_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;

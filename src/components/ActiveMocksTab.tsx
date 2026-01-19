@@ -48,6 +48,10 @@ export function ActiveMocksTab({
     );
   }
 
+  // Split items into Analytics (with date ranges) and Evaluations (timeless)
+  const analyticsMocks = items.filter(item => !item.mockParts?.isTimeless);
+  const evaluationsMocks = items.filter(item => item.mockParts?.isTimeless);
+
   return (
     <div className="tab-content">
       {items.length === 0 ? (
@@ -56,19 +60,50 @@ export function ActiveMocksTab({
           <p>Make sure you're on a page that has localStorage items with the "mock_" prefix.</p>
         </div>
       ) : (
-        <div className="items-list" ref={itemsListRef}>
-          {items.map((item) => (
-            <LocalStorageItemComponent
-              key={item.key}
-              item={item}
-              onUpdate={onUpdateItem}
-              onDelete={onDeleteItem}
-              onSave={onSaveItem}
-              autoExpand={false}
-              searchTerm={searchTerm}
-              isFirstResult={false}
-            />
-          ))}
+        <div ref={itemsListRef}>
+          {/* Analytics Section - mocks WITH date ranges */}
+          {analyticsMocks.length > 0 && (
+            <div className="mocks-section">
+              <h3 className="section-header">Analytics</h3>
+              <div className="items-count">{analyticsMocks.length} item{analyticsMocks.length !== 1 ? 's' : ''}</div>
+              <div className="items-list">
+                {analyticsMocks.map((item) => (
+                  <LocalStorageItemComponent
+                    key={item.key}
+                    item={item}
+                    onUpdate={onUpdateItem}
+                    onDelete={onDeleteItem}
+                    onSave={onSaveItem}
+                    autoExpand={false}
+                    searchTerm={searchTerm}
+                    isFirstResult={false}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Evaluations Section - mocks WITHOUT date ranges */}
+          {evaluationsMocks.length > 0 && (
+            <div className="mocks-section">
+              <h3 className="section-header">Evaluations</h3>
+              <div className="items-count">{evaluationsMocks.length} item{evaluationsMocks.length !== 1 ? 's' : ''}</div>
+              <div className="items-list">
+                {evaluationsMocks.map((item) => (
+                  <LocalStorageItemComponent
+                    key={item.key}
+                    item={item}
+                    onUpdate={onUpdateItem}
+                    onDelete={onDeleteItem}
+                    onSave={onSaveItem}
+                    autoExpand={false}
+                    searchTerm={searchTerm}
+                    isFirstResult={false}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
       <div className="current-tab">

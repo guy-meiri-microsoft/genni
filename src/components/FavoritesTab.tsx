@@ -109,19 +109,60 @@ export function FavoritesTab({
               </div>
             </div>
           </div>
-          <div className="items-list" ref={itemsListRef}>
-            {items.map((item) => (
-              <FavoriteItemComponent
-                key={item.displayName}
-                item={item}
-                onUpdate={onUpdateItem}
-                onDelete={onDeleteItem}
-                onApply={onApplyItem}
-                autoExpand={false}
-                searchTerm={searchTerm}
-                isFirstResult={false}
-              />
-            ))}
+          <div ref={itemsListRef}>
+            {(() => {
+              // Split items into Analytics (with date ranges) and Evaluations (timeless)
+              const analyticsFavorites = items.filter(fav => !fav.isTimeless);
+              const evaluationsFavorites = items.filter(fav => fav.isTimeless);
+
+              return (
+                <>
+                  {/* Analytics Section - favorites WITH date ranges */}
+                  {analyticsFavorites.length > 0 && (
+                    <div className="mocks-section">
+                      <h3 className="section-header">Analytics</h3>
+                      <div className="items-count">{analyticsFavorites.length} item{analyticsFavorites.length !== 1 ? 's' : ''}</div>
+                      <div className="items-list">
+                        {analyticsFavorites.map((item) => (
+                          <FavoriteItemComponent
+                            key={item.displayName}
+                            item={item}
+                            onUpdate={onUpdateItem}
+                            onDelete={onDeleteItem}
+                            onApply={onApplyItem}
+                            autoExpand={false}
+                            searchTerm={searchTerm}
+                            isFirstResult={false}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Evaluations Section - favorites WITHOUT date ranges */}
+                  {evaluationsFavorites.length > 0 && (
+                    <div className="mocks-section">
+                      <h3 className="section-header">Evaluations</h3>
+                      <div className="items-count">{evaluationsFavorites.length} item{evaluationsFavorites.length !== 1 ? 's' : ''}</div>
+                      <div className="items-list">
+                        {evaluationsFavorites.map((item) => (
+                          <FavoriteItemComponent
+                            key={item.displayName}
+                            item={item}
+                            onUpdate={onUpdateItem}
+                            onDelete={onDeleteItem}
+                            onApply={onApplyItem}
+                            autoExpand={false}
+                            searchTerm={searchTerm}
+                            isFirstResult={false}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         </>
       )}

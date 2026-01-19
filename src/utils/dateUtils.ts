@@ -88,7 +88,12 @@ function mapTimestampToNewRange(originalTimestamp: string, originalStartDate: st
  * Updates JSON string by replacing date fields with new values
  * Looks for fields containing 'startDate', 'endDate', or 'timestamp' in their names
  */
-export function updateJsonDates(jsonString: string, newStartDate: string, newEndDate: string, originalStartDate?: string, originalEndDate?: string): string {
+export function updateJsonDates(jsonString: string, newStartDate: string, newEndDate: string, originalStartDate?: string, originalEndDate?: string, isTimeless: boolean = false): string {
+  // If timeless, return unchanged
+  if (isTimeless) {
+    return jsonString;
+  }
+
   try {
     const parsed = JSON.parse(jsonString);
     
@@ -147,15 +152,20 @@ export function updateJsonDates(jsonString: string, newStartDate: string, newEnd
  */
 export function updateMockKey(originalKey: string, newStartDate: string, newEndDate: string): string {
   const parts = originalKey.split('_');
-  
+
   if (parts.length < 2 || parts[0] !== 'mock') {
     return originalKey; // Return original if not a mock key
+  }
+
+  // If timeless (only 2 parts: mock_<api>), return unchanged
+  if (parts.length === 2) {
+    return originalKey;
   }
 
   // Calculate the day after the end date for the key format
   const [endDay, endMonth] = newEndDate.split('/');
   const endDateObj = new Date(new Date().getFullYear(), parseInt(endMonth) - 1, parseInt(endDay) + 1);
-  
+
   // Format the day after end date as DD/MM
   const dayAfterEnd = endDateObj.getDate().toString().padStart(2, '0');
   const monthAfterEnd = (endDateObj.getMonth() + 1).toString().padStart(2, '0');
