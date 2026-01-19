@@ -1,0 +1,124 @@
+/* ==========================================================================
+   Shared Button Styles
+   ========================================================================== */
+
+/* Base button - shared foundation for all buttons */
+.btn-base,
+.header-search-btn,
+.action-btn {
+  padding: 6px var(--spacing-sm);
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  background: var(--color-bg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-base {
+  padding: 6px var(--spacing-md);
+  font-weight: 500;
+}
+
+.action-btn {
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+}
+
+.btn-base:hover,
+.header-search-btn:hover,
+.action-btn:hover {
+  background: var(--color-bg-muted);
+  border-color: var(--color-border-hover);
+}
+
+.btn-base:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Color variants for action buttons */
+.refresh-page-btn {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  min-width: 32px;
+  padding: 6px;
+}
+
+.refresh-page-btn:hover {
+  background: var(--color-primary-bg);
+  border-color: var(--color-primary-hover);
+}
+
+.clear-mocks-btn {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+  min-width: 32px;
+  padding: 6px;
+}
+
+.clear-mocks-btn:hover {
+  background: var(--color-danger-bg-hover);
+  border-color: var(--color-danger-hover);
+}
+
+/* ==========================================================================
+   Elegant Button Styling
+   ========================================================================== */
+.elegant-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: 6px 10px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-sm);
+  min-width: 70px;
+  height: 28px;
+}
+
+.elegant-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.elegant-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-icon {
+  font-size: 12px;
+}
+
+.btn-text {
+  font-weight: 500;
+}
+
+.export-btn {
+  color: var(--color-primary);
+}
+
+.export-btn:hover {
+  background: var(--color-primary-bg);
+  border-color: var(--color-primary-hover);
+}
+
+.import-btn {
+  color: var(--color-success);
+}
+
+.import-btn:hover {
+  background: var(--color-success-bg);
+  border-color: var(--color-success-hover);
+}

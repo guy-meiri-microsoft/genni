@@ -1,0 +1,88 @@
+/* ==========================================================================
+   JSON Tree View
+   ========================================================================== */
+.json-tree-view {
+  padding: var(--spacing-md);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.5;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--radius-lg);
+  max-height: 500px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.json-line {
+  display: flex;
+  align-items: flex-start;
+  min-height: 20px;
+  width: 100%;
+}
+
+.json-spacer {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: var(--spacing-xs);
+}
+
+.json-nested {
+  flex: 1;
+  width: 100%;
+}
+
+.json-indent {
+  white-space: pre;
+}
+
+/* Tree control buttons - shared base */
+.fold-button,
+.delete-button {
+  padding: 0 var(--spacing-xs);
+  background: none;
+  border: none;
+  border-radius: 2px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.fold-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  margin-right: var(--spacing-xs);
+  font-size: 10px;
+}
+
+.fold-button:hover {
+  background: var(--color-bg-subtle);
+  color: var(--color-text);
+}
+
+.delete-button {
+  margin-left: var(--spacing-sm);
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.delete-button:hover {
+  background: #ffebee;
+  color: var(--color-danger);
+  opacity: 1;
+}
+
+/* JSON syntax colors */
+.json-key { color: var(--color-primary); font-weight: 500; }
+.json-string { color: var(--color-success-hover); }
+.json-number { color: #8250df; }
+.json-boolean { color: var(--color-danger); font-weight: 500; }
+.json-null { color: var(--color-text-muted); font-style: italic; }
+.json-brace { color: var(--color-text); font-weight: 600; }
+.json-colon { color: var(--color-text); margin-right: var(--spacing-xs); }
+.json-comma { color: var(--color-text); }
+.json-ellipsis { color: var(--color-text-muted); font-style: italic; }

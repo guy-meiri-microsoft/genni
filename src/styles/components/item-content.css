@@ -1,0 +1,135 @@
+/* ==========================================================================
+   Item Content
+   ========================================================================== */
+.item-content {
+  padding: 0;
+}
+
+.view-mode {
+  padding: var(--spacing-xl);
+}
+
+.edit-mode {
+  padding: 0;
+}
+
+.json-display {
+  margin: 0 0 var(--spacing-lg);
+  padding: var(--spacing-lg);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg-subtle);
+  border-radius: var(--radius-lg);
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  max-height: 300px;
+}
+
+.view-actions,
+.edit-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.view-actions {
+  justify-content: flex-end;
+}
+
+.content-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-bottom: 1px solid var(--color-border);
+  background: #fafbfc;
+}
+
+/* ==========================================================================
+   Key Details / Mock Key Parts
+   ========================================================================== */
+.key-details {
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background: var(--color-bg-subtle);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mock-key-parts {
+  display: flex;
+  flex-direction: column;
+}
+
+.key-info-inline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.key-info-inline .separator {
+  color: var(--color-text-muted);
+  font-weight: bold;
+}
+
+/* Key part badges - shared base */
+.key-info-inline .api-name,
+.key-info-inline .date-range,
+.key-info-inline .display-name,
+.key-info-inline .mock-id,
+.key-info-inline .full-key {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  border: 1px solid;
+}
+
+.key-info-inline .api-name {
+  font-weight: 600;
+  color: var(--color-primary);
+  background: var(--color-primary-bg-hover);
+  border-color: #bfdbfe;
+}
+
+.key-info-inline .date-range {
+  color: #059669;
+  background: #d1fae5;
+  border-color: var(--color-success-border);
+}
+
+.key-info-inline .display-name {
+  color: #960a00;
+  background: #f5c0c0;
+  border-color: #fcc8c8;
+}
+
+.key-info-inline .mock-id {
+  color: #7c2d12;
+  background: #fef3c7;
+  border-color: #fde68a;
+}
+
+.key-info-inline .full-key {
+  font-size: 12px;
+  color: #6b7280;
+  background: #f9fafb;
+  border-color: #e5e7eb;
+}
+
+.simple-key .value {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--color-text);
+  word-break: break-all;
+}
+
+/* Search highlighting */
+.search-highlight {
+  padding: 1px 2px;
+  background: var(--color-warning-bg);
+  color: var(--color-warning-text);
+  border: 1px solid var(--color-warning-border);
+  border-radius: 2px;
+  font-weight: 600;
+}

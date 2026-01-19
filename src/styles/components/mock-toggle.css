@@ -1,0 +1,110 @@
+/* ==========================================================================
+   Mock Toggle Switch
+   ========================================================================== */
+.mock-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 22px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.mock-toggle-switch.toggling {
+  cursor: wait;
+}
+
+.mock-toggle-switch.loading,
+.mock-toggle-switch.error {
+  cursor: default;
+}
+
+.mock-toggle-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.mock-toggle-slider {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-danger);
+  border: 2px solid transparent;
+  border-radius: 11px;
+  transition: all var(--transition-slow);
+}
+
+.mock-toggle-slider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transform: translateY(-50%);
+  transition: all var(--transition-slow);
+}
+
+/* Checked state */
+.mock-toggle-input:checked + .mock-toggle-slider {
+  background-color: var(--color-success-hover);
+}
+
+.mock-toggle-input:checked + .mock-toggle-slider::before {
+  transform: translateX(20px) translateY(-50%);
+}
+
+/* Hover states */
+.mock-toggle-switch:hover:not(.loading):not(.error) .mock-toggle-slider {
+  box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.3);
+}
+
+.mock-toggle-input:checked + .mock-toggle-slider:hover {
+  background-color: #2da44e;
+}
+
+.mock-toggle-input:not(:checked) + .mock-toggle-slider:hover {
+  background-color: #e85c75;
+}
+
+/* Toggle text */
+.mock-toggle-text {
+  position: absolute;
+  font-size: 8px;
+  font-weight: 600;
+  color: white;
+  pointer-events: none;
+  transition: all var(--transition-slow);
+}
+
+.mock-toggle-input:checked + .mock-toggle-slider .mock-toggle-text {
+  left: 5px;
+}
+
+.mock-toggle-input:not(:checked) + .mock-toggle-slider .mock-toggle-text {
+  right: 5px;
+}
+
+/* Loading and error states */
+.mock-toggle-switch.loading .mock-toggle-slider,
+.mock-toggle-switch.error .mock-toggle-slider {
+  background-color: #656d76;
+  cursor: default;
+}
+
+.mock-toggle-switch.loading .mock-toggle-slider::before,
+.mock-toggle-switch.error .mock-toggle-slider::before {
+  transform: translateX(12px) translateY(-50%);
+  animation: none;
+}
+
+.mock-toggle-switch.error .mock-toggle-slider {
+  background-color: var(--color-text-light);
+}

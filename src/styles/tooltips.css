@@ -1,0 +1,185 @@
+/* ==========================================================================
+   Tooltips
+   ========================================================================== */
+
+/* Tooltip arrow color variable for easy theming */
+:root {
+  --tooltip-bg: rgba(0, 0, 0, 0.9);
+  --tooltip-arrow-size: 6px;
+}
+
+[data-tooltip] {
+  position: relative;
+  cursor: help;
+}
+
+/* Override cursor for clickable elements */
+button[data-tooltip],
+label[data-tooltip],
+.editable-value[data-tooltip] {
+  cursor: pointer;
+}
+
+/* Base tooltip styles */
+[data-tooltip]::before,
+[data-tooltip]::after {
+  position: absolute;
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-normal);
+}
+
+[data-tooltip]::before {
+  content: attr(data-tooltip);
+  background: var(--tooltip-bg);
+  color: white;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-lg);
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: normal;
+  max-width: 250px;
+  text-align: center;
+  font-weight: 400;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+[data-tooltip]::after {
+  content: '';
+  width: 0;
+  height: 0;
+}
+
+[data-tooltip]:hover::before,
+[data-tooltip]:hover::after {
+  opacity: 1;
+}
+
+/* Tooltip above (default) */
+[data-tooltip]:hover::before {
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+[data-tooltip]:hover::after {
+  bottom: calc(100% + 2px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: var(--tooltip-arrow-size) solid transparent;
+  border-top-color: var(--tooltip-bg);
+  border-bottom: none;
+}
+
+/* Tooltip below - for header elements and storage items */
+.app-header [data-tooltip]:hover::before,
+.top-actions [data-tooltip]:hover::before,
+.storage-item [data-tooltip]:hover::before,
+.item-controls [data-tooltip]:hover::before,
+.tab-button[data-tooltip]:hover::before,
+.header-search-input[data-tooltip]:hover::before,
+.mock-toggle-switch[data-tooltip]:hover::before,
+label[data-tooltip]:hover::before {
+  top: calc(100% + 8px);
+  bottom: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+}
+
+.app-header [data-tooltip]:hover::after,
+.top-actions [data-tooltip]:hover::after,
+.storage-item [data-tooltip]:hover::after,
+.item-controls [data-tooltip]:hover::after,
+.tab-button[data-tooltip]:hover::after,
+.header-search-input[data-tooltip]:hover::after,
+.mock-toggle-switch[data-tooltip]:hover::after,
+label[data-tooltip]:hover::after {
+  top: calc(100% + 2px);
+  bottom: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  border: var(--tooltip-arrow-size) solid transparent;
+  border-bottom-color: var(--tooltip-bg);
+  border-top: none;
+  z-index: 9999;
+}
+
+/* Right-aligned tooltip for last button in item controls */
+.item-controls button:last-child[data-tooltip]:hover::before {
+  left: auto;
+  right: 0;
+  transform: none;
+}
+
+.item-controls button:last-child[data-tooltip]:hover::after {
+  left: auto;
+  right: 12px;
+  transform: none;
+}
+
+/* Left-aligned tooltip for mock-id and status badges */
+.mock-id[data-tooltip]:hover::before,
+.status-invalid[data-tooltip]:hover::before {
+  left: 0;
+  transform: none;
+  max-width: 300px;
+  text-align: left;
+}
+
+.mock-id[data-tooltip]:hover::after,
+.status-invalid[data-tooltip]:hover::after {
+  left: 12px;
+  transform: none;
+}
+
+/* Error tooltip styling */
+.status-invalid[data-tooltip]:hover::before {
+  --tooltip-bg: rgba(220, 53, 69, 0.95);
+  background: var(--tooltip-bg);
+  border: 1px solid rgba(184, 44, 58, 0.8);
+  max-width: 200px;
+}
+
+.status-invalid[data-tooltip]:hover::after {
+  border-top-color: rgba(220, 53, 69, 0.95);
+}
+
+/* Success tooltip styling */
+.status-valid[data-tooltip]:hover::before {
+  --tooltip-bg: rgba(40, 167, 69, 0.95);
+  background: var(--tooltip-bg);
+  border: 1px solid rgba(33, 136, 56, 0.8);
+}
+
+.status-valid[data-tooltip]:hover::after {
+  border-top-color: rgba(40, 167, 69, 0.95);
+}
+
+/* Warning tooltip styling */
+.update-button[data-tooltip]:hover::before {
+  background: rgba(255, 211, 61, 0.95);
+  color: var(--color-text);
+  border: 1px solid rgba(249, 197, 19, 0.8);
+}
+
+.update-button[data-tooltip]:hover::after {
+  border-top-color: rgba(255, 211, 61, 0.95);
+}
+
+/* Tooltip overflow prevention */
+.item-content [data-tooltip]:hover::before {
+  max-width: min(250px, 90vw);
+}
+
+/* ==========================================================================
+   Mobile Responsiveness
+   ========================================================================== */
+@media (max-width: 640px) {
+  [data-tooltip]:hover::before {
+    max-width: 200px;
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}

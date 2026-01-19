@@ -1,0 +1,46 @@
+/* ==========================================================================
+   Header
+   ========================================================================== */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-2xl);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex: 1;
+}
+
+.header-search {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding-left: var(--spacing-xs);
+  flex: 1;
+}
+
+.header-search-input {
+  flex: 1;
+  height: 32px;
+  padding: 6px 10px;
+  border: 1px solid var(--color-border-muted);
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.header-search-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-focus);
+}

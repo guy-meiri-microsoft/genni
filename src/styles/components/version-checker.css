@@ -1,0 +1,53 @@
+/* ==========================================================================
+   Version Checker
+   ========================================================================== */
+.version-checker {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-subtle);
+  font-size: 12px;
+  text-align: center;
+  max-height: 44px;
+}
+
+.version-checker.loading {
+  color: var(--color-text-muted);
+}
+
+.version-checker.up-to-date {
+  color: var(--color-success-hover);
+  background: #dafbe1;
+}
+
+.version-checker.error {
+  color: var(--color-danger);
+  background: var(--color-danger-bg);
+}
+
+.version-checker.update-available {
+  padding: 6px var(--spacing-md);
+  background: #fff8c5;
+}
+
+.update-button {
+  width: 100%;
+  padding: 6px var(--spacing-md);
+  background: #ffd33d;
+  border: 1px solid #f9c513;
+  border-radius: var(--radius-lg);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.update-button:hover {
+  background: #f9c513;
+  border-color: #edb100;
+  transform: translateY(-1px);
+}
+
+.version-text {
+  font-weight: 500;
+}

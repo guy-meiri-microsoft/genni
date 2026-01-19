@@ -1,0 +1,12 @@
+/* ==========================================================================
+   App Container
+   ========================================================================== */
+.app {
+  width: 600px;
+  height: 700px;
+  min-height: 500px;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}

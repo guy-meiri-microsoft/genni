@@ -1,0 +1,95 @@
+/* ==========================================================================
+   Loading and Error States
+   ========================================================================== */
+.loading,
+.error,
+.no-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.loading,
+.error {
+  height: 300px;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--spacing-lg);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.error h2 {
+  margin: 0 0 var(--spacing-sm);
+  font-size: 16px;
+  color: var(--color-danger);
+}
+
+.error p {
+  margin: 0 0 var(--spacing-lg);
+  color: var(--color-text-muted);
+}
+
+.retry-btn {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.retry-btn:hover {
+  background: var(--color-primary-hover);
+}
+
+/* ==========================================================================
+   No Items State
+   ========================================================================== */
+.no-items {
+  min-height: 400px;
+  padding: 40px var(--spacing-xl);
+}
+
+.no-items-content {
+  text-align: center;
+  max-width: 400px;
+}
+
+.no-items-icon {
+  font-size: 48px;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.5;
+}
+
+.no-items h3 {
+  margin: 0 0 var(--spacing-md);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.no-items p {
+  margin: 0 0 var(--spacing-sm);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.search-info {
+  font-style: italic;
+  color: var(--color-text-light) !important;
+  margin-top: var(--spacing-sm) !important;
+}

@@ -1,0 +1,67 @@
+/* ==========================================================================
+   CSS Custom Properties (Design Tokens)
+   ========================================================================== */
+:root {
+  /* Colors - Primary */
+  --color-primary: #0969da;
+  --color-primary-hover: #0550ae;
+  --color-primary-bg: #f0f6ff;
+  --color-primary-bg-hover: #dbeafe;
+
+  /* Colors - Success */
+  --color-success: #1f883d;
+  --color-success-hover: #1a7f37;
+  --color-success-bg: #f0fff4;
+  --color-success-bg-alt: #dcfce7;
+  --color-success-border: #a7f3d0;
+
+  /* Colors - Danger */
+  --color-danger: #cf222e;
+  --color-danger-hover: #a40e26;
+  --color-danger-bg: #ffebe9;
+  --color-danger-bg-hover: #ffeef0;
+
+  /* Colors - Warning */
+  --color-warning-bg: #fff3cd;
+  --color-warning-border: #ffeaa7;
+  --color-warning-text: #856404;
+
+  /* Colors - Neutral */
+  --color-text: #24292f;
+  --color-text-muted: #656d76;
+  --color-text-light: #8b949e;
+  --color-bg: #ffffff;
+  --color-bg-subtle: #f6f8fa;
+  --color-bg-muted: #f3f4f6;
+  --color-border: #e1e5e9;
+  --color-border-muted: #d1d9e0;
+  --color-border-hover: #c7d2db;
+
+  /* Typography */
+  --font-mono: 'SF Mono', Monaco, Inconsolata, 'Roboto Mono', Consolas, 'Courier New', monospace;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-2xl: 24px;
+
+  /* Border radius */
+  --radius-sm: 3px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.2s ease;
+  --transition-slow: 0.3s ease;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-focus: 0 0 0 2px rgba(9, 105, 218, 0.12);
+}
