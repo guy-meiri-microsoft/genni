@@ -17,18 +17,17 @@
 .tab-button {
   padding: var(--spacing-md) var(--spacing-2xl);
   border: none;
+  border-bottom: 2px solid transparent;
   background: transparent;
   color: var(--color-text-muted);
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all var(--transition-fast);
   outline: none;
+  transition: all var(--transition-fast);
 }
 
 .tab-button:focus {
-  outline: none;
   box-shadow: var(--shadow-focus);
 }
 
@@ -40,7 +39,6 @@
 .tab-button.active {
   color: var(--color-primary);
   border-bottom-color: var(--color-primary);
-  background: transparent;
 }
 
 .tab-content {

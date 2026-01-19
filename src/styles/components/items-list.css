@@ -3,16 +3,16 @@
    ========================================================================== */
 .main-content {
   flex: 1;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .items-count {
   margin-bottom: var(--spacing-xl);
   font-size: 14px;
-  color: var(--color-text-muted);
   font-weight: 500;
+  color: var(--color-text-muted);
 }
 
 .items-list {

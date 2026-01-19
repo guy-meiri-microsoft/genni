@@ -2,13 +2,18 @@
    Loading and Error States
    ========================================================================== */
 .loading,
-.error {
+.error,
+.no-items {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 300px;
   text-align: center;
+}
+
+.loading,
+.error {
+  height: 300px;
 }
 
 .spinner {
@@ -26,13 +31,13 @@
 }
 
 .error h2 {
-  margin: 0 0 var(--spacing-sm) 0;
+  margin: 0 0 var(--spacing-sm);
   font-size: 16px;
   color: var(--color-danger);
 }
 
 .error p {
-  margin: 0 0 var(--spacing-lg) 0;
+  margin: 0 0 var(--spacing-lg);
   color: var(--color-text-muted);
 }
 
@@ -48,16 +53,13 @@
 }
 
 .retry-btn:hover {
-  background: #0860ca;
+  background: var(--color-primary-hover);
 }
 
 /* ==========================================================================
    No Items State
    ========================================================================== */
 .no-items {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 400px;
   padding: 40px var(--spacing-xl);
 }
@@ -74,14 +76,14 @@
 }
 
 .no-items h3 {
-  margin: 0 0 var(--spacing-md) 0;
+  margin: 0 0 var(--spacing-md);
   font-size: 20px;
   font-weight: 600;
   color: var(--color-text);
 }
 
 .no-items p {
-  margin: 0 0 var(--spacing-sm) 0;
+  margin: 0 0 var(--spacing-sm);
   color: var(--color-text-muted);
   line-height: 1.5;
 }

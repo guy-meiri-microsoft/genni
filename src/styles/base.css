@@ -4,10 +4,7 @@
 .app {
   width: 600px;
   height: 700px;
-  min-width: 600px;
   min-height: 500px;
-  max-width: 600px;
-  max-height: 700px;
   background: var(--color-bg);
   display: flex;
   flex-direction: column;

@@ -2,12 +2,12 @@
    Storage Item Card
    ========================================================================== */
 .storage-item {
+  position: relative;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
   background: var(--color-bg);
   overflow: hidden;
   transition: all var(--transition-normal);
-  position: relative;
 }
 
 .storage-item:hover,
@@ -25,15 +25,15 @@
 }
 
 .item-header {
-  padding: var(--spacing-lg) var(--spacing-xl);
-  background: var(--color-bg-subtle);
-  border-bottom: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background: var(--color-bg-subtle);
+  border-bottom: 1px solid var(--color-border);
   cursor: pointer;
   transition: background-color var(--transition-normal);
-  gap: var(--spacing-md);
 }
 
 .item-header:hover {
@@ -49,24 +49,24 @@
 }
 
 .item-key {
-  margin: 0;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--color-text);
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
   display: flex;
   align-items: baseline;
   gap: var(--spacing-sm);
   flex: 1;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .date-preview small {
-  color: var(--color-text-muted);
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 400;
-  font-family: var(--font-mono);
+  color: var(--color-text-muted);
   white-space: nowrap;
 }
 
@@ -84,7 +84,6 @@
   gap: var(--spacing-sm);
 }
 
-/* Shared item control button base */
 .item-controls button {
   padding: var(--spacing-xs) var(--spacing-sm);
   background: var(--color-bg-subtle);
@@ -142,8 +141,8 @@
   font-size: 12px;
   color: var(--color-text-muted);
   cursor: pointer;
-  transition: all var(--transition-normal);
   user-select: none;
+  transition: all var(--transition-normal);
 }
 
 .expand-btn:hover {
@@ -171,37 +170,40 @@
 }
 
 .edit-btn:hover {
-  background: #0860ca;
+  background: var(--color-primary-hover);
 }
 
-/* Status badges */
-.item-status .status-valid,
-.status-valid {
-  padding: 2px 6px;
-  background: #dcfdf7;
-  color: #065f46;
-  border-radius: var(--radius-md);
-  font-size: 10px;
-  font-weight: 500;
-}
-
-.status-valid {
-  color: var(--color-success-hover);
-  font-size: 14px;
-}
-
-.item-status .status-invalid,
+/* ==========================================================================
+   Status Badges
+   ========================================================================== */
+.status-valid,
 .status-invalid {
   padding: 2px 6px;
-  background: #fef2f2;
-  color: #dc2626;
   border-radius: var(--radius-md);
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 500;
+}
+
+.item-status .status-valid,
+.item-status .status-invalid {
+  font-size: 10px;
+}
+
+.status-valid {
+  background: #dcfdf7;
+  color: var(--color-success-hover);
+}
+
+.item-status .status-valid {
+  color: #065f46;
+}
+
+.status-invalid {
+  background: #fef2f2;
+  color: var(--color-danger);
   cursor: help;
 }
 
-.status-invalid {
-  color: var(--color-danger);
-  font-size: 14px;
+.item-status .status-invalid {
+  color: #dc2626;
 }

@@ -2,9 +2,9 @@
    Inline Editing
    ========================================================================== */
 .editable-value {
-  cursor: pointer;
-  border-radius: var(--radius-sm);
   padding: 1px 3px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
   transition: background-color var(--transition-fast);
 }
 
@@ -18,18 +18,17 @@
 }
 
 .json-input {
+  min-width: 60px;
+  padding: 2px 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-text);
+  background: var(--color-bg);
   border: 1px solid var(--color-primary);
   border-radius: var(--radius-sm);
-  padding: 2px 6px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-  font-size: 12px;
-  background: var(--color-bg);
-  color: var(--color-text);
-  min-width: 60px;
   outline: none;
 }
 
 .json-input:focus {
-  border-color: var(--color-primary);
   box-shadow: 0 0 0 2px rgba(9, 105, 218, 0.3);
 }

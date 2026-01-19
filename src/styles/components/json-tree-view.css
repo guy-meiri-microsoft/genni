@@ -2,10 +2,10 @@
    JSON Tree View
    ========================================================================== */
 .json-tree-view {
+  padding: var(--spacing-md);
   font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1.5;
-  padding: var(--spacing-md);
   background: var(--color-bg);
   border: 1px solid var(--color-border-muted);
   border-radius: var(--radius-lg);
@@ -22,9 +22,9 @@
 }
 
 .json-spacer {
+  display: inline-block;
   width: 16px;
   height: 16px;
-  display: inline-block;
   margin-right: var(--spacing-xs);
 }
 
@@ -37,21 +37,26 @@
   white-space: pre;
 }
 
-.fold-button {
+/* Tree control buttons - shared base */
+.fold-button,
+.delete-button {
+  padding: 0 var(--spacing-xs);
   background: none;
   border: none;
+  border-radius: 2px;
   color: var(--color-text-muted);
   cursor: pointer;
-  padding: 0 var(--spacing-xs);
-  margin-right: var(--spacing-xs);
-  font-size: 10px;
-  border-radius: 2px;
   transition: all var(--transition-normal);
-  min-width: 16px;
-  height: 16px;
+}
+
+.fold-button {
   display: flex;
   align-items: center;
   justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  margin-right: var(--spacing-xs);
+  font-size: 10px;
 }
 
 .fold-button:hover {
@@ -60,15 +65,8 @@
 }
 
 .delete-button {
-  background: none;
-  border: none;
-  color: var(--color-text-muted);
-  cursor: pointer;
-  padding: 0 var(--spacing-xs);
   margin-left: var(--spacing-sm);
   font-size: 12px;
-  border-radius: 2px;
-  transition: all var(--transition-normal);
   opacity: 0.6;
 }
 
@@ -85,6 +83,6 @@
 .json-boolean { color: var(--color-danger); font-weight: 500; }
 .json-null { color: var(--color-text-muted); font-style: italic; }
 .json-brace { color: var(--color-text); font-weight: 600; }
-.json-colon { color: var(--color-text); margin: 0 var(--spacing-xs) 0 0; }
+.json-colon { color: var(--color-text); margin-right: var(--spacing-xs); }
 .json-comma { color: var(--color-text); }
 .json-ellipsis { color: var(--color-text-muted); font-style: italic; }
