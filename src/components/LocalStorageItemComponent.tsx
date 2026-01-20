@@ -7,76 +7,101 @@ interface LocalStorageItemComponentProps {
   onUpdate: (key: string, newValue: string) => Promise<void>;
   onDelete: (key: string) => Promise<void>;
   onSave?: (key: string, item: LocalStorageItem) => Promise<void>;
-  autoExpand?: boolean;
   searchTerm?: string;
-  isFirstResult?: boolean;
 }
 
-export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps> = ({
+function renderTitleBadge(mockParts: LocalStorageItem['mockParts']): React.ReactNode {
+  if (!mockParts) return null;
+
+  if (mockParts.startDate && mockParts.endDate) {
+    return (
+      <span className="date-preview">
+        <small> ({mockParts.startDate} &#x2192; {mockParts.endDate})</small>
+      </span>
+    );
+  }
+
+  if (mockParts.isTimeless) {
+    return (
+      <span className="timeless-badge">
+        <small> (no time range)</small>
+      </span>
+    );
+  }
+
+  return null;
+}
+
+export function LocalStorageItemComponent({
   item,
   onUpdate,
   onDelete,
   onSave,
-  autoExpand = false,
-  searchTerm = '',
-  isFirstResult = false
-}) => {
-  const handleSaveToFavorites = async () => {
+  searchTerm = ''
+}: LocalStorageItemComponentProps): React.ReactNode {
+  async function handleSaveToFavorites(): Promise<void> {
     if (!onSave) return;
-    
+
     try {
       await onSave(item.key, item);
     } catch (error) {
       console.error('Failed to save item:', error);
     }
-  };
+  }
 
-  const renderTitle = () => (
-    <h3 className="item-key">
-      {item.mockParts ? highlightText(item.mockParts.api, searchTerm) : highlightText(item.key, searchTerm)}
-      {item.mockParts?.startDate && item.mockParts?.endDate && (
-        <span className="date-preview">
-          <small> ({item.mockParts.startDate} → {item.mockParts.endDate})</small>
-        </span>
-      )}
-    </h3>
-  );
+  function renderTitle(): React.ReactNode {
+    const displayText = item.mockParts ? item.mockParts.api : item.key;
+    return (
+      <h3 className="item-key">
+        {highlightText(displayText, searchTerm)}
+        {renderTitleBadge(item.mockParts)}
+      </h3>
+    );
+  }
 
-  const renderKeyDisplay = () => {
-    if (item.mockParts) {
-      const { api, startDate, endDate, id } = item.mockParts;
+  function renderKeyDisplay(): React.ReactNode {
+    if (!item.mockParts) {
       return (
-        <div className="mock-key-parts">
-          <div className="key-info-inline">
-            <span className="api-name">{highlightText(api, searchTerm)}</span>
-            {startDate && endDate && (
-              <>
-                <span className="separator">•</span>
-                <span className="date-range">{startDate} → {endDate}</span>
-              </>
-            )}
-            {id && (
-              <>
-                <span className="separator">•</span>
-                <span className="mock-id" data-tooltip={id}>{id.substring(0, 8)}...</span>
-              </>
-            )}
-          </div>
+        <div className="simple-key">
+          <span className="value">{highlightText(item.key, searchTerm)}</span>
         </div>
       );
     }
-    
-    // Fallback for non-mock keys or unparseable keys
+
+    const { api, startDate, endDate, id, isTimeless } = item.mockParts;
+
     return (
-      <div className="simple-key">
-        <span className="value">{highlightText(item.key, searchTerm)}</span>
+      <div className="mock-key-parts">
+        <div className="key-info-inline">
+          <span className="api-name">{highlightText(api, searchTerm)}</span>
+          {!isTimeless && startDate && endDate && (
+            <>
+              <span className="separator">&#x2022;</span>
+              <span className="date-range">{startDate} &#x2192; {endDate}</span>
+            </>
+          )}
+          {isTimeless && (
+            <>
+              <span className="separator">&#x2022;</span>
+              <span className="timeless-badge">Timeless</span>
+            </>
+          )}
+          {id && (
+            <>
+              <span className="separator">&#x2022;</span>
+              <span className="mock-id" data-tooltip={id}>{id.substring(0, 8)}...</span>
+            </>
+          )}
+        </div>
       </div>
     );
-  };
+  }
 
-  const renderActionButtons = () => (
-    onSave && (
-      <button 
+  function renderActionButtons(): React.ReactNode {
+    if (!onSave) return null;
+
+    return (
+      <button
         onClick={(e) => {
           e.stopPropagation();
           handleSaveToFavorites();
@@ -84,10 +109,10 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
         className="save-btn"
         data-tooltip="Save to favorites"
       >
-        ⭐
+        &#x2B50;
       </button>
-    )
-  );
+    );
+  }
 
   return (
     <BaseItemComponent
@@ -97,8 +122,6 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
       error={item.error}
       onUpdate={onUpdate}
       onDelete={onDelete}
-      autoExpand={autoExpand}
-      isFirstResult={isFirstResult}
     >
       {{
         renderTitle,
@@ -107,4 +130,4 @@ export const LocalStorageItemComponent: React.FC<LocalStorageItemComponentProps>
       }}
     </BaseItemComponent>
   );
-};
+}

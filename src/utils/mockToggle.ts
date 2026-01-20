@@ -112,12 +112,12 @@ export async function toggleMockState(tabUrl: string): Promise<MockToggleInfo> {
       func: (envId: string, botId: string | null) => {
         const useMockApis = localStorage.getItem('useMockApis') || '';
         let mockIds = useMockApis.split(',').filter(id => id.trim().length > 0);
-        
+
         // Check current state - both envId and botId (if exists) should be present
         const envEnabled = mockIds.includes(envId);
         const botEnabled = botId ? mockIds.includes(botId) : true;
         const currentlyEnabled = envEnabled && botEnabled;
-        
+
         if (currentlyEnabled) {
           // Remove both IDs
           mockIds = mockIds.filter(id => id !== envId && id !== botId);
@@ -130,15 +130,30 @@ export async function toggleMockState(tabUrl: string): Promise<MockToggleInfo> {
             mockIds.push(botId);
           }
         }
-        
+
         const newValue = mockIds.join(',');
         localStorage.setItem('useMockApis', newValue);
-        
+
         // Check final state
         const finalEnvEnabled = mockIds.includes(envId);
         const finalBotEnabled = botId ? mockIds.includes(botId) : true;
         const finalEnabled = finalEnvEnabled && finalBotEnabled;
-        
+
+        // Update URL query parameter
+        try {
+          const url = new URL(window.location.href);
+          if (finalEnabled) {
+            // Add isMock=true parameter
+            url.searchParams.set('isMock', 'true');
+          } else {
+            // Remove isMock parameter
+            url.searchParams.delete('isMock');
+          }
+          window.history.replaceState({}, '', url.toString());
+        } catch (error) {
+          console.error('Error updating URL parameter:', error);
+        }
+
         return {
           newValue,
           isEnabled: finalEnabled
