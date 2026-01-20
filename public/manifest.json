@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Genni - Analytics mocking tool",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "description": "A tool to help manage Analytics mocks",
   "action": {
     "default_popup": "index.html",
