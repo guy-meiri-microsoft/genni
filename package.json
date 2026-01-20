@@ -1,7 +1,7 @@
 {
   "name": "localStorage-json-manager",
   "private": true,
-  "version": "1.5.6",
+  "version": "1.6.0",
   "type": "module",
   "description": "A Chrome/Edge extension to manage localStorage JSON values with specific prefixes",
   "scripts": {
