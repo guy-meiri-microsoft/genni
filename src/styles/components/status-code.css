@@ -16,7 +16,6 @@
 .status-code-value {
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   padding: 2px 8px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: var(--radius-sm);
   color: white;
   font-weight: 600;
@@ -24,10 +23,35 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 
+/* Success: 2xx */
+.status-code-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+/* Redirect: 3xx */
+.status-code-redirect {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+/* Client Error: 4xx */
+.status-code-client-error {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+/* Server Error: 5xx */
+.status-code-server-error {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+/* Info/Other: 1xx */
+.status-code-info {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
 .status-code-edit-btn {
   padding: 2px 4px;
-  border: 1px solid rgba(102, 126, 234, 0.3);
-  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.05);
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 0.75rem;
@@ -36,8 +60,8 @@
 }
 
 .status-code-edit-btn:hover {
-  background: rgba(102, 126, 234, 0.2);
-  border-color: rgba(102, 126, 234, 0.5);
+  background: rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.3);
 }
 
 .status-code-editing {
@@ -49,7 +73,7 @@
 .status-code-input {
   width: 60px;
   padding: 2px 8px;
-  border: 2px solid #667eea;
+  border: 2px solid var(--border-color);
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
@@ -61,13 +85,24 @@
 
 .status-code-input:focus {
   outline: none;
-  border-color: #764ba2;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px var(--primary-color-alpha);
 }
 
 .status-code-input:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Remove spinner buttons from number input */
+.status-code-input::-webkit-inner-spin-button,
+.status-code-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.status-code-input {
+  -moz-appearance: textfield;
 }
 
 .status-code-save-btn,

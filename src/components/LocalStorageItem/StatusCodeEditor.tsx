@@ -19,6 +19,15 @@ export function StatusCodeEditor({ item, onUpdate }: StatusCodeEditorProps): Rea
     return null;
   }
 
+  // Determine status code type for styling
+  function getStatusType(code: number): string {
+    if (code >= 200 && code < 300) return 'success';
+    if (code >= 300 && code < 400) return 'redirect';
+    if (code >= 400 && code < 500) return 'client-error';
+    if (code >= 500) return 'server-error';
+    return 'info';
+  }
+
   async function handleSave(): Promise<void> {
     setIsSaving(true);
     try {
@@ -44,7 +53,9 @@ export function StatusCodeEditor({ item, onUpdate }: StatusCodeEditorProps): Rea
       {!isEditing ? (
         <>
           <span className="status-code-label">Status:</span>
-          <span className="status-code-value">{statusCode}</span>
+          <span className={`status-code-value status-code-${getStatusType(statusCode)}`}>
+            {statusCode}
+          </span>
           <button
             className="status-code-edit-btn"
             onClick={(e) => {
