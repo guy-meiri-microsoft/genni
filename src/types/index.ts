@@ -15,6 +15,8 @@ export interface LocalStorageItem {
   isValidJson: boolean;
   error?: string;
   mockParts?: MockKeyParts; // Parsed mock key structure if applicable
+  statusCode?: number; // HTTP status code from { data, status } format
+  hasStatusField: boolean; // Whether the value has the { data, status } structure
 }
 
 export interface ChromeTabInfo {

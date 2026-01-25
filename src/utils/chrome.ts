@@ -153,11 +153,28 @@ export async function getLocalStorageItems(searchTerm: string = ''): Promise<Loc
       let parsedValue: unknown;
       let isValidJson = false;
       let error: string | undefined;
+      let statusCode: number | undefined;
+      let hasStatusField = false;
 
       try {
         parsedValue = JSON.parse(item.value);
         isValidJson = true;
         console.log('🌐 Chrome: Successfully parsed JSON for:', item.key);
+
+        // Check if the parsed value has the { data, status } structure
+        if (
+          parsedValue &&
+          typeof parsedValue === 'object' &&
+          'data' in parsedValue &&
+          'status' in parsedValue
+        ) {
+          const obj = parsedValue as { data: unknown; status: unknown };
+          if (typeof obj.status === 'number') {
+            statusCode = obj.status;
+            hasStatusField = true;
+            console.log('🌐 Chrome: Found status code:', statusCode, 'for:', item.key);
+          }
+        }
       } catch (e) {
         error = e instanceof Error ? e.message : 'Invalid JSON';
         isValidJson = false;
@@ -172,14 +189,18 @@ export async function getLocalStorageItems(searchTerm: string = ''): Promise<Loc
         parsedValue,
         isValidJson,
         error,
-        mockParts: mockParts || undefined
+        mockParts: mockParts || undefined,
+        statusCode,
+        hasStatusField
       };
 
       console.log('🌐 Chrome: Processed item:', {
         key: processedItem.key,
         valueLength: processedItem.value.length,
         isValidJson: processedItem.isValidJson,
-        hasError: !!processedItem.error
+        hasError: !!processedItem.error,
+        hasStatusField: processedItem.hasStatusField,
+        statusCode: processedItem.statusCode
       });
 
       return processedItem;
