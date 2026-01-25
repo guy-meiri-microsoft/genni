@@ -3,7 +3,6 @@ import { BaseItemComponent } from '../BaseItemComponent';
 import { highlightText } from '../../utils/textUtils';
 import { MockKeyDisplay } from './MockKeyDisplay';
 import { MockTitleBadge } from './MockTitleBadge';
-import { StatusCodeEditor } from './StatusCodeEditor';
 
 interface LocalStorageItemComponentProps {
   item: LocalStorageItem;
@@ -40,12 +39,7 @@ export function LocalStorageItemComponent({
   }
 
   function renderKeyDisplay(): React.ReactNode {
-    return (
-      <>
-        <MockKeyDisplay item={item} searchTerm={searchTerm} />
-        <StatusCodeEditor item={item} onUpdate={onUpdate} />
-      </>
-    );
+    return <MockKeyDisplay item={item} searchTerm={searchTerm} onUpdate={onUpdate} />;
   }
 
   function renderActionButtons(): React.ReactNode {

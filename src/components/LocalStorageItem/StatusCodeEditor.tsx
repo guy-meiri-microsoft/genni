@@ -40,53 +40,64 @@ export function StatusCodeEditor({ item, onUpdate }: StatusCodeEditorProps): Rea
   }
 
   return (
-    <div className="status-code-section">
-      <div className="status-code-header">
-        <label className="status-code-label">
-          <span className="status-code-label-text">Status Code:</span>
-          {!isEditing ? (
-            <>
-              <span className="status-code-value">{statusCode}</span>
-              <button
-                className="status-code-edit-btn"
-                onClick={() => setIsEditing(true)}
-                data-tooltip="Edit status code"
-              >
-                ✏️
-              </button>
-            </>
-          ) : (
-            <div className="status-code-edit-controls">
-              <input
-                type="number"
-                value={statusCode}
-                onChange={(e) => setStatusCode(parseInt(e.target.value) || 200)}
-                min="100"
-                max="599"
-                className="status-code-input"
-                disabled={isSaving}
-                autoFocus
-              />
-              <button
-                className="status-code-save-btn"
-                onClick={handleSave}
-                disabled={isSaving}
-                data-tooltip="Save status code"
-              >
-                ✓
-              </button>
-              <button
-                className="status-code-cancel-btn"
-                onClick={handleCancel}
-                disabled={isSaving}
-                data-tooltip="Cancel"
-              >
-                ✕
-              </button>
-            </div>
-          )}
-        </label>
-      </div>
-    </div>
+    <span className="status-code-inline">
+      {!isEditing ? (
+        <>
+          <span className="status-code-label">Status:</span>
+          <span className="status-code-value">{statusCode}</span>
+          <button
+            className="status-code-edit-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsEditing(true);
+            }}
+            data-tooltip="Edit status code"
+          >
+            ✏️
+          </button>
+        </>
+      ) : (
+        <span className="status-code-editing">
+          <span className="status-code-label">Status:</span>
+          <input
+            type="number"
+            value={statusCode}
+            onChange={(e) => setStatusCode(parseInt(e.target.value) || 200)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleSave();
+              if (e.key === 'Escape') handleCancel();
+            }}
+            min="100"
+            max="599"
+            className="status-code-input"
+            disabled={isSaving}
+            autoFocus
+            onClick={(e) => e.stopPropagation()}
+          />
+          <button
+            className="status-code-save-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSave();
+            }}
+            disabled={isSaving}
+            data-tooltip="Save (Enter)"
+          >
+            ✓
+          </button>
+          <button
+            className="status-code-cancel-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleCancel();
+            }}
+            disabled={isSaving}
+            data-tooltip="Cancel (Esc)"
+          >
+            ✕
+          </button>
+        </span>
+      )}
+    </span>
   );
 }
