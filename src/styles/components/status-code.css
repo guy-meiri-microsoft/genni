@@ -67,26 +67,37 @@
 .status-code-editing {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(59, 130, 246, 0.05);
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
 .status-code-input {
   width: 60px;
-  padding: 2px 8px;
-  border: 2px solid var(--border-color);
+  padding: 4px 10px;
+  border: 2px solid #3b82f6;
   border-radius: var(--radius-sm);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  background: white;
+  color: #1e293b;
   font-weight: 600;
   transition: all 0.2s ease;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .status-code-input:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px var(--primary-color-alpha);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+  background: #fff;
+}
+
+.status-code-input:hover:not(:disabled) {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
 }
 
 .status-code-input:disabled {
@@ -107,34 +118,40 @@
 
 .status-code-save-btn,
 .status-code-cancel-btn {
-  padding: 2px 4px;
-  border: 1px solid var(--border-color);
+  padding: 4px 8px;
+  border: 2px solid;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   transition: all 0.2s ease;
-  background: var(--bg-primary);
   line-height: 1;
+  font-weight: 600;
 }
 
 .status-code-save-btn {
-  color: var(--success-text);
-  border-color: var(--success-border);
+  background: #10b981;
+  border-color: #059669;
+  color: white;
 }
 
 .status-code-save-btn:hover:not(:disabled) {
-  background: var(--success-bg);
-  color: var(--success-text);
+  background: #059669;
+  border-color: #047857;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .status-code-cancel-btn {
-  color: var(--error-text);
-  border-color: var(--error-border);
+  background: #ef4444;
+  border-color: #dc2626;
+  color: white;
 }
 
 .status-code-cancel-btn:hover:not(:disabled) {
-  background: var(--error-bg);
-  color: var(--error-text);
+  background: #dc2626;
+  border-color: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .status-code-save-btn:disabled,

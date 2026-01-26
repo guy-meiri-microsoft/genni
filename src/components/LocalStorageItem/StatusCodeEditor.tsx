@@ -69,7 +69,7 @@ export function StatusCodeEditor({ item, onUpdate }: StatusCodeEditorProps): Rea
         </>
       ) : (
         <span className="status-code-editing">
-          <span className="status-code-label">Status:</span>
+          <span className="status-code-label">Edit Status:</span>
           <input
             type="number"
             value={statusCode}
@@ -84,6 +84,7 @@ export function StatusCodeEditor({ item, onUpdate }: StatusCodeEditorProps): Rea
             disabled={isSaving}
             autoFocus
             onClick={(e) => e.stopPropagation()}
+            placeholder="200"
           />
           <button
             className="status-code-save-btn"
