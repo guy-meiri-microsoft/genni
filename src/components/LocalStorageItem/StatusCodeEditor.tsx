@@ -31,8 +31,8 @@ export function StatusCodeEditor({ item, onUpdate }: StatusCodeEditorProps): Rea
   async function handleSave(): Promise<void> {
     setIsSaving(true);
     try {
-      const parsed = JSON.parse(item.value) as { data: unknown; status: number };
-      parsed.status = statusCode;
+      const parsed = JSON.parse(item.value) as { data: unknown; statusCode: number };
+      parsed.statusCode = statusCode;
       await onUpdate(item.key, JSON.stringify(parsed));
       setIsEditing(false);
     } catch (error) {

@@ -166,11 +166,11 @@ export async function getLocalStorageItems(searchTerm: string = ''): Promise<Loc
           parsedValue &&
           typeof parsedValue === 'object' &&
           'data' in parsedValue &&
-          'status' in parsedValue
+          'statusCode' in parsedValue
         ) {
-          const obj = parsedValue as { data: unknown; status: unknown };
-          if (typeof obj.status === 'number') {
-            statusCode = obj.status;
+          const obj = parsedValue as { data: unknown; statusCode: unknown };
+          if (typeof obj.statusCode === 'number') {
+            statusCode = obj.statusCode;
             hasStatusField = true;
             console.log('🌐 Chrome: Found status code:', statusCode, 'for:', item.key);
           }

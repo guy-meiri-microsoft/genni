@@ -25,33 +25,33 @@
 
 /* Success: 2xx */
 .status-code-success {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #86efac 0%, #4ade80 100%);
 }
 
 /* Redirect: 3xx */
 .status-code-redirect {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 100%);
 }
 
 /* Client Error: 4xx */
 .status-code-client-error {
-  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  background: linear-gradient(135deg, #fcd34d 0%, #fbbf24 100%);
 }
 
 /* Server Error: 5xx */
 .status-code-server-error {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background: linear-gradient(135deg, #fca5a5 0%, #f87171 100%);
 }
 
 /* Info/Other: 1xx */
 .status-code-info {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #a78bfa 0%, #8b5cf6 100%);
 }
 
 .status-code-edit-btn {
   padding: 2px 4px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.03);
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 0.75rem;
@@ -60,44 +60,32 @@
 }
 
 .status-code-edit-btn:hover {
-  background: rgba(0, 0, 0, 0.1);
-  border-color: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.06);
+  border-color: rgba(0, 0, 0, 0.2);
 }
 
 .status-code-editing {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 4px 8px;
-  background: rgba(59, 130, 246, 0.05);
-  border-radius: var(--radius-sm);
-  border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
 .status-code-input {
   width: 60px;
   padding: 4px 10px;
-  border: 2px solid #3b82f6;
+  border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   font-size: 0.9rem;
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   background: white;
   color: #1e293b;
   font-weight: 600;
-  transition: all 0.2s ease;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transition: border-color 0.2s ease;
 }
 
 .status-code-input:focus {
   outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
-  background: #fff;
-}
-
-.status-code-input:hover:not(:disabled) {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  border-color: var(--primary-color);
 }
 
 .status-code-input:disabled {
@@ -119,39 +107,35 @@
 .status-code-save-btn,
 .status-code-cancel-btn {
   padding: 4px 8px;
-  border: 2px solid;
+  border: 1px solid;
   border-radius: var(--radius-sm);
   cursor: pointer;
   font-size: 0.85rem;
   transition: all 0.2s ease;
   line-height: 1;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .status-code-save-btn {
-  background: #10b981;
-  border-color: #059669;
-  color: white;
+  background: #86efac;
+  border-color: #4ade80;
+  color: #166534;
 }
 
 .status-code-save-btn:hover:not(:disabled) {
-  background: #059669;
-  border-color: #047857;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: #4ade80;
+  border-color: #22c55e;
 }
 
 .status-code-cancel-btn {
-  background: #ef4444;
-  border-color: #dc2626;
-  color: white;
+  background: #fca5a5;
+  border-color: #f87171;
+  color: #991b1b;
 }
 
 .status-code-cancel-btn:hover:not(:disabled) {
-  background: #dc2626;
-  border-color: #b91c1c;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: #f87171;
+  border-color: #ef4444;
 }
 
 .status-code-save-btn:disabled,
