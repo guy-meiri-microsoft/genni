@@ -25,6 +25,7 @@ import './styles/components/json-inline-edit.css';
 import './styles/components/mock-toggle.css';
 import './styles/components/version-checker.css';
 import './styles/components/floating-nav.css';
+import './styles/components/status-code.css';
 
 function App() {
   const [items, setItems] = useState<LocalStorageItem[]>([]);

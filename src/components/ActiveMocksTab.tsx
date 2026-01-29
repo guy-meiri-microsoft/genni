@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import type { LocalStorageItem } from '../types';
-import { LocalStorageItemComponent } from './LocalStorageItemComponent';
+import { LocalStorageItemComponent } from './LocalStorageItem';
 import { FloatingNavigationMenu } from './FloatingNavigationMenu';
 
 type SectionId = 'analytics' | 'evaluations';
