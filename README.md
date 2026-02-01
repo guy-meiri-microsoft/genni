@@ -6,7 +6,7 @@ A browser extension for managing analytics mocks in **Microsoft Copilot Studio**
 
 ### Step 1: Download the Latest Release
 
-1. Go to the [Releases page](https://github.com/guy-meiri-microsoft/genni/releases)
+1. Go to the [Releases page](https://github.com/dtoledano1/genni/releases)
 2. Download the latest `x.x.x.zip` file
 
 ![Download Release](docs/images/download-release.png)
