@@ -20,7 +20,7 @@ const getCurrentVersion = (): string => {
 
 export async function checkForUpdates(): Promise<VersionInfo> {
   const currentVersion = getCurrentVersion();
-  const githubUrl = 'https://raw.githubusercontent.com/guy-meiri-microsoft/genni/main/public/manifest.json';
+  const githubUrl = 'https://raw.githubusercontent.com/dtoledano1/genni/main/public/manifest.json';
   
   try {
     console.log('🔍 VersionChecker: Checking for updates...');
